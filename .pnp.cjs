@@ -60,6 +60,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-react-app", "virtual:12822d1089810f1364ee256f17210b7b22c8d70db7d8b4a0652f571d73ca644fa1b1b8cf78bfe85af8676582905848b61bd65b5422e3a30b8b10440ade5ba5ca#npm:7.0.1"],\
             ["eslint-plugin-jest-dom", "virtual:12822d1089810f1364ee256f17210b7b22c8d70db7d8b4a0652f571d73ca644fa1b1b8cf78bfe85af8676582905848b61bd65b5422e3a30b8b10440ade5ba5ca#npm:4.0.3"],\
             ["generate-react-cli", "npm:8.2.0"],\
+            ["graphql", "npm:16.6.0"],\
             ["pnpapi", "npm:0.0.0"],\
             ["prettier", "npm:2.8.3"],\
             ["prop-types", "npm:15.8.1"],\
@@ -141,7 +142,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@wry/context", "npm:0.7.0"],\
             ["@wry/equality", "npm:0.5.3"],\
             ["@wry/trie", "npm:0.3.2"],\
-            ["graphql", null],\
+            ["graphql", "npm:16.6.0"],\
             ["graphql-tag", "virtual:24d9d158198e3862c404798ad1ea93b810b52ce405a18bc78eea0ea35de91f317e3e2cc0d37c1132e08484f024d41e16277b26f0ac0e2f265e91f6af6840052b#npm:2.12.6"],\
             ["graphql-ws", null],\
             ["hoist-non-react-statics", "npm:3.3.2"],\
@@ -4898,7 +4899,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@graphql-typed-document-node/core", "virtual:24d9d158198e3862c404798ad1ea93b810b52ce405a18bc78eea0ea35de91f317e3e2cc0d37c1132e08484f024d41e16277b26f0ac0e2f265e91f6af6840052b#npm:3.1.1"],\
             ["@types/graphql", null],\
-            ["graphql", null]\
+            ["graphql", "npm:16.6.0"]\
           ],\
           "packagePeers": [\
             "@types/graphql",\
@@ -16311,6 +16312,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["graphql", [\
+        ["npm:16.6.0", {\
+          "packageLocation": "./.yarn/cache/graphql-npm-16.6.0-301c470966-bf1d9e3c19.zip/node_modules/graphql/",\
+          "packageDependencies": [\
+            ["graphql", "npm:16.6.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["graphql-tag", [\
         ["npm:2.12.6", {\
           "packageLocation": "./.yarn/cache/graphql-tag-npm-2.12.6-99a5a7f6de-b15162a3d6.zip/node_modules/graphql-tag/",\
@@ -16324,7 +16334,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["graphql-tag", "virtual:24d9d158198e3862c404798ad1ea93b810b52ce405a18bc78eea0ea35de91f317e3e2cc0d37c1132e08484f024d41e16277b26f0ac0e2f265e91f6af6840052b#npm:2.12.6"],\
             ["@types/graphql", null],\
-            ["graphql", null],\
+            ["graphql", "npm:16.6.0"],\
             ["tslib", "npm:2.4.1"]\
           ],\
           "packagePeers": [\
@@ -24916,6 +24926,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-react-app", "virtual:12822d1089810f1364ee256f17210b7b22c8d70db7d8b4a0652f571d73ca644fa1b1b8cf78bfe85af8676582905848b61bd65b5422e3a30b8b10440ade5ba5ca#npm:7.0.1"],\
             ["eslint-plugin-jest-dom", "virtual:12822d1089810f1364ee256f17210b7b22c8d70db7d8b4a0652f571d73ca644fa1b1b8cf78bfe85af8676582905848b61bd65b5422e3a30b8b10440ade5ba5ca#npm:4.0.3"],\
             ["generate-react-cli", "npm:8.2.0"],\
+            ["graphql", "npm:16.6.0"],\
             ["pnpapi", "npm:0.0.0"],\
             ["prettier", "npm:2.8.3"],\
             ["prop-types", "npm:15.8.1"],\
@@ -25651,7 +25662,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@storybook/components", "virtual:07bb40cceb8f1ec20dc74be05398a50c7a726196b997743b848e23719f30e74194d565052de3d122f53e024efa052307847712bcea5507524a047e52cbba5485#npm:6.5.12"],\
             ["@types/graphql", null],\
             ["@types/react", "npm:18.0.26"],\
-            ["graphql", null],\
+            ["graphql", "npm:16.6.0"],\
             ["react", "npm:18.2.0"],\
             ["tslib", "npm:2.4.1"]\
           ],\
