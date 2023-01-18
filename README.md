@@ -1,10 +1,20 @@
-# Getting Started with Create React App
+# Search and Filter with GraphQL
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+`yarn create react-app --template typescript`
+
+## The Storybook runs on Repl.it!
+
+[![Run on Repl.it](https://replit.com/badge/github/djbauch/search-and-filter)](https://replit.com/new/github/djbauch/search-and-filter)
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `yarn storybook`
+
+Runs Storybook to test the components contained in this library. This is the primary mode of operation
 
 ### `yarn start`
 
