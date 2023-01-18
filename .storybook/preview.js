@@ -1,3 +1,5 @@
+import { MockedProvider } from '@apollo/client/testing'
+
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -6,4 +8,8 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  apolloClient: {
+    MockeProvider: MockedProvider,
+    // any props to pass to MockedProvider for every story
+  }
 }
