@@ -8830,7 +8830,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["aria-query", "npm:5.1.3"],\
             ["chalk", "npm:3.0.0"],\
             ["css.escape", "npm:1.5.1"],\
-            ["dom-accessibility-api", "npm:0.5.15"],\
+            ["dom-accessibility-api", "npm:0.5.16"],\
             ["lodash", "npm:4.17.21"],\
             ["redent", "npm:3.0.0"]\
           ],\
@@ -14299,6 +14299,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/dom-accessibility-api-npm-0.5.15-652b27db89-02b91611f1.zip/node_modules/dom-accessibility-api/",\
           "packageDependencies": [\
             ["dom-accessibility-api", "npm:0.5.15"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:0.5.16", {\
+          "packageLocation": "./.yarn/cache/dom-accessibility-api-npm-0.5.16-d3e2310666-005eb283ca.zip/node_modules/dom-accessibility-api/",\
+          "packageDependencies": [\
+            ["dom-accessibility-api", "npm:0.5.16"]\
           ],\
           "linkType": "HARD"\
         }]\
