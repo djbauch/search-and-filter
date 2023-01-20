@@ -16,12 +16,11 @@ export const freqBandSelectionChanged = 'freqBandSelectionChanged'
 export const freqEventFilterSwitch = 'freqEventFilterSwitch'
 interface CardDropdownProps {
   label?: string;
-  choices?: [
-    {
+  choices?: Array<    {
       label: string;
       value: any;
     }
-  ];
+  >;
 }
 
 const CardDropdown: FC<CardDropdownProps> = ({label, choices}: CardDropdownProps ) => {
@@ -31,6 +30,7 @@ const CardDropdown: FC<CardDropdownProps> = ({label, choices}: CardDropdownProps
     setSelection(event.target.value);
 
     label = label || 'Choose'
+    choices = choices || [{label: 'Ten', value: 10}, {label: 'Twenty', value: 20}, {label: 'Thirty', value: 30}]
   return (
     <FormControl
       variant="standard"
@@ -44,15 +44,13 @@ const CardDropdown: FC<CardDropdownProps> = ({label, choices}: CardDropdownProps
         label="What"
         value={selection}
       >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
+       {
+          choices.map((choice) =>
+            <MenuItem key={choice.label} value={choice.value}> {choice.label} </MenuItem>)
+        }
       </Select>
     </FormControl>
-  );
-};
+  )
+}
 
 export default CardDropdown;

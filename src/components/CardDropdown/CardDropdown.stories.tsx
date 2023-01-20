@@ -1,11 +1,15 @@
 /* eslint-disable */
+import { ComponentMeta, ComponentStory } from '@storybook/react'
 import CardDropdown from './CardDropdown';
 
 export default {
-  title: "CardDropdown",
-}
+  title: "Components/CardDropdown",
+  component: CardDropdown,
+} as ComponentMeta<typeof CardDropdown>
 
-export const Default = () => <CardDropdown />;
+const Template: ComponentStory<typeof CardDropdown> = (args) => <CardDropdown {...args} />
+
+export const Default = () => <CardDropdown />
 
 Default.story = {
   name: 'default',

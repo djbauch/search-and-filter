@@ -2,8 +2,9 @@
 import TemporalFilterCard from './TemporalFilterCard';
 
 export default {
-  title: "TemporalFilterCard",
-};
+  title: "Components/TemporalFilterCard",
+  component: TemporalFilterCard,
+}
 
 export const Default = () => <TemporalFilterCard />;
 

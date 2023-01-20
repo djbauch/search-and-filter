@@ -2,7 +2,7 @@
 import FunctionFilterCard from './FunctionFilterCard';
 
 export default {
-  title: "FunctionFilterCard",
+  title: "Components/FunctionFilterCard",
 };
 
 export const Default = () => <FunctionFilterCard />;

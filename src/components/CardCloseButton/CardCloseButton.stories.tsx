@@ -1,12 +1,18 @@
 /* eslint-disable */
-import CardCloseButton from './CardCloseButton';
+import { ComponentMeta, ComponentStory } from '@storybook/react'
+import CardCloseButton from './CardCloseButton'
 
 export default {
-  title: "CardCloseButton",
-};
+  title: "Components/CardCloseButton",
+  component: CardCloseButton,
+  argTypes: {
+    size: {
+      options: ['small', 'medium', 'large'],
+      control: { type: 'radio'}
+    }
+  }
+} as ComponentMeta<typeof CardCloseButton>
 
-export const Default = () => <CardCloseButton />;
+const Template: ComponentStory<typeof CardCloseButton> =(args) => <CardCloseButton {...args} />
 
-Default.story = {
-  name: 'default',
-};
+export const Default = Template.bind({})

@@ -4,6 +4,11 @@ import Map from '@arcgis/core/Map'
 import View from '@arcgis/core/views/View'
 import SceneView from '@arcgis/core/views/SceneView'
 
+declare module "*.png" {
+  const value: any;
+  export = value;
+}
+
 export type DashboardStateType = {
   widgetKey: string
   location: string //top, center, right

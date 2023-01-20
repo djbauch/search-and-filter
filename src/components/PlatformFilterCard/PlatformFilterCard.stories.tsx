@@ -2,8 +2,9 @@
 import PlatformFilterCard from './PlatformFilterCard';
 
 export default {
-  title: "PlatformFilterCard",
-};
+  title: "Components/PlatformFilterCard",
+  component: PlatformFilterCard,
+}
 
 export const Default = () => <PlatformFilterCard />;
 

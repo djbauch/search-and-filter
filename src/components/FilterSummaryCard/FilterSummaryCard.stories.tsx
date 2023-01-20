@@ -2,7 +2,7 @@
 import FilterSummaryCard from './FilterSummaryCard';
 
 export default {
-  title: "FilterSummaryCard",
+  title: "Components/FilterSummaryCard",
 };
 
 export const Default = () => <FilterSummaryCard />;

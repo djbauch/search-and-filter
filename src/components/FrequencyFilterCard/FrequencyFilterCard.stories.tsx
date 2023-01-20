@@ -2,7 +2,7 @@
 import FrequencyFilterCard from './FrequencyFilterCard';
 
 export default {
-  title: "FrequencyFilterCard",
+  title: "Components/FrequencyFilterCard",
 };
 
 export const Default = () => <FrequencyFilterCard />;

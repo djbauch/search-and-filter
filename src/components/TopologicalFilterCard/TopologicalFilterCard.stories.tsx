@@ -2,7 +2,7 @@
 import TopologicalFilterCard from './TopologicalFilterCard';
 
 export default {
-  title: "TopologicalFilterCard",
+  title: "Components/TopologicalFilterCard",
 };
 
 export const Default = () => <TopologicalFilterCard />;
