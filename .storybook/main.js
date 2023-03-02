@@ -8,7 +8,8 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
     "@storybook/preset-create-react-app",
-    "storybook-addoon-apollo-client",
+    "storybook-addon-apollo-client",
+    "@dreamworld/addon-redux"
   ],
   "framework": "@storybook/react",
   "core": {

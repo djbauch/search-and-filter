@@ -1,4 +1,5 @@
 import { MockedProvider } from '@apollo/client/testing'
+import store from '../src/app/store'
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
