@@ -1,4 +1,6 @@
+import * as React from 'react'
 import { MockedProvider } from '@apollo/client/testing'
+import { Provider } from 'react-redux'
 import store from '../src/app/store'
 
 export const parameters = {
@@ -44,3 +46,12 @@ export const parameters = {
     // any props to pass to MockedProvider for every story
   }
 }
+export const decorators = [
+  (Story) => {
+    return (
+    <Provider store={store}>
+      <Story />
+    </Provider>
+    )
+  }
+]
