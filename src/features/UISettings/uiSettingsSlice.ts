@@ -8,11 +8,12 @@ interface SettingsState {
   isFluid: boolean
   isRTL: boolean
   isDark: boolean
-  navbarPosition: 'vertical' | 'horizontal'
+  navbarPosition: 'vertical' | 'horizontal' /* and */ | 'top' | 'combo'
   showBurgerMenu: boolean
   currency: string
   isNavbarVerticalCollapsed: boolean
-  navbarStyle: string
+  isNavbarCollapsed: boolean
+  navbarStyle: string // 'transparent' or something else, but I don't know what
 }
 
 // Define the initial state using that type
@@ -24,6 +25,7 @@ const initialState: SettingsState = {
   showBurgerMenu: false, // controls showing vertical nav on mobile
   currency: '$',
   isNavbarVerticalCollapsed: false, // toggle vertical navbar collapse
+  isNavbarCollapsed: false,
   navbarStyle: 'transparent'
 }
 
@@ -54,6 +56,9 @@ export const settingsSlice = createSlice({
     setNavbarVerticalCollapsed: (state, action: PayloadAction<boolean>) => {
       state.isNavbarVerticalCollapsed = action.payload
     },
+    setNavbarCollapsed: (state, action: PayloadAction<boolean>) => {
+      state.isNavbarCollapsed = action.payload
+    },
     setNavbarStyle: (state, action: PayloadAction<string>) => {
       state.navbarStyle = action.payload
     }
@@ -68,6 +73,7 @@ export const {
   setShowBurgermenu,
   setCurrency,
   setNavbarVerticalCollapsed,
+  setNavbarCollapsed,
   setNavbarStyle
 } = settingsSlice.actions
 
