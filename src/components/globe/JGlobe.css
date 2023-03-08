@@ -1,0 +1,8 @@
+.globe-panel {
+    border: 1px solid gray;
+    border-bottom: 0; 
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-bottom: 1vh; */
+}

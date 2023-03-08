@@ -1,0 +1,86 @@
+            <Container className="esri-browse-container">
+                <div id="panel" className="esri-component esri-widget search-panel">
+                    <div >
+                        <Row className="mb-1">
+                            <Col className="col-7">
+                                <h5>Select a Layer to Load</h5>
+                            </Col>
+                            <Button id="closeButton" className="esri-search-close esri-search__search-button esri-widget--button float-right" title="Close" onClick={() => props.setShowBrowseLayersPortal(false)}>
+                                    <span aria-hidden="true" className="esri-icon-close"></span>
+                            </Button>
+                        </Row>
+                    </div>
+                    /*
+                    <div className="esri-search__input-container">
+                        <input id="search" type="text" placeholder="e.g. weather, census, population, trails..."
+                            aria-label="Search" className="esri-input esri-search__input"
+                            title="" onKeyUp={(e) => {handleKeyUp(e)}} >
+                        </input>
+                        {/* <SearchInputBox/> */}
+                        {/* <button id="searchButton" className="esri-search__search-button esri-widget--button" title="Search" onClick={handleSearchClick()}> */}
+                        <Button id="searchButton" className="esri-search__search-button esri-widget--button" title="Search" onClick={handleSearchClick} >
+                            <span aria-hidden="true" className="esri-icon-search"></span>
+                        </Button>
+                    </div>
+                    <Form.Group className="esri-addLayer_padding">
+                    <div className="search-panel__filter">
+                        <div className="search-panel__filter-group">
+                            {/* <label for="ownerTypeSelect"><b>Content:</b></label>
+                            <select id="ownerTypeSelect" className="esri-widget esri-select"></select>
+                            <div className="esri-widget esri-select">{OwnerTypeDropdown}</div> */}
+                            {/* <label for="itemTypeSelect"><b>Type:</b></label>
+                            <select id="itemTypeSelect" className="esri-widget esri-select"></select> */}
+                            <Form.Label className="esri-addLayer_padding">Content:</Form.Label>
+                            <OwnerTypeDropdown/>
+                            <Form.Label className="esri-addLayer_padding">Type:</Form.Label>
+                            <ItemTypeDropdown/>
+                        </div>
+                        <div className="search-panel__filter-group">
+                            Sort:
+                            <Form.Check
+                                type="radio"
+                                id="sortViews"
+                                label="Views"
+                                className="search-panel__filter-radio"
+                                value="numviews"
+                                name="sortType"
+                                onChange={e => onChangeSortSelect(e.target.value)}
+                                checked={sortType === 'numviews'}
+                            />
+                            <Form.Check
+                                type="radio"
+                                id="sortCreated"
+                                label="Created"
+                                className="search-panel__filter-radio"
+                                value="created"
+                                name="sortType"
+                                onChange={e => onChangeSortSelect(e.target.value)}
+                                checked={sortType === 'created'}
+                            />
+                            <Form.Check
+                                type="radio"
+                                id="sortModified"
+                                label="Modified"
+                                className="search-panel__filter-radio"
+                                value="modified"
+                                name="sortType"
+                                onChange={e => onChangeSortSelect(e.target.value)}
+                                checked={sortType === 'modified'}
+                            />
+                            {/* <b>Sort:</b>
+                            <input type="radio" id="sortViews" name="sortType" value="numviews" className="search-panel__filter-radio" onChange={e => onChangeTypeSelect(e.target.value)} checked></input>
+                            <label for="sortViews">Views</label>
+                            <input type="radio" id="sortCreated" name="sortType" value="created" className="search-panel__filter-radio" onChange={e => onChangeTypeSelect(e.target.value)}></input>
+                            <label for="sortCreated">Created</label>
+                            <input type="radio" id="sortModified" name="sortType" value="modified" className="search-panel__filter-radio" onChange={e => onChangeTypeSelect(e.target.value)}></input>
+                            <label for="sortModified">Modified</label> */}
+                        </div>
+                        <div>
+                            Number Results: {numResults}
+                        </div>
+                    </div>
+                    </Form.Group>
+                    <ul id="results" role="presentation" className="esri-basemap-gallery__item-container search-panel__results" onClick={onResultListClick}></ul>
+                    {/* <ResultsList/> */}
+                </div>
+            </Container>

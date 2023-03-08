@@ -1,0 +1,799 @@
+import React, { PureComponent } from 'react'
+import Map from '@arcgis/core/Map'
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import ElevationLayer from '@arcgis/core/layers/ElevationLayer'
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
+import PropTypes from 'prop-types'
+import { checkFreqRangeOverlap } from '../../services/frequencyChecks'
+import RFSource from './drawing/RFSource'
+import Polyline from './drawing/Polyline'
+import MapPoint from './drawing/MapPoint'
+import CoComAOR from './drawing/CoComAOR'
+import { EsriGlobe } from './esri/EsriGlobe'
+import SceneView from '@arcgis/core/views/SceneView'
+import { isIterableArray } from '../../helpers/utils'
+import esriRequest from '@arcgis/core/request'
+import 'rc-tabs/assets/index.css'
+import { AiOutlineConsoleSql } from 'react-icons/ai'
+import moment from 'moment'
+import {
+  CCStateType,
+  FreqStateType,
+  FuncStateType,
+  PlatformType,
+  ProjectLayerType,
+  TempStateType,
+  TopoStateType
+} from '../../types/sharedTypes'
+import { BASEMAP_URL, BASEMAP_TYPE, ELEVATION_LAYER_URL, GEOJSON_LAYER_URL, GEOJSON_LAYER_TITLE } from '../../config'
+import WMSLayer from '@arcgis/core/layers/WMSLayer'
+import WMTSLayer from '@arcgis/core/layers/WMTSLayer'
+import WCSLayer from '@arcgis/core/layers/WCSLayer'
+import WFSLayer from '@arcgis/core/layers/WFSLayer'
+import GeoJSONLayer from '@arcgis/core/layers/GeoJSONLayer'
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
+import ImageryLayer from '@arcgis/core/layers/ImageryLayer'
+import PopupTemplate from '@arcgis/core/PopupTemplate'
+import Layer from 'esri/layers/Layer'
+import { FeatureCollection, Feature } from 'geojson'
+
+type JGlobeProps = {
+  key: string
+  ref: any //React.createRef
+  layersVisible: boolean
+  latitude: number
+  longitude: number
+  altitude: number
+  className?: string
+  getIconImage: any //function
+  getGlobeDataGeoJSON: () => FeatureCollection
+  geojsonLayerVisible: boolean
+  surfaceShapeLayerVisible: boolean
+  loadShapefileFromURL: any //function
+  loadShapefileFromFile: any //function
+  getSceneView: (sceneView: SceneView) => void
+  getPlatformTypes: () => PlatformType[]
+  projectLayerList: Array<ProjectLayerType>
+  setProjectLayerList: any
+  handleProjectLayerListChanged: any
+}
+
+enum ELayerType {
+  WFS = 'WFS',
+  WMTS = 'WMTS',
+  WMS = 'WMS',
+  WCS = 'WCS',
+  GeoJSON = 'GeoJSON',
+  FeatureServer = 'FeatureServer',
+  VectorTile = 'VectorTile',
+  ImageServer = 'ImageServer'
+}
+class JGlobe extends PureComponent {
+  _mapPoints: MapPoint[]
+  _rfSources
+  _polygons
+  hoveredItems
+  _elevLayer: ElevationLayer | null
+  _geojsonLayer
+  esriMap
+  _shapesLayer: GraphicsLayer | null
+  _aorLayer
+  _rfSourceLayer
+  getGlobeDataGeoJSON
+  getIconImage
+  layersVisible
+  surfaceShapeLayerVisible
+  projectLayerList
+  setProjectLayerList
+
+  constructor(props: JGlobeProps) {
+    super(props)
+    this._mapPoints = []
+    this._rfSources = []
+    this._polygons = []
+    this.hoveredItems = []
+    this._shapesLayer = null
+    this._rfSourceLayer = null
+    this.getGlobeDataGeoJSON = props.getGlobeDataGeoJSON
+    this.getIconImage = props.getIconImage
+    this.layersVisible = props.layersVisible
+    this._elevLayer =
+      ELEVATION_LAYER_URL === null || ELEVATION_LAYER_URL === undefined || ELEVATION_LAYER_URL === ''
+        ? null
+        : new ElevationLayer({ url: ELEVATION_LAYER_URL })
+
+    const geojsonLayerTitle =
+      GEOJSON_LAYER_TITLE === null || GEOJSON_LAYER_TITLE === undefined || GEOJSON_LAYER_TITLE === ''
+        ? 'GeoJSON'
+        : GEOJSON_LAYER_TITLE
+
+    this._geojsonLayer =
+      GEOJSON_LAYER_URL === null || GEOJSON_LAYER_URL === undefined || GEOJSON_LAYER_URL === ''
+        ? null
+        : new GeoJSONLayer({
+            url: GEOJSON_LAYER_URL,
+            title: geojsonLayerTitle,
+            // eslint-disable-next-line react/prop-types
+            visible: props.geojsonLayerVisible,
+            id: 'geojsonURLLayer'
+          })
+
+    const getBaseMapLayer = () => {
+      return BASEMAP_TYPE === 'WMTS' ? new WMTSLayer({ url: BASEMAP_URL }) : new WMSLayer({ url: BASEMAP_URL })
+    }
+
+    let basemap =
+      BASEMAP_URL === null || BASEMAP_URL === undefined || BASEMAP_URL === ''
+        ? 'satellite'
+        : {
+            baseLayers: [getBaseMapLayer()]
+          }
+
+    this.esriMap = new Map({
+      basemap: basemap,
+      ground:
+        this._elevLayer != null
+          ? {
+              layers: [this._elevLayer]
+            }
+          : {}
+    })
+  }
+
+  loadData = (geoObj, props) => {
+    //Clear any previously loaded data
+    this._mapPoints = []
+    this._rfSources = []
+    this._polygons = []
+
+    if (geoObj.type === 'FeatureCollection') {
+      var arrayOfFeatures = geoObj.features
+      //start by checking if all filters are off, just return a blank array
+      if (
+        !props.ccState.ccmdFilterOn &&
+        !props.freqState.filterOn &&
+        !props.tempState.filterOn &&
+        !props.funcState.filterOn &&
+        !props.topoState.orgFilterOn &&
+        !props.topoState.platFilterOn
+      ) {
+        arrayOfFeatures = [] //no filters are on, so array is empty
+      } else {
+        //filter that featureCollection through all active filters
+        arrayOfFeatures = JGlobe.getFilteredArray(geoObj.features, props)
+      }
+
+      arrayOfFeatures.forEach((f) => {
+        if (f.geometry.type === 'Polygon') {
+          //console.log(f.properties.id + " polygon is being added with #pts: " + f.geometry.coordinates[0].length)
+          this._polygons.push(
+            new Polyline(f.properties.id, f.properties.name, true, f.geometry.coordinates[0], f.properties.id)
+          )
+        } else if (f.geometry.type === 'LineString') {
+          this._polygons.push(
+            new Polyline(f.properties.id, f.properties.name, false, f.geometry.coordinates, f.properties.id)
+          )
+          //} else if (f.geometry.type === "Point" && checkFreqRangeOverlap(f.properties.frequencies, props.freqState)=== true) {
+        } else if (f.geometry.type === 'Point') {
+          if (f.properties.range) {
+            this._rfSources.push(
+              new RFSource(
+                f.properties.id,
+                f.properties.name,
+                JSON.parse('{ "lng":' + f.geometry.coordinates[0] + ', "lat":' + f.geometry.coordinates[1] + ' }'),
+                f.properties.iconCode,
+                f.properties.range,
+                f.properties,
+                this.getIconImage
+              )
+            )
+          } else {
+            this._mapPoints.push(
+              new MapPoint(
+                f.properties.id,
+                f.properties.name,
+                JSON.parse('{ "lng":' + f.geometry.coordinates[0] + ', "lat":' + f.geometry.coordinates[1] + ' }'),
+                f.properties.iconCode,
+                f.properties
+              )
+            )
+          }
+        } else if (f.geometry.type === 'MultiPolygon') {
+          //draw each polygon in the collection of polygons
+          //console.log(f.properties.id + " multi polygon is being added with #polys: " + f.geometry.coordinates.length)
+          for (let poly of f.geometry.coordinates) {
+            this._polygons.push(new Polyline(f.properties.id, f.properties.name, true, poly[0], f.properties.id))
+          }
+        }
+      })
+    }
+
+    this.drawMapPoints(props)
+    this.drawPolygons() //order matters here since drawMapPoints clears out the shapesLayer
+    this.drawRFSources()
+
+    if (this._geojsonLayer) {
+      this._geojsonLayer.visible = props.geojsonLayerVisible
+      //console.log("adding geojsonLayer in loadData")
+      this.esriMap.add(this._geojsonLayer)
+    }
+
+    this.loadProjectLayerList()
+    // var count = 0;
+    // this.esriMap.layers.forEach(layer => {
+    //     console.log("Layer" + count + ": " + layer.id + ", " + layer.title);
+    //     count++;
+    //   });
+  }
+
+  static getFilteredArray = (fullArray: FeatureCollection, props) => {
+    //    get filteredArray(){
+    /*need to get each of the 6 filter options and apply them to the features array
+          each filter will return any map feature that satisfies any of the filter strings
+          then filter that reduced feature list through the next card
+          if any card filter is empty, just return current filteredArray instead of empty - THIS IS CHANGING TO DEFAULT TO EMPTY
+          (CoCom || CoCom) && (Freq) && (DateRange) && (Func || Func) && (Org || Org || Org) && (Plat || Plat || Plat) */
+
+    //LOG all filter switch values
+    // console.log("ccmd: " + props.ccState.ccmdFilterOn + " freq: " + props.freqState.filterOn + " temp: " + props.tempState.filterOn
+    //     + " func: " + props.funcState.filterOn  + " org: " + props.topoState.orgFilterOn  + " plat: " + props.topoState.platFilterOn);
+
+    let filteredFeatures = fullArray //geoObj.features is full array
+    let filterIsEmpty = true
+
+    //the following will grab all products that have any coCom strings in features.properties.ccmd
+    if (props.ccState.ccmdFilterOn) {
+      let coComFilters = props.ccState.treeChecked
+      //changing logic here to always use filter even if nothing is checked
+      if (coComFilters.length > 0) {
+        filteredFeatures = filteredFeatures.filter((features) =>
+          coComFilters?.some((r) => features.properties.ccmd?.includes(r))
+        )
+        filterIsEmpty = false
+      }
+    }
+    //pipe through freq
+    if (props.freqState.filterOn) {
+      filteredFeatures = JGlobe.getfilteredFrequencyArray(filteredFeatures, props.freqState)
+      filterIsEmpty = false
+    }
+    //pipe through date range
+    if (props.tempState.filterOn) {
+      filteredFeatures = JGlobe.getfilteredDateArray(filteredFeatures, props.tempState)
+      filterIsEmpty = false
+    }
+
+    //pipe through func
+    if (props.funcState.filterOn && isIterableArray(props.funcState.functionalValues)) {
+      var funcFilters = []
+      for (let funcItem of props.funcState.functionalValues) {
+        if (funcItem.value !== '') funcFilters.push(funcItem.value)
+      }
+      if (funcFilters.length > 0) {
+        filteredFeatures = filteredFeatures.filter((features) =>
+          funcFilters?.some((r) => features.properties.functional?.includes(r))
+        )
+        filterIsEmpty = false
+      }
+    }
+
+    //pipe through org
+    if (props.topoState.orgFilterOn) {
+      let orgFilters = props.topoState.treeChecked
+      //empty is not the same as Off
+      //filteredFeatures = (orgFilters.length > 0)?filteredFeatures.filter(features => orgFilters?.some(r=>features.properties.organization?.includes(r))):filteredFeatures;
+      if (orgFilters.length > 0) {
+        filteredFeatures = filteredFeatures.filter((features) =>
+          orgFilters?.some((r) => features.properties.organization?.includes(r))
+        )
+        filterIsEmpty = false
+      }
+    }
+
+    //pipe through platforms
+    if (props.topoState.platFilterOn) {
+      let platFilters = []
+      let platTypes = props.getPlatformTypes()
+      if (props.topoState.platChecked.length > 0) {
+        for (let ptype of platTypes) {
+          if (props.topoState.platChecked.length > 0 && props.topoState.platChecked.indexOf(ptype.id) > -1) {
+            platFilters.push(ptype.value)
+          }
+        }
+      }
+      if (platFilters.length > 0) {
+        filteredFeatures = filteredFeatures.filter((features) =>
+          platFilters?.some((r) => features.properties.platformtype?.includes(r))
+        )
+        filterIsEmpty = false
+      }
+    }
+
+    if (filterIsEmpty)
+      //if it gets through all the filters and nothing was actually chosen, just empty the array
+      filteredFeatures = []
+
+    return filteredFeatures
+  }
+
+  static getArrayAsString = (arrayToConvert) => {
+    const filterAsString = arrayToConvert.reduce((result, feature) => {
+      return `${result}${feature} \r\n`
+    }, '')
+    //alert("FilterArray length is: " + props.coComFilterArray.length + '\r\n' +  filterAsString);
+    return filterAsString
+  }
+
+  static getfilteredFrequencyArray = (fullArray: FeatureCollection[], freqState) => {
+    var filteredFrequencyFeatures: any[] = []
+    Array.prototype.forEach.call(fullArray, (f) => {
+      if (f.properties.frequencies && checkFreqRangeOverlap(f.properties.frequencies, freqState)) {
+        filteredFrequencyFeatures.push(f)
+      }
+    })
+    return filteredFrequencyFeatures
+  }
+
+  static getfilteredDateArray = (fullArray: Array<any>, tempState) => {
+    var filteredDateFeatures: any[] = []
+    fullArray.forEach((f) => {
+      //console.log(f.properties.dateStart + " : " + tempState.startDate);
+      if (
+        (moment(f.properties.dateStart).isAfter(moment(tempState.startDate)) &&
+          moment(f.properties.dateStart).isBefore(moment(tempState.endDate))) ||
+        (moment(f.properties.dateStop).isBefore(moment(tempState.endDate)) &&
+          moment(f.properties.dateStop).isAfter(moment(tempState.startDate)))
+      ) {
+        filteredDateFeatures.push(f)
+      }
+    })
+    return filteredDateFeatures
+  }
+
+  getMapPoints() {
+    return this._mapPoints
+  }
+
+  get rfSources() {
+    return this._rfSources
+  }
+
+  get polygons() {
+    return this._polygons
+  }
+
+  get shapesLayer() {
+    if (!this._shapesLayer) {
+      this._shapesLayer = new GraphicsLayer({
+        title: 'Surface Shapes',
+        id: 'Surface Shapes'
+      })
+      //console.log("adding shapesLayer: " + this._shapesLayer.id)
+      this.esriMap.add(this._shapesLayer)
+    }
+    return this._shapesLayer
+  }
+
+  get rfSourceLayer() {
+    if (!this._rfSourceLayer) {
+      this._rfSourceLayer = new GraphicsLayer({
+        title: 'RF Sources'
+      })
+      this.esriMap.add(this._rfSourceLayer)
+    }
+    return this._rfSourceLayer
+  }
+
+  get aorLayer() {
+    if (!this._aorLayer) {
+      this._aorLayer = new GraphicsLayer({
+        title: 'CCMD AOR'
+      })
+      this.esriMap.add(this._aorLayer)
+    }
+    return this._aorLayer
+  }
+
+  get elevLayer() {
+    return this._elevLayer
+  }
+
+  drawMapPoints = (props) => {
+    this.shapesLayer.removeAll() //resetting the shapeslayer
+
+    this.getMapPoints().forEach((pt) => pt.draw(this.shapesLayer, this.props.getIconImage))
+
+    this.setLayerExtent(this.shapesLayer)
+    this.shapesLayer.visible = props.surfaceShapeLayerVisible
+  }
+
+  drawPolygons = () => {
+    //if (this.polygons.length > 0) console.log("There are " + this.polygons.length + " polygons.")
+    this.polygons.forEach((p) => p.draw(this.shapesLayer))
+  }
+
+  drawRFSources = () => {
+    this.rfSources.forEach((s) => s.draw(this.rfSourceLayer))
+  }
+
+  drawAORs = (geoObj) => {
+    if (geoObj.type === 'FeatureCollection') {
+      this.aorLayer.removeAll()
+      let borders = geoObj.features.map((f) => new CoComAOR(f))
+      borders.forEach((b) => b.draw(this.aorLayer))
+    }
+  }
+
+  importShapefile = (sceneView, filename, layerTitle, fileContent, fileType) => {
+    this.props.loadShapefileFromFile(this.esriMap, sceneView, filename, layerTitle, fileContent, fileType)
+  }
+
+  // importShapefile = (map, view) => {
+  //     this.props.loadShapefileFromURL(map, view)
+  // }
+
+  importLayerURL = (layerURL: string, layerName: string) => {
+    let newLayer = null
+    var layerType = this.getImportLayerType(layerURL)
+    // if(layerType === ELayerType.FeatureServer)
+    //     this.addFeatureLayers(layerURL, layerName, true);    //not quite working yet
+    // else
+    this.addLayer(layerURL, layerType, layerName, true)
+  }
+
+  loadLayer(layer: Layer, layerURLValue: string) {
+    layer
+      .load()
+      .then(() => {})
+      .catch((error) => {
+        layer.cancelLoad()
+        alert('Error loading layer: ' + error.message)
+      })
+
+    var findLayer = this.esriMap.findLayerById(layer.title)
+    if (!findLayer) {
+      //console.log("didn't find " + layer.title + " layer in addLayer, adding now.");
+      this.esriMap.add(layer)
+      this.props.handleProjectLayerListChanged(layer, layerURLValue, 'add')
+    }
+  }
+
+  loadLayerWithFields(layer: FeatureLayer | WFSLayer | WCSLayer | GeoJSONLayer, layerURLValue: string) {
+    layer
+      .load()
+      .then(() => {
+        let field_names = layer.fields
+          ? layer.fields.map((k) => {
+              return {
+                fieldName: k.name,
+                label: k.alias
+              }
+            })
+          : { fieldName: 'fieldName', Label: 'label' }
+
+        const template = new PopupTemplate({
+          title: layer.title + ': ' + '{NAME}',
+          content: [
+            {
+              type: 'fields',
+              fieldInfos: field_names
+            }
+          ]
+        })
+        if (layer.fields)
+          if ('popupTemplate' in layer) {
+            //to do: only add popup if there were fields to add, this still shows a default empty box
+            layer.popupTemplate = template
+          }
+      })
+      .catch((error) => {
+        layer.cancelLoad()
+        alert('Error loading layer: ' + error.message)
+      })
+
+    var findLayer = this.esriMap.findLayerById(layer.title)
+    if (!findLayer) {
+      //console.log("didn't find " + layer.title + " layer in addLayer, adding now.");
+      this.esriMap.add(layer)
+      this.props.handleProjectLayerListChanged(layer, layerURLValue, 'add')
+    }
+  }
+  //WFS, WMTS, WMS, WCS, GeoJSON, FeatureServer
+  addLayer = (layerURLValue: string, layerType: ELayerType, layerName, visible) => {
+    let newLayer: Layer | null = null
+    switch (layerType) {
+      case ELayerType.FeatureServer:
+        console.log('Adding FeatureLayer: ' + layerName)
+        newLayer = new FeatureLayer({
+          url: layerURLValue,
+          id: layerName,
+          title: layerName,
+          outFields: ['*'],
+          fields: ['*'],
+          visible: visible
+        })
+        break
+      case ELayerType.WFS:
+        console.log('Adding WFSLayer: ' + layerName)
+        newLayer = new WFSLayer({
+          url: layerURLValue,
+          id: layerName,
+          title: layerName,
+          fields: ['*'],
+          visible: visible
+        })
+        break
+      case ELayerType.WMTS:
+        console.log('Adding WMTSLayer: ' + layerName)
+        newLayer = new WMTSLayer({
+          url: layerURLValue,
+          id: layerName,
+          title: layerName,
+          fields: ['*'],
+          visible: visible
+        })
+        break
+      case ELayerType.WMS:
+        console.log('Adding WMSLayer: ' + layerName)
+        newLayer = new WMSLayer({
+          url: layerURLValue,
+          id: layerName,
+          title: layerName,
+          fields: ['*'],
+          visible: visible
+        })
+        break
+      case ELayerType.WCS:
+        console.log('Adding WCSLayer: ' + layerName)
+        newLayer = new WCSLayer({
+          url: layerURLValue,
+          id: layerName,
+          title: layerName,
+          fields: ['*'],
+          visible: visible
+        })
+        break
+      case ELayerType.GeoJSON:
+        console.log('Adding GeoJSON Layer: ' + layerName)
+        newLayer = new GeoJSONLayer({
+          url: layerURLValue,
+          id: layerName,
+          title: layerName,
+          fields: ['*'],
+          visible: visible
+        })
+        break
+      case ELayerType.VectorTile:
+        console.log('Adding VectorTile Layer: ' + layerName)
+        newLayer = new VectorTileLayer({
+          url: layerURLValue,
+          id: layerName,
+          title: layerName,
+          visible: visible
+        })
+        break
+      case ELayerType.ImageServer:
+        console.log('Adding ImageryLayer: ' + layerName)
+        newLayer = new ImageryLayer({
+          url: layerURLValue,
+          id: layerName,
+          title: layerName,
+          visible: visible
+        })
+        break
+    }
+    if (newLayer) {
+      //console.log("addLayer: " + layerURLValue + ", same as? " + layer.url);
+      //the above urls are not the same so pass along url values used
+      this.loadLayer(newLayer, layerURLValue)
+    } else console.log('Layer not added')
+  }
+
+  addFeatureLayers = (layerURLValue: string, layerName, visible) => {
+    //Check to see if the URL ends with a number (for a specific sublayer), if it does not, load all sublayers.
+    //to do: get this working when there is more than one layer in a FeatureLayer
+    const match = layerURLValue.match(/\d+$/)
+    if (match) {
+      console.log('FeatureLayer adding')
+      const layer = new FeatureLayer({
+        url: layerURLValue,
+        id: layerName,
+        title: layerName,
+        outFields: ['*'],
+        fields: ['*'],
+        visible: visible
+      })
+      if (layer) this.loadLayer(layer, layerURLValue)
+      else console.log('Layer not created')
+    } else {
+      //Load all sublayers - can't get this to work
+      console.log('Many FeatureLayer being added')
+      var jsonURL = layerURLValue + '?f=pjson'
+      esriRequest(jsonURL, {
+        responseType: 'json'
+      }).then(
+        function (response) {
+          let responseJSON = response.data
+          //console.log(responseJSON);
+          let numberOfLayers = responseJSON.layers.length
+          // load each service layer
+          //console.log("numLayers: " + numberOfLayers);
+          responseJSON.layers.forEach(function (sublayer) {
+            //console.log(layerURLValue + "/" + sublayer.id);
+            let newSublayer = new FeatureLayer({
+              url: layerURLValue + '/' + sublayer.id,
+              outFields: ['*'],
+              title: sublayer.name,
+              id: sublayer.name,
+              fields: ['*'],
+              visible: visible,
+              infoTemplate: new PopupTemplate({ title: sublayer.name })
+            })
+
+            if (newSublayer !== null) this.loadLayer(newSublayer)
+            else console.log('Layer not created')
+          })
+        },
+        function (error) {
+          console.log(
+            'Error: Esri Request Failed. Feature Service Layer is unable to load. Error Message: ',
+            error.message
+          )
+          alert('Layer can not be added. See Console for details.')
+        }
+      )
+    }
+  }
+
+  getImportLayerType = (url: string) => {
+    let urlLayerType: ELayerType
+    if (url.includes('wfs') || url.includes('WFS')) urlLayerType = ELayerType.WFS
+    else if (url.includes('wmts') || url.includes('WMTS')) urlLayerType = ELayerType.WMTS
+    else if (url.includes('wms') || url.includes('WMS')) urlLayerType = ELayerType.WMS
+    else if (url.includes('wcs') || url.includes('WCS')) urlLayerType = ELayerType.WCS
+    else if (url.toLowerCase().includes('geojson')) urlLayerType = ELayerType.GeoJSON
+    else if (url.toLowerCase().includes('vectortile')) urlLayerType = ELayerType.VectorTile
+    else if (url.toLowerCase().includes('imageserver')) urlLayerType = ELayerType.ImageServer
+    // if (url.includes("/FeatureServer"))
+    else urlLayerType = ELayerType.FeatureServer
+    return urlLayerType
+  }
+
+  removeLayer = (layerID) => {
+    const thatLayer = this.esriMap.findLayerById(layerID)
+    if (thatLayer) {
+      this.esriMap.remove(thatLayer)
+      this.props.handleProjectLayerListChanged(thatLayer, '', 'remove')
+    }
+  }
+
+  loadProjectLayerList = () => {
+    //go through projectLayerList and add each one back to project
+    var layerCount = this.props.projectLayerList.length
+    if (layerCount > 0) {
+      //this.props.projectLayerList.foreach(layer => {
+      for (var i = 0; i < this.props.projectLayerList.length; i++) {
+        //clonedList.push(projectLayerList[i])
+        var layer = this.props.projectLayerList[i]
+        const layerURL = layer.layerURL
+        var layerType = this.getImportLayerType(layerURL)
+        var layerTitle = layer.layerTitle
+        var layerVisible = layer.visible
+        var thatLayer = this.esriMap.findLayerById(layerTitle) //see if already there
+
+        if (thatLayer) {
+          //console.log("foundLayer: " + thatLayer.id);
+        } else {
+          //console.log("didn't find layer, adding LayerTitle: " + layerTitle);
+          this.addLayer(layerURL, layerType, layerTitle, layerVisible)
+        }
+      }
+      //});
+    }
+  }
+
+  updateLayerVisibility = (layerID, visible) => {
+    if (this.props.projectLayerList.length > 0) {
+      let clonedLayers: Array<any> = []
+      if (layerID === 'Surface Shapes')
+        //no need to change this one,it's part of local storage separately
+        return
+      for (var i = 0; i < this.props.projectLayerList.length; i++) {
+        if (this.props.projectLayerList[i].layerID === layerID) {
+          this.props.projectLayerList[i].visible = visible
+        }
+        clonedLayers.push(this.props.projectLayerList[i])
+      }
+      this.props.setProjectLayerList(clonedLayers)
+    }
+  }
+
+  getTooltipContent = () => {
+    if (this.hoveredItems.length > 0) {
+      return this.hoveredItems[0]
+    }
+    return ''
+  }
+
+  componentDidMount = () => {
+    this.loadData(this.getGlobeDataGeoJSON(), this.props)
+  }
+
+  componentDidUpdate() {
+    //console.log("JGlobe did update");
+    //this calls everytime something is even clicked, not even changed
+    //need to figure a flag to only call when there is a change
+    this.loadData(this.getGlobeDataGeoJSON(), this.props)
+  }
+
+  getEsriMap = () => {
+    return this.esriMap
+  }
+
+  position
+
+  //This funciton just returns the position given to it?
+  getCamPosition = (pos) => {
+    return pos
+  }
+
+  extent = []
+  //setting the view extent to send to the globe
+
+  setLayerExtent(layer) {
+    this.extent = layer.graphics.toArray()
+    //console.log(this.extent)
+  }
+
+  render() {
+    let className = 'jglobe-widget px-0 col esri-widget'
+
+    if (this.props.className) {
+      className = className + ' ' + this.props.className
+    }
+
+    return (
+      <div id="jglobe" className={className}>
+        <EsriGlobe
+          map={this.esriMap}
+          elevLayer={this.elevLayer}
+          importShapefile={this.importShapefile}
+          importLayerURL={this.importLayerURL}
+          removeLayer={this.removeLayer}
+          layersVisible={this.layersVisible}
+          geojsonLayerVisible={this.geojsonLayerVisible}
+          setGeojsonLayerVisible={this.setGeojsonLayerVisible}
+          surfaceShapeLayerVisible={this.surfaceShapeLayerVisible}
+          updateLayerVisibility={this.updateLayerVisibility}
+          projectLayerList={this.projectLayerList}
+          setProjectLayerList={this.setProjectLayerList}
+          className={this.className}
+          // isTabOpen={this.state.activeKey != -1}
+          getCamPosition={this.getCamPosition}
+          getSceneView={this.getSceneView}
+          mapPoints={this._mapPoints}
+          extent={this.extent}
+          //setSelectedURL={this.props.setSelectedURL}
+          //selectedURL={this.props.selectedURL}
+        />
+      </div>
+    )
+  }
+}
+
+JGlobe.propTypes = {
+  jglobeRef: PropTypes.object,
+  latitude: PropTypes.number, // +/-90 degrees
+  longitude: PropTypes.number, // +/-180 degrees
+  altitude: PropTypes.number, // meters above sea level (MSL)
+  importShapefile: PropTypes.func,
+  importLayerURL: PropTypes.func,
+  removeLayer: PropTypes.func,
+  layersVisible: PropTypes.bool,
+  getIconImage: PropTypes.func.isRequired,
+  getGlobeDataGeoJSON: PropTypes.func.isRequired,
+  loadShapefileFromURL: PropTypes.func.isRequired,
+  loadShapefileFromFile: PropTypes.func.isRequired
+}
+
+export default JGlobe

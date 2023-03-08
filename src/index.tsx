@@ -9,6 +9,7 @@ import SearchRoot, {
   loader as rootLoader,
   action as rootAction,
 } from './routes/SearchRoot'
+import esriConfig from '@arcgis/core/config'
 
 // Routing is with react-router v6
 import {
@@ -29,6 +30,8 @@ import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
+
+esriConfig.assetsPath = "./assets"
 
 const router = createBrowserRouter(
   createRoutesFromElements([

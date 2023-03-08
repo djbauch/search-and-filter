@@ -1,0 +1,962 @@
+import React, { useRef, useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
+import Map from '@arcgis/core/Map'
+import SceneView from '@arcgis/core/views/SceneView'
+import Camera from '@arcgis/core/Camera'
+import Sketch from '@arcgis/core/widgets/Sketch'
+import Expand from '@arcgis/core/widgets/Expand'
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import esriConfig from '@arcgis/core/config'
+import LayerList from '@arcgis/core/widgets/LayerList'
+import * as watchUtils from '@arcgis/core/core/watchUtils'
+import BasemapLayerList from '@arcgis/core/widgets/BasemapLayerList'
+import AreaMeasurement3D from '@arcgis/core/widgets/AreaMeasurement3D'
+import DirectLineMeasurement3D from '@arcgis/core/widgets/DirectLineMeasurement3D'
+import CoordinateConversion from '@arcgis/core/widgets/CoordinateConversion'
+import Search from '@arcgis/core/widgets/Search'
+import Legend from '@arcgis/core/widgets/Legend'
+import LineOfSight from '@arcgis/core/widgets/LineOfSight'
+import ElevationProfile from '@arcgis/core/widgets/ElevationProfile'
+import formatcoords from './formatcoords'
+import PropTypes from 'prop-types'
+import BrowseLayersPortal from './BrowseLayersPortal'
+
+import './EsriGlobe.css'
+//import { useTooltipsEnabledState, useTooltipBehaviorState } from '../../../data/LocalStorageKeys'
+
+export const EsriGlobe = (props) => {
+  let currentLat = null
+  let currentLon = null
+
+  const [tooltipsEnabled] = useState(true)
+  const [tooltipBehavior] = useState('view-mouseover')
+
+  const [showBrowseLayersPortal, setShowBrowseLayersPortal] = useState(false)
+
+  const [selectedURL, setSelectedURL] = useState('')
+  const [selectedTitle, setSelectedTitle] = useState('')
+
+  const monumentPos = {
+    center: [-77.035278, 38.889484],
+    scale: 240000000,
+    rotation: 0
+  }
+  // Required: Set this property to insure assets resolve correctly.
+  esriConfig.assetsPath = '/assets'
+
+  const graphicsArray = () => {
+    if (mapRef.current) {
+      const layerItems = mapRef.current.layers.items[1]
+      if (layerItems && layerItems.graphics) {
+        return layerItems.graphics.toArray()
+      } else {
+        return []
+      }
+    } else {
+      return []
+    }
+  }
+
+  const mapDiv = useRef(null)
+  const mapRef = useRef(null)
+  const viewRef = useRef(null)
+  const browseRef = useRef(null)
+
+  const addMeasurementTool = (sceneView) => {
+    let activeWidget = null
+
+    const distanceId = 'esri-distance-button'
+    const areaId = 'esri-area-button'
+    const clearId = 'esri-clear-button'
+
+    /*
+    ViewRef doesn't allow adding things the React way, so got to do things the old way
+    Note that in order to get the button look that the globe widgets use, you need to
+    use a div and give it the button role, rather than use the button HTML element.
+    */
+
+    const distanceButton = document.createElement('div')
+    distanceButton.id = distanceId
+    distanceButton.className = 'esri-widget--button esri-widget--button__measure button__bottom-right'
+    distanceButton.title = 'Distance Measurement Tool'
+    distanceButton.role = 'button'
+    distanceButton.tabIndex = 0
+    const distanceIcon = document.createElement('span')
+    distanceIcon.className = 'esri-icon-measure-line'
+    distanceButton.append(distanceIcon)
+
+    const areaButton = document.createElement('div')
+    areaButton.id = areaId
+    areaButton.className = 'esri-widget--button esri-widget--button__measure button__bottom-right'
+    areaButton.title = 'Area Measurement Tool'
+    areaButton.role = 'button'
+    areaButton.tabIndex = 0
+    const areaIcon = document.createElement('span')
+    areaIcon.className = 'esri-icon-measure-area'
+    areaButton.append(areaIcon)
+
+    const clearButton = document.createElement('div')
+    clearButton.id = clearId
+    clearButton.className = 'esri-widget--button esri-widget--button__measure'
+    clearButton.title = 'Clear Measurements'
+    clearButton.role = 'button'
+    clearButton.tabIndex = 0
+    const clearIcon = document.createElement('span')
+    clearIcon.className = 'esri-icon-trash'
+    clearButton.append(clearIcon)
+
+    distanceButton.addEventListener('click', function () {
+      setActiveWidget('line')
+      distanceButton.classList.add('esri-widget--button__measure--active')
+      areaButton.classList.remove('esri-widget--button__measure--active')
+    })
+    areaButton.addEventListener('click', function () {
+      setActiveWidget('area')
+      distanceButton.classList.remove('esri-widget--button__measure--active')
+      areaButton.classList.add('esri-widget--button__measure--active')
+    })
+    clearButton.addEventListener('click', function () {
+      setActiveWidget()
+      distanceButton.classList.remove('esri-widget--button__measure--active')
+      areaButton.classList.remove('esri-widget--button__measure--active')
+    })
+
+    function setActiveWidget(tool) {
+      if (activeWidget) {
+        activeWidget.viewModel.clear()
+        sceneView.ui.remove(activeWidget)
+        activeWidget.destroy()
+      }
+
+      if (tool === 'line') {
+        activeWidget = new DirectLineMeasurement3D({
+          view: sceneView
+        })
+        distanceButton.classList.add('active')
+        areaButton.classList.remove('active')
+      } else if (tool === 'area') {
+        activeWidget = new AreaMeasurement3D({
+          view: sceneView
+        })
+        distanceButton.classList.remove('active')
+        areaButton.classList.add('active')
+      } else {
+        activeWidget = null
+        distanceButton.classList.remove('active')
+        areaButton.classList.remove('active')
+      }
+
+      if (activeWidget) {
+        sceneView.ui.add(activeWidget, 'bottom-right')
+        activeWidget.viewModel.start().catch(function (error) {
+          if (error.name != 'AbortError') {
+            console.error(error)
+          }
+        })
+      }
+    }
+
+    const panel = document.createElement('div')
+    panel.className = 'esri-component esri-measurement-toggle esri-widget'
+    panel.appendChild(distanceButton)
+    panel.appendChild(areaButton)
+    panel.appendChild(clearButton)
+
+    sceneView.ui.add(panel, 'bottom-right')
+  }
+
+  const addSketchTool = (map, sceneView) => {
+    const sketchLayer = new GraphicsLayer({
+      title: 'Sketch Tool',
+      listMode: 'hide'
+    })
+
+    map.add(sketchLayer, 0)
+
+    const sketch = new Sketch({
+      view: sceneView,
+      layer: sketchLayer,
+      creationMode: 'update'
+    })
+
+    let sketchExpand = new Expand({
+      expandIconClass: 'esri-icon-sketch-rectangle',
+      expandTooltip: 'Expand Sketch Tool',
+      view: sceneView,
+      content: sketch
+    })
+
+    sceneView.ui.add(sketchExpand, 'bottom-left')
+  }
+
+  const addElevationProfileTool = (sceneView) => {
+    const elevationProfile = new ElevationProfile({
+      view: sceneView
+    })
+
+    const expand = new Expand({
+      expandIconClass: 'esri-icon-elevation-profile',
+      expandTooltip: 'Expand Elevation Profile Tool', // optional, defaults to "Expand" for English locale
+      view: sceneView,
+      content: elevationProfile
+    })
+
+    sceneView.ui.add(expand, 'top-right')
+  }
+
+  const addCoordinateConversionTool = (sceneView) => {
+    let ccWidget = new CoordinateConversion({
+      view: sceneView
+    })
+
+    /*
+    const expand = new Expand({
+      expandIconClass: "esri-icon-tracking",
+      expandTooltip: "Expand Coordinate Conversion Tool", // optional, defaults to "Expand" for English locale
+      view: sceneView,
+      content: ccWidget
+    });
+    */
+
+    // Adds widget in the bottom left corner of the view
+    sceneView.ui.add(ccWidget, 'bottom-left')
+  }
+
+  const addLineOfSightTool = (sceneView) => {
+    const lineOfSight = new LineOfSight({
+      view: sceneView
+    })
+
+    const expand = new Expand({
+      expandIconClass: 'esri-icon-line-of-sight',
+      expandTooltip: 'Expand Line Of Sight Tool', // optional, defaults to "Expand" for English locale
+      view: sceneView,
+      content: lineOfSight
+    })
+
+    // Add widget to the bottom left corner of the view
+    sceneView.ui.add(expand, {
+      position: 'top-right'
+    })
+  }
+
+  const addCoordinateCopyAction = (sceneView) => {
+    let copyUnavailable = !navigator.clipboard
+
+    let copyAction = !copyUnavailable
+      ? {
+          title: 'Copy Coordinates',
+          id: 'clipboard-copy',
+          className: 'esri-icon-duplicate'
+        }
+      : null
+
+    if (copyAction) {
+      sceneView.popup.actions.push(copyAction)
+
+      sceneView.on('click', (event) => {
+        if (event.button === 2 && event.mapPoint) {
+          //Right click
+          // you must overwrite default click-for-popup
+          // behavior to display your own popup
+          //sceneView.popup.autoOpenEnabled = false;
+
+          // Get the coordinates of the click on the view
+          currentLat = event.mapPoint.latitude
+          currentLon = event.mapPoint.longitude
+
+          if (currentLat != null && currentLon != null) {
+            var coords = formatcoords(currentLat, currentLon)
+
+            const template = {
+              // Set the popup's title to the coordinates of the location
+              title: 'Coordinates:<br/>' + coords.format('pDD pMM pss X', { decimalPlaces: 3 }),
+              location: event.mapPoint, // Set the location of the popup to the clicked location
+              content: '' // content displayed in the popup
+            }
+
+            sceneView.popup.open(template)
+          }
+        }
+      })
+
+      sceneView.popup.on('trigger-action', (event) => {
+        // Execute the measureThis() function if the measure-this action is clicked
+        if (event.action.id === 'clipboard-copy' && currentLat && currentLon) {
+          var coords = formatcoords(currentLat, currentLon)
+          navigator.clipboard
+            .writeText(coords.format('pDD pMM pss X', { decimalPlaces: 3 }))
+            .then((_) => (sceneView.popup.content = 'Coordinates copied to clipboard.'))
+        }
+      })
+
+      //In order to prevent the copy feature from appearing on every popup, check the title to see if it's a
+      //coordinate display window.
+      sceneView.popup.watch('title', (title) => {
+        let copyActionIdx = -1
+        sceneView.popup.actions.forEach((element, index) => {
+          if (element.id === 'clipboard-copy' && copyActionIdx === -1) {
+            copyActionIdx = index
+          }
+        })
+        if (copyActionIdx !== -1) {
+          sceneView.popup.actions.items[copyActionIdx].visible = sceneView.popup.title.includes('Coordinates:<br/>')
+        }
+      })
+    }
+  }
+
+  const addSearchTool = (sceneView) => {
+    const searchWidget = new Search({
+      view: sceneView
+    })
+    // Adds the search widget below other elements in
+    // the top left corner of the view
+    sceneView.ui.add(searchWidget, {
+      position: 'top-left',
+      index: 0
+    })
+  }
+
+  //moved these outside function to be used elsewhere
+  var addLayerTypeIsURL = true //default to url
+  var addLayerTitle
+  var addLayerURL
+
+  const addAddLayerTool = (sceneView) => {
+    let addLayerDiv = document.createElement('div')
+    addLayerDiv.className = 'esri-widget esri-widget--panel esri-layer-list scroll-vert'
+    let addLayerHeading = document.createElement('h2')
+    addLayerHeading.className = 'esri-header__layer-header'
+    let addLayerHeadingContent = document.createTextNode('Add Layer')
+    addLayerHeading.appendChild(addLayerHeadingContent)
+
+    var addLayerForm = document.createElement('form')
+    addLayerForm.className = 'esri-addLayer_padding'
+    addLayerForm.id = 'addLayerForm'
+    addLayerForm.method = 'post'
+    addLayerForm.enctype = 'multipart/form-data'
+
+    const urlRow = document.createElement('div')
+    urlRow.className = 'row d-flex align-items-center'
+    const urlLabelCol = document.createElement('div')
+    urlLabelCol.className = 'col'
+    const urlButtonCol = document.createElement('div')
+    urlButtonCol.className = 'col d-flex justify-content-end'
+
+    const addLayerURLDiv = document.createElement('div')
+    addLayerURLDiv.className = 'esri-addLayer_padding'
+    var addLayerURLLabel = document.createElement('label')
+    addLayerURLLabel.innerHTML = 'URL'
+    addLayerURLLabel.className = 'radio-inline esri-addLayer_label'
+    var addLayerURLRadio = document.createElement('input')
+    addLayerURLRadio.type = 'radio'
+    addLayerURLRadio.name = 'radioOption'
+    addLayerURLRadio.checked = addLayerTypeIsURL
+    addLayerURLRadio.className = 'esri-addLayer_padding'
+    addLayerURLRadio.addEventListener('click', function () {
+      addLayerTypeChange('url', browseButton, addLayerURL, addLayerFile, addLayerTitle)
+    })
+    urlLabelCol.append(addLayerURLRadio)
+    urlLabelCol.append(addLayerURLLabel)
+
+    var addLayerFileLabel = document.createElement('label')
+    addLayerFileLabel.innerHTML = 'File'
+    addLayerFileLabel.className = 'radio-inline esri-addLayer_label'
+    var addLayerFileRadio = document.createElement('input')
+    addLayerFileRadio.type = 'radio'
+    addLayerFileRadio.name = 'radioOption'
+    addLayerFileRadio.value = 'File'
+    addLayerFileRadio.className = 'esri-addLayer_padding'
+    addLayerFileRadio.addEventListener('click', function () {
+      addLayerTypeChange('file', browseButton, addLayerURL, addLayerFile, addLayerTitle)
+    })
+    urlLabelCol.append(addLayerFileRadio)
+    urlLabelCol.append(addLayerFileLabel)
+
+    let browseButton = document.createElement('div')
+    browseButton.textContent = 'Browse...'
+    browseButton.className = 'esri-button esri-addLayer_browsebutton'
+    browseButton.role = 'button'
+    browseButton.hidden = !addLayerTypeIsURL
+    urlButtonCol.append(browseButton)
+    urlRow.append(urlLabelCol)
+    urlRow.append(urlButtonCol)
+    addLayerURLDiv.append(urlRow)
+    browseButton.addEventListener('click', function () {
+      browseLayers(browseButton)
+    })
+
+    addLayerURL = document.createElement('input')
+    addLayerURL.className = 'esri-addLayer_inputbox'
+    addLayerURL.type = 'url'
+    addLayerURL.name = 'URL'
+    addLayerURL.id = 'addLayerURL'
+    addLayerURL.value = ''
+    addLayerURL.contentEditable = true
+    addLayerURL.hidden = !addLayerTypeIsURL
+    addLayerURL.placeholder = 'https://<enter URL>'
+    addLayerURLDiv.append(addLayerURL)
+
+    var uploadForm = document.createElement('form')
+    uploadForm.id = 'uploadForm'
+    uploadForm.method = 'post'
+    uploadForm.enctype = 'multipart/form-data'
+
+    var addLayerFile = document.createElement('input')
+    addLayerFile.className = 'esri-addLayer_inputbox'
+    addLayerFile.type = 'file'
+    addLayerFile.name = 'file'
+    addLayerFile.id = 'inFile'
+    addLayerFile.contentEditable = true
+    addLayerFile.accept = '.zip, .geojson'
+    addLayerFile.hidden = addLayerTypeIsURL
+    addLayerFile.addEventListener('change', function () {
+      updateTitleText(addLayerTitle)
+    })
+
+    uploadForm.append(addLayerFile)
+    addLayerURLDiv.append(uploadForm)
+
+    addLayerForm.appendChild(addLayerURLDiv)
+
+    var addLayerTitleDiv = document.createElement('div')
+    addLayerTitleDiv.className = 'esri-addLayer_padding'
+    var addLayerTitleLabel = document.createElement('label')
+    addLayerTitleLabel.className = 'esri-addLayer_padding'
+    addLayerTitleLabel.innerHTML = 'Title'
+    addLayerTitleDiv.append(addLayerTitleLabel)
+
+    addLayerTitle = document.createElement('input')
+    addLayerTitle.className = 'esri-addLayer_inputbox'
+    addLayerTitle.type = 'text'
+    addLayerTitle.name = 'addLayerTitleName'
+    addLayerTitle.id = 'addLayerTitle'
+    //addLayerTitle.value = "";
+    addLayerTitle.placeholder = '<enter Title>'
+    addLayerTitleDiv.appendChild(addLayerTitle)
+    addLayerForm.append(addLayerTitleDiv)
+
+    var addLayerButtonDiv = document.createElement('div')
+    addLayerButtonDiv.className = 'esri-addLayer_padding'
+    var addLayerButton = document.createElement('div')
+    addLayerButton.role = 'button'
+    addLayerButton.name = 'addLayer'
+    addLayerButton.textContent = 'Add Map Layer'
+    addLayerButton.className =
+      'esri-button esri-button--secondary width-auto esri-addLayer_padding  esri-addLayer_addmapbutton'
+    addLayerButtonDiv.append(addLayerButton)
+    addLayerForm.appendChild(addLayerButtonDiv)
+
+    addLayerButton.addEventListener('click', function () {
+      if (nameIsUnique(addLayerTitle.value, sceneView)) {
+        if (addLayerTypeIsURL) {
+          addLayerFromURL(addLayerURL.value, addLayerTitle.value)
+        } else addLayerFromFile(sceneView, addLayerFile.value, addLayerTitle.value)
+
+        layerListExpand.iconNumber = getLayerListCount(sceneView)
+      } else {
+        alert('Please enter a unique Title.')
+      }
+    })
+
+    addLayerDiv.append(addLayerHeading)
+    addLayerDiv.append(addLayerForm)
+
+    const addLayerExpand = new Expand({
+      expandIconClass: 'esri-icon-plus-circled',
+      expandTooltip: 'Add Layer',
+      view: sceneView,
+      content: addLayerDiv
+    })
+
+    sceneView.ui.add(addLayerExpand, 'top-right')
+  }
+
+  const addBrowseLayersPortal = (sceneView) => {
+    /* TODO:
+    let browsePortalDiv = document.createElement('div')
+    browsePortalDiv.id = 'browsePortalDiv'
+    browsePortalDiv.className = 'scroll-vert'
+    let browseLayersPortal = (
+      <BrowseLayersPortal
+        setSelectedURL={setSelectedURL}
+        setSelectedTitle={setSelectedTitle}
+        selectedURL={selectedURL}
+        selectedTitle={selectedTitle}
+        setShowBrowseLayersPortal={setShowBrowseLayersPortal}
+      />
+    )
+    browseRef.current = browseLayersPortal
+    ReactDOM.render(browseLayersPortal, browsePortalDiv)
+    ReactDOM.hydrate(browseLayersPortal, browsePortalDiv)
+
+    let addBrowseDiv = document.createElement('div')
+    addBrowseDiv.id = 'addBrowseDiv'
+    browsePortalDiv.className = 'scroll-vert'
+    addBrowseDiv.append(browsePortalDiv)
+
+    sceneView.ui.add(addBrowseDiv, 'top-right') //adds this to bottom of top right buttons
+    */
+  }
+
+  const nameIsUnique = (name, sceneView) => {
+    var isUnique = true
+    sceneView.map.layers.forEach((layer) => {
+      if (layer.title === name) isUnique = false
+    })
+    return isUnique
+  }
+
+  const browseLayers = () => {
+    setShowBrowseLayersPortal(true)
+  }
+
+  const addLayerTypeChange = (layerType, browseButton, addLayerURL, addLayerFile) => {
+    if (layerType == 'url') {
+      addLayerTypeIsURL = true
+    } else {
+      addLayerTypeIsURL = false
+    }
+    addLayerFile.hidden = addLayerTypeIsURL
+    addLayerURL.hidden = !addLayerTypeIsURL
+    browseButton.hidden = !addLayerTypeIsURL
+  }
+
+  const updateTitleText = (addLayerTitle) => {
+    let filename = document.getElementById('inFile').value
+    //nameOnly = nameOnly.match(/[^\\\/]+$/);
+    let nameOnly = stripFileName(filename)
+    //nameOnly = nameOnly.split('.');
+    addLayerTitle.value = nameOnly
+  }
+
+  const stripFileName = (fullFileName) => {
+    return fullFileName.match(/[^\\\/]+$/)
+  }
+
+  const addLayerFromURL = (url, layerTitle) => {
+    if (url) {
+      props.importLayerURL(url, layerTitle)
+    } else {
+      alert('Please enter a valid URL')
+    }
+  }
+
+  const addLayerFromFile = (sceneView, filename, layerTitle, addLayerFile) => {
+    if (filename) {
+      var fileType = filename.includes('.zip') ? 'shapefile' : 'geojson'
+      let justName = stripFileName(filename)
+      var fileContent = document.getElementById('uploadForm')
+      props.importShapefile(sceneView, justName, layerTitle, fileContent, fileType)
+    } else {
+      alert('Please enter a valid filename')
+    }
+  }
+
+  var layerListExpand
+  const addLayerControlTool = (sceneView) => {
+    let layerListDiv = document.createElement('div')
+    layerListDiv.className = 'project-layer-list'
+
+    let letLayerListTitle = document.createElement('h2')
+    letLayerListTitle.className = 'esri-header__layer-header'
+    let layerListTitleContent = document.createTextNode('Project Layers')
+    letLayerListTitle.appendChild(layerListTitleContent)
+    layerListDiv.append(letLayerListTitle)
+
+    var layerList = new LayerList({
+      container: layerListDiv,
+      view: sceneView,
+      listItemCreatedFunction: defineLayerListActions
+    })
+
+    function defineLayerListActions(event) {
+      // The event object contains an item property.
+      // is is a ListItem referencing the associated layer
+      // and other properties. You can control the visibility of the
+      // item, its title, and actions using this object.
+
+      var item = event.item
+
+      item.actionsSections = [
+        [
+          {
+            title: 'Zoom to',
+            className: 'esri-icon-zoom-in-magnifying-glass',
+            id: 'zoom-to'
+          },
+          {
+            title: 'Current Opacity: ' + item.layer.opacity * 100 + '%',
+            className: 'esri-icon-hollow-eye',
+            id: 'current-opacity'
+          },
+          {
+            title: 'Increase opacity by 25%',
+            className: 'esri-icon-up',
+            id: 'increase-opacity'
+          },
+          {
+            title: 'Decrease opacity by 25%',
+            className: 'esri-icon-down',
+            id: 'decrease-opacity'
+          },
+          {
+            title: 'Reset opacity to 100%',
+            className: 'esri-icon-undo',
+            id: 'reset-opacity'
+          },
+          {
+            title: 'Remove Layer',
+            className: 'esri-icon-trash',
+            id: 'remove-layer'
+          }
+        ]
+      ]
+    }
+
+    /////////////// added visibility persistence for geojson and surface shapes layer using watchUtils (2.28.22 release)
+    // map to store lyr => watcher
+    //let watcherMap = new Map();
+
+    // watch all layers
+    sceneView.map.layers.forEach((layer) => {
+      watchLayerVisibility(layer)
+      //console.log("added visible watch to " + layer.title + " in jsGlobe is visible " + layer.visible);
+    })
+
+    // watch all future layers that are added/removed to/from map
+    layerList.on('changes', (e) => {
+      // layer is added, watch it
+      var layer = e.item.layer
+      if (e.added.length > 0) {
+        e.added.forEach((layer) => watchLayerVisibility(layer))
+      }
+      // layer is removed, clear watch, maybe add this in later
+      // if (e.removed.length > 0){
+      //   e.removed.forEach(layer => {
+      //     watcherMap.get(layer).remove();
+      //     watcherMap.delete(layer);
+      //   });
+      // }
+      layerListExpand.iconNumber = getLayerListCount(sceneView)
+    })
+
+    function watchLayerVisibility(layer) {
+      let watcher = watchUtils.watch(layer, 'visible', (e) => {
+        //console.log(`visibility for layer with title ${layer.title} is ${e}`);
+        if (layer.id === 'geojsonURLLayer') {
+          props.setGeojsonLayerVisible(layer.visible)
+        } else if (layer.title === 'Surface Shapes') {
+          props.setSurfaceShapeLayerVisible(layer.visible)
+        } else {
+          props.updateLayerVisibility(layer.id, layer.visible)
+        }
+      })
+      //watcherMap.set(layer, watcher)
+    }
+    ////////////////
+
+    layerList.on('trigger-action', function (event) {
+      // The layer visible in the view at the time of the trigger.
+      let visibleLayer = event.item.layer
+
+      // Capture the action id.
+      let id = event.action.id
+
+      let opacityChanged = false
+
+      if (id === 'increase-opacity') {
+        // If the increase-opacity action is triggered, then
+        // increase the opacity of the GroupLayer by 0.25.
+
+        if (visibleLayer.opacity < 1) {
+          visibleLayer.opacity += 0.25
+          opacityChanged = true
+        }
+      } else if (id === 'decrease-opacity') {
+        // If the decrease-opacity action is triggered, then
+        // decrease the opacity of the GroupLayer by 0.25.
+
+        if (visibleLayer.opacity > 0) {
+          visibleLayer.opacity -= 0.25
+          opacityChanged = true
+        }
+      } else if (id === 'reset-opacity') {
+        // If the decrease-opacity action is triggered, then
+        // decrease the opacity of the GroupLayer by 0.25.
+
+        if (visibleLayer.opacity !== 1) {
+          visibleLayer.opacity = 1
+          opacityChanged = true
+        }
+      } else if (id === 'remove-layer') {
+        //alert("remove this layer: " + visibleLayer.id);
+        props.removeLayer(visibleLayer.id)
+        layerListExpand.iconNumber = getLayerListCount(sceneView)
+      } else if (id === 'zoom-to') {
+        var layerZoom = sceneView.map.findLayerById(visibleLayer.id)
+        var ext = layerZoom.fullExtent
+        sceneView.goTo(ext).catch((err) => console.log(err))
+      }
+
+      if (opacityChanged) {
+        //Update the label to show the current opacity
+        event.item.actionsSections.getItemAt(0).getItemAt(0).title =
+          'Current Opacity: ' + visibleLayer.opacity * 100 + ' %'
+      }
+    })
+
+    layerListExpand = new Expand({
+      expandIconClass: 'esri-icon-layers',
+      iconNumber: getLayerListCount(sceneView),
+      expandTooltip: 'Expand Project Layers List',
+      view: sceneView,
+      content: layerListDiv,
+      group: 'top-right',
+      expanded: false //default to collapsed
+    })
+
+    sceneView.ui.add(layerListExpand, {
+      position: 'top-right'
+    })
+
+    //Add the BaseMap layer toggle below
+    var basemapLayerList = new BasemapLayerList({
+      view: sceneView
+    })
+
+    let bmLayerListExpand = new Expand({
+      expandIconClass: 'esri-icon-globe',
+      expandTooltip: 'Expand Base Map Layers List',
+      view: sceneView,
+      content: basemapLayerList
+    })
+
+    // Adds the widget below other elements in the top right corner of the view
+    sceneView.ui.add(bmLayerListExpand, {
+      position: 'top-right'
+    })
+  }
+
+  const getLayerListCount = (sceneView) => {
+    var layerListCount = 0
+    sceneView.map.layers.forEach((layer) => {
+      if (layer.listMode !== 'hide')
+        //this should get all the layers that show up in LayerList
+        layerListCount++
+    })
+    return layerListCount
+  }
+
+  const addLegend = (map, sceneView) => {
+    sceneView.when(() => {
+      let layers = map.layers.items
+      let layerInfos = []
+      for (let layer of layers) {
+        layerInfos.push({
+          layer: layer,
+          title: layer.title
+        })
+      }
+
+      const featureLayer = map.layers.getItemAt(0)
+
+      let legend = new Legend({
+        view: sceneView,
+        layerInfos: [
+          {
+            layer: featureLayer,
+            title: 'NY Educational Attainment'
+          }
+        ]
+      })
+
+      const expand = new Expand({
+        expandIconClass: 'esri-icon-legend',
+        expandTooltip: 'Expand Legend', // optional, defaults to "Expand" for English locale
+        view: sceneView,
+        content: legend
+      })
+
+      sceneView.ui.add(expand, {
+        position: 'top-right'
+      })
+    })
+  }
+
+  const addHighlighting = (sceneView) => {
+    let highlightHandle = null
+    sceneView.on('pointer-move', (event) => {
+      sceneView.hitTest(event).then((response) => {
+        if (response.results.length > 0) {
+          let graphic = response.results[0].graphic
+          //TODO Only update graphic when the user requests it via a button press
+          sceneView.whenLayerView(graphic.layer).then((layerView) => {
+            if (!highlightHandle) {
+              highlightHandle = layerView.highlight(graphic)
+              if (tooltipsEnabled && tooltipBehavior === 'view-mouseover') {
+                sceneView.popup.open({
+                  features: [graphic], // array of graphics with popupTemplate set and geometries
+                  location: graphic.geometry.centroid // updates the location of popup based on
+                  // selected feature's geometry
+                })
+              }
+            }
+          })
+        } else {
+          if (highlightHandle) {
+            highlightHandle.remove()
+            highlightHandle = null
+            if (tooltipsEnabled && tooltipBehavior === 'view-mouseover') sceneView.popup.close()
+          }
+        }
+      })
+    })
+  }
+
+  useEffect(() => {
+    let layerTitle = document.getElementById('addLayerTitle')
+
+    if (layerTitle) {
+      //console.log("made it to useEffect " + layerTitle.name + " selectedTitle: " + selectedTitle);
+      layerTitle.value = selectedTitle
+    }
+
+    let layerURL = document.getElementById('addLayerURL')
+    if (layerURL) layerURL.value = selectedURL
+  }, [selectedTitle, setSelectedTitle, selectedURL, setSelectedURL, showBrowseLayersPortal])
+
+  useEffect(() => {
+    if (mapDiv.current) {
+      // Only initialize map once.
+      if (!mapRef.current) {
+        mapRef.current = props.map
+      }
+
+      // Only initialize view once.
+      if (!viewRef.current) {
+        viewRef.current = new SceneView({
+          map: mapRef.current,
+          container: mapDiv.current,
+          highlightOptions: {
+            haloColor: 'black',
+            haloOpacity: 0.9,
+            fillOpacity: 0.2,
+            shadowColor: 'black',
+            shadowOpacity: 0.5
+          }
+        })
+
+        //Top Left
+        addSearchTool(viewRef.current)
+        //Bottom Left
+        addCoordinateConversionTool(viewRef.current)
+        addSketchTool(mapRef.current, viewRef.current)
+        //Top Right
+        addAddLayerTool(viewRef.current)
+        if (props.layersVisible) {
+          addLayerControlTool(viewRef.current)
+        }
+        //addLegend(mapRef.current, viewRef.current);
+        addLineOfSightTool(viewRef.current)
+        addElevationProfileTool(viewRef.current)
+        //Bottom Right
+        addMeasurementTool(viewRef.current)
+        //Popups
+        addCoordinateCopyAction(viewRef.current)
+        addHighlighting(viewRef.current)
+
+        if (!tooltipsEnabled || tooltipBehavior === 'view-mouseover') viewRef.current.popup.autoOpenEnabled = false
+      }
+      //Initializing camera to over the washington monument
+      if (!viewRef.current.camera) {
+        viewRef.current.camera = new Camera({
+          position: {
+            latitude: monumentPos.center[1],
+            longitude: monumentPos.center[0],
+            z: 25000000
+          }
+        })
+      }
+      //console.log(viewRef.current)
+      //if there are no graphics loaded in the mapRef, go to the monument. This should eventually be depricated and replaced with a change listener once this is a featuresLayer.
+      //if there are graphics on the map, find the appropriate position.
+      findCameraPosition(graphicsArray())
+
+      //Uncomment this to see a shapefile loaded onto the map.
+      //props.importShapefile(mapRef.current, viewRef.current);
+      //props.importLayerURL(mapRef.current, viewRef.current);
+    }
+  }, [props, tooltipBehavior, tooltipsEnabled])
+
+  useEffect(() => {
+    if (showBrowseLayersPortal) {
+      //console.log("show browse dialog");
+      addBrowseLayersPortal(viewRef.current)
+    } else {
+      let addBrowseDiv = document.getElementById('addBrowseDiv')
+      if (addBrowseDiv) {
+        //console.log("remove browse dialog");
+        viewRef.current.ui.remove(addBrowseDiv)
+      }
+    }
+  }, [showBrowseLayersPortal])
+
+  function findCameraPosition(graphics) {
+    //console.log("Finding Camera Position!")
+    //check to see if there is anything on the globe
+    if (graphicsArray().length == 0) {
+      //console.log("Going to the monument")
+      viewRef.current.goTo(monumentPos)
+      //console.log(viewRef.current)
+    }
+    //check to see if the current screen has been updated since the view was created by the parent
+    //this works because the prop being passed down is created before the data is retrieved to be drawn,
+    //so we have a kind of janky change listener.
+    else if (!checkArrays(graphics, props.extent)) {
+      //console.log("Recentering")
+      viewRef.current.goTo(graphics)
+    }
+  }
+
+  props.getSceneView(viewRef)
+
+  function checkArrays(arr1, arr2) {
+    if (arr1.length !== arr2.length) {
+      //console.log("The lengths do not match")
+      return false
+    } else {
+      for (var i = 0; i < arr1.length; i++) {
+        //even if the arrays are the same length, they may have different elements.
+        //However, the elements are added on every rerender, making their ids inconsistent, even if they represent the same equipment
+        //when this is a features layer we will be able to run a change check. For now, this checks to make sure their position is the same.
+        // If two elements are in the same position in the arrays and have the same position, we will consider them to represent the same equipment.
+        if (
+          arr1[i].geometry.latitude !== arr2[i].geometry.latitude ||
+          arr1[i].geometry.longitude !== arr2[i].geometry.longitude
+        ) {
+          //console.log("Item " + i + " does not match.")
+          return false
+        }
+      }
+    }
+    //console.log("returning true ")
+    return true
+  }
+
+  return <div id="esri-parent-div" ref={mapDiv}></div>
+}
+
+EsriGlobe.propTypes = {
+  map: PropTypes.instanceOf(Map).isRequired,
+  layersVisible: PropTypes.bool,
+  handleCameraUpdate: PropTypes.func,
+  mapPoints: PropTypes.array,
+  extent: PropTypes.any,
+  geojsonLayerVisible: PropTypes.bool,
+  setGeojsonLayerVisible: PropTypes.any,
+  surfaceShapeLayerVisible: PropTypes.bool,
+  setSurfaceShapeLayerVisible: PropTypes.any,
+  updateLayerVisibility: PropTypes.any
+}
