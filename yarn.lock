@@ -17436,6 +17436,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"moment@npm:^2.29.4":
+  version: 2.29.4
+  resolution: "moment@npm:2.29.4"
+  checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
+  languageName: node
+  linkType: hard
+
 "move-concurrently@npm:^1.0.1":
   version: 1.0.1
   resolution: "move-concurrently@npm:1.0.1"
@@ -17901,6 +17908,13 @@ __metadata:
   version: 0.6.0
   resolution: "object-path@npm:0.6.0"
   checksum: e9d7a901bcfcfe39b195cdac5bb2b8c1f030abdf86f45ed6d0385c5d0c38a8c5e4b4a30c88bf483d6b3b37b5a8d620d004dbfc6db6be8565f88e9cf0b078e945
+  languageName: node
+  linkType: hard
+
+"object-path@npm:^0.11.8":
+  version: 0.11.8
+  resolution: "object-path@npm:0.11.8"
+  checksum: 684ccf0fb6b82f067dc81e2763481606692b8485bec03eb2a64e086a44dbea122b2b9ef44423a08e09041348fe4b4b67bd59985598f1652f67df95f0618f5968
   languageName: node
   linkType: hard
 
@@ -18404,6 +18418,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"parse-path@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "parse-path@npm:7.0.0"
+  dependencies:
+    protocols: ^2.0.0
+  checksum: 244b46523a58181d251dda9b888efde35d8afb957436598d948852f416d8c76ddb4f2010f9fc94218b4be3e5c0f716aa0d2026194a781e3b8981924142009302
+  languageName: node
+  linkType: hard
+
 "parse-url@npm:^6.0.0":
   version: 6.0.5
   resolution: "parse-url@npm:6.0.5"
@@ -18413,6 +18436,15 @@ __metadata:
     parse-path: ^4.0.0
     protocols: ^1.4.0
   checksum: b583800f63a8a293c5d53ee6b28b99293c742791fba4f14c1b829547a78bad93500fe0d448f8d8e2087a3c4d39deab236ed3837830ea522272e8c5852f21d223
+  languageName: node
+  linkType: hard
+
+"parse-url@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "parse-url@npm:8.1.0"
+  dependencies:
+    parse-path: ^7.0.0
+  checksum: b93e21ab4c93c7d7317df23507b41be7697694d4c94f49ed5c8d6288b01cba328fcef5ba388e147948eac20453dee0df9a67ab2012415189fff85973bdffe8d9
   languageName: node
   linkType: hard
 
@@ -19886,7 +19918,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protocols@npm:^2.0.1":
+"protocols@npm:^2.0.0, protocols@npm:^2.0.1":
   version: 2.0.1
   resolution: "protocols@npm:2.0.1"
   checksum: 4a9bef6aa0449a0245ded319ac3cbfd032c3e76ebb562777037a3a832c99253d0e8bc2847f7be350236df620a11f7d4fe683ea7f59a2cc14c69f746b6259eda4
@@ -21664,6 +21696,9 @@ __metadata:
     lodash: ^4.17.21
     match-sorter: ^6.3.1
     mdb-react-ui-kit: ^5.1.0
+    moment: ^2.29.4
+    object-path: ^0.11.8
+    parse-url: ^8.1.0
     pnpapi: ^0.0.0
     prettier: ^2.8.3
     prop-types: ^15.8.1
@@ -21684,6 +21719,7 @@ __metadata:
     require-from-string: ^2.0.2
     sort-by: ^1.2.0
     storybook-addon-apollo-client: ^4.0.13
+    trim: ^1.0.1
     typescript: ^4.9.4
     web-vitals: ^2.1.0
     webpack: ^5.75.0
@@ -23413,6 +23449,13 @@ __metadata:
   version: 0.0.1
   resolution: "trim@npm:0.0.1"
   checksum: 2b4646dff99a222e8e1526edd4e3a43bbd925af0b8e837c340455d250157e7deefaa4da49bb891ab841e5c27b1afc5e9e32d4b57afb875d2dfcabf4e319b8f7f
+  languageName: node
+  linkType: hard
+
+"trim@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "trim@npm:1.0.1"
+  checksum: d7593f72edc1738218e94deeff54a9b81cb52b6448ef8a4d20015bd4581dadc3a636553fb06b1ab36d14e3803fd3138bd2b6da555de926abed33b0ae24f92879
   languageName: node
   linkType: hard
 
