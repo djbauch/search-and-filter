@@ -14,6 +14,9 @@ import Color from "@arcgis/core/Color"
 import PropTypes from "prop-types";
 import "./EsriGlobe.css";
 
+  // Required: Set this property to insure assets resolve correctly.
+  esriConfig.assetsPath = "/assets";
+
 const blackColor = new Color("black")
 const mapRef = new Map({
 
@@ -49,8 +52,6 @@ const EsriGlobe = (props: EsriGlobeProps) => {
   const [tooltipsEnabled] = useState(true); // useTooltipsEnabledState from LocalStorageKeys
   const [tooltipBehavior] = useState("view-mouseover"); //useTooltipBehaviorState ""
 
-  // Required: Set this property to insure assets resolve correctly.
-  esriConfig.assetsPath = "./assets";
 
   const mapDiv = useRef(null);
 

@@ -265,7 +265,7 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
   //State
   const [valuesVisible, setValuesVisible] = useState(true)
   const [freqStore, setFreqStore] = useState(
-    setInitFreqStore(retNodes('', valuesVisible, props.freqState.activeFilter))
+    setInitFreqStore(retNodes('', valuesVisible, props.freqState?.activeFilter))
   )
   const [validUserFilter, setValidUserFilter] = useState(props.freqState.highFreq >= props.freqState.lowFreq)
 
@@ -313,7 +313,7 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
   let bandsDropdown = (
     <BandSelectionDropdown
       id="bands"
-      value={props.freqState.activeFilter.label}
+      value={props.freqState?.activeFilter.label}
       onFilterChange={props.onFilterChange}
       filterOn= {false} //{props.freqState.filterOn}
     />
@@ -393,7 +393,7 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
         </Row>
         <Row className="">
           <CheckboxTree
-            nodes={retNodes(freqUnits[freqArrVal].label, valuesVisible, props.freqState.activeFilter)}
+            nodes={retNodes(freqUnits[freqArrVal].label, valuesVisible, props.freqState?.activeFilter)}
             checked={props.freqState.checked}
             expanded={props.freqState.expanded}
             onCheck={(checked) => onCheck(checked)}
@@ -481,7 +481,7 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
           <Col sm={10}>{bandsDropdown}</Col>
         </Row>
       </Form>
-      {bandOptionReducer(props.freqState.activeFilter)}
+      {bandOptionReducer(props.freqState?.activeFilter)}
       {/*UserSelectedBands(props.freqState.activeFilter.label)*/}
     </div>
   )
