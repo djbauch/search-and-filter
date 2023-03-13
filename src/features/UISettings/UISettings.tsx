@@ -1,19 +1,11 @@
 import * as React from 'react'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
+import '../../bootstrap.css'
+
 // Note: Because we're using webpack, which supports tree-shaking, we can safely use named imports
 // See: https://mui.com/material-ui/guides/minimizing-bundle-size/
-import {
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Switch,
-  ToggleButton,
-  ToggleButtonGroup
-} from '@mui/material'
+
+import { Form, ToggleButtonGroup, ToggleButton } from 'react-bootstrap'
 
 import {
   setFluid,
@@ -26,24 +18,28 @@ import {
   setNavbarStyle
 } from './uiSettingsSlice'
 
-
-const NavbarPositionControl = (position: 'vertical' | 'horizontal' | 'top' | 'combo') => {
+const NavbarPositionControl = () => {
   const dispatch = useAppDispatch()
-  const handleNavbarPositionChange = (event: React.MouseEvent<HTMLElement>, newPosition: 'vertical' | 'horizontal') => {
+  const uiSettings = useAppSelector((state) => state.uiSettings)
+  const navbarPosition = uiSettings.navbarPosition
+  const handleNavbarPositionChange = (newPosition: 'vertical' | 'horizontal', event: React.MouseEvent<HTMLElement>) => {
     dispatch(setNavbarPosition(newPosition))
   }
-
+  const handleVerticalButton = () => {
+    dispatch(setNavbarPosition('vertical'))
+  }
+  const handleHorizontalButton = () => {
+    dispatch(setNavbarPosition('horizontal'))
+  }
   return (
-    <ToggleButtonGroup
+    <div key="inline-navbar-position" className="mb-3"
       color="primary"
-      value={position}
-      exclusive
-      onChange={handleNavbarPositionChange}
       aria-label="Navbar Position"
     >
-      <ToggleButton value="vertical">Vertical</ToggleButton>
-      <ToggleButton value="horizontal>">Horizontal</ToggleButton>
-    </ToggleButtonGroup>
+            <Form.Label>Navbar Position&nbsp;</Form.Label>
+      <ToggleButton onClick={handleVerticalButton} checked={navbarPosition==='vertical'} name="navbar" type="radio" value="vertical">Vertical</ToggleButton>
+      <ToggleButton onClick={handleHorizontalButton} checked={navbarPosition==='horizontal'} name="navbar" type="radio" value="horizontal">Horizontal</ToggleButton>
+    </div>
   )
 }
 
@@ -61,57 +57,57 @@ export function UISettings() {
   const navbarStyle = uiSettings.navbarStyle
 
   // We don't really need the event for anything, but if we did, it's like this:
-  const handleFluidChanged = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    dispatch(setFluid(checked))
+  const handleFluidChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setFluid(e.target.checked))
   }
-  const handleRTLChanged = (_: any, checked: boolean) => {
-    dispatch(setRTL(checked))
+  const handleRTLChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setRTL(e.target.checked))
   }
-  const handleDarkChanged = (_: any, checked: boolean) => {
-    dispatch(setDark(checked))
+  const handleDarkChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setDark(e.target.checked))
   }
-  const handleBurgerChanged = (_: any, checked: boolean) => {
-    dispatch(setShowBurgermenu(checked))
+  const handleBurgerChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setShowBurgermenu(e.target.checked))
   }
-  const handleVerticalChanged = (_: any, checked: boolean) => {
-    dispatch(setNavbarVerticalCollapsed(checked))
+  const handleVerticalChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setNavbarVerticalCollapsed(e.target.checked))
   }
-  const handleCurrencyChanged = (event: SelectChangeEvent<string>, child: React.ReactNode) => {
+  const handleCurrencyChanged = (event: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setCurrency(event.target.value))
   }
   return (
-    <FormGroup>
-      <FormControlLabel control={<Switch size="small" sx={{ml: 2}} checked={isFluid} onChange={handleFluidChanged} />} label="Fluid" />
-      <FormControlLabel control={<Switch size="small" sx={{ml: 2}} checked={isRTL} onChange={handleRTLChanged} />} label="RTL" />
-      <FormControlLabel control={<Switch size="small" sx={{ml: 2}} checked={isDark} onChange={handleDarkChanged} />} label="Dark" />
-      <FormControlLabel
-        control={<Switch size="small" sx={{ml: 2}} checked={isNavbarVerticalCollapsed} onChange={handleVerticalChanged} />}
+    <Form>
+    <Form.Group style={{marginLeft: 8}}>
+      <Form.Switch size={12} checked={isFluid} onChange={handleFluidChanged} label="Fluid" />
+      <Form.Switch size={12} checked={isRTL} onChange={handleRTLChanged} label="RTL" />
+      <Form.Switch size={12} checked={isDark} onChange={handleDarkChanged} label="Dark" />
+      <Form.Switch
+        size={12} checked={isNavbarVerticalCollapsed} onChange={handleVerticalChanged}
         label="Collapsed Vertical Navbar"
       />
-      <FormControlLabel
-        control={<Switch size="small" sx={{ml: 2}} checked={showBurgerMenu} onChange={handleBurgerChanged} />}
+      <Form.Switch
+        size={12} checked={showBurgerMenu} onChange={handleBurgerChanged}
         label="Show Burgermenu"
       />
-      <FormControl sx={{ml:2, mt: 1, width:220}}>
-        <InputLabel id="currency-select-label">Currency</InputLabel>
-        <Select
-          labelId="currency-select-label"
+        <Form.Label htmlFor="currency-select" id="currency-select-label">Currency</Form.Label>
+        <Form.Select size="sm" style={{width: 220}}
           id="currency-select"
           value={currency}
-          label="Currency"
           onChange={handleCurrencyChanged}
         >
-          <MenuItem value="$">$ dollar or peso</MenuItem>
-          <MenuItem value="€">€ euro</MenuItem>
-          <MenuItem value="fr">fr franc</MenuItem>
-          <MenuItem value="₴">₴ hryvnia</MenuItem>
-          <MenuItem value="£">£ pound</MenuItem>
-          <MenuItem value="₩">₩ won</MenuItem>
-          <MenuItem value="¥">¥ yuan</MenuItem>
-          <MenuItem value="¤">¤ generic</MenuItem>
-        </Select>
-      </FormControl>
-      <FormControlLabel sx={{ml:2, mt: 1}}control={NavbarPositionControl(navbarPosition)} label="&nbsp;Navbar Position" />
-    </FormGroup>
+          <option value="$">$ dollar or peso</option>
+          <option value="€">€ euro</option>
+          <option value="fr">fr franc</option>
+          <option value="₴">₴ hryvnia</option>
+          <option value="£">£ pound</option>
+          <option value="₩">₩ won</option>
+          <option value="¥">¥ yuan</option>
+          <option value="¤">¤ generic</option>
+      </Form.Select>
+
+      <NavbarPositionControl />
+
+    </Form.Group>
+    </Form>
   )
 }
