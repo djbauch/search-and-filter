@@ -283,7 +283,7 @@ export const EsriGlobe = (props) => {
       sceneView.popup.on('trigger-action', (event) => {
         // Execute the measureThis() function if the measure-this action is clicked
         if (event.action.id === 'clipboard-copy' && currentLat && currentLon) {
-          var coords = formatcoords(currentLat, currentLon)
+          let coords = formatcoords(currentLat, currentLon)
           navigator.clipboard
             .writeText(coords.format('pDD pMM pss X', { decimalPlaces: 3 }))
             .then((_) => (sceneView.popup.content = 'Coordinates copied to clipboard.'))
@@ -319,9 +319,9 @@ export const EsriGlobe = (props) => {
   }
 
   //moved these outside function to be used elsewhere
-  var addLayerTypeIsURL = true //default to url
-  var addLayerTitle
-  var addLayerURL
+  let addLayerTypeIsURL = true //default to url
+  let addLayerTitle
+  let addLayerURL
 
   const addAddLayerTool = (sceneView) => {
     let addLayerDiv = document.createElement('div')
@@ -331,7 +331,7 @@ export const EsriGlobe = (props) => {
     let addLayerHeadingContent = document.createTextNode('Add Layer')
     addLayerHeading.appendChild(addLayerHeadingContent)
 
-    var addLayerForm = document.createElement('form')
+    let addLayerForm = document.createElement('form')
     addLayerForm.className = 'esri-addLayer_padding'
     addLayerForm.id = 'addLayerForm'
     addLayerForm.method = 'post'
@@ -346,10 +346,10 @@ export const EsriGlobe = (props) => {
 
     const addLayerURLDiv = document.createElement('div')
     addLayerURLDiv.className = 'esri-addLayer_padding'
-    var addLayerURLLabel = document.createElement('label')
+    let addLayerURLLabel = document.createElement('label')
     addLayerURLLabel.innerHTML = 'URL'
     addLayerURLLabel.className = 'radio-inline esri-addLayer_label'
-    var addLayerURLRadio = document.createElement('input')
+    let addLayerURLRadio = document.createElement('input')
     addLayerURLRadio.type = 'radio'
     addLayerURLRadio.name = 'radioOption'
     addLayerURLRadio.checked = addLayerTypeIsURL
@@ -360,10 +360,10 @@ export const EsriGlobe = (props) => {
     urlLabelCol.append(addLayerURLRadio)
     urlLabelCol.append(addLayerURLLabel)
 
-    var addLayerFileLabel = document.createElement('label')
+    let addLayerFileLabel = document.createElement('label')
     addLayerFileLabel.innerHTML = 'File'
     addLayerFileLabel.className = 'radio-inline esri-addLayer_label'
-    var addLayerFileRadio = document.createElement('input')
+    let addLayerFileRadio = document.createElement('input')
     addLayerFileRadio.type = 'radio'
     addLayerFileRadio.name = 'radioOption'
     addLayerFileRadio.value = 'File'
@@ -398,12 +398,12 @@ export const EsriGlobe = (props) => {
     addLayerURL.placeholder = 'https://<enter URL>'
     addLayerURLDiv.append(addLayerURL)
 
-    var uploadForm = document.createElement('form')
+    let uploadForm = document.createElement('form')
     uploadForm.id = 'uploadForm'
     uploadForm.method = 'post'
     uploadForm.enctype = 'multipart/form-data'
 
-    var addLayerFile = document.createElement('input')
+    let addLayerFile = document.createElement('input')
     addLayerFile.className = 'esri-addLayer_inputbox'
     addLayerFile.type = 'file'
     addLayerFile.name = 'file'
@@ -420,9 +420,9 @@ export const EsriGlobe = (props) => {
 
     addLayerForm.appendChild(addLayerURLDiv)
 
-    var addLayerTitleDiv = document.createElement('div')
+    let addLayerTitleDiv = document.createElement('div')
     addLayerTitleDiv.className = 'esri-addLayer_padding'
-    var addLayerTitleLabel = document.createElement('label')
+    let addLayerTitleLabel = document.createElement('label')
     addLayerTitleLabel.className = 'esri-addLayer_padding'
     addLayerTitleLabel.innerHTML = 'Title'
     addLayerTitleDiv.append(addLayerTitleLabel)

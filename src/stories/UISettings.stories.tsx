@@ -15,4 +15,3 @@ export default {
 const Template: ComponentStory<typeof UISettings> = (args) => <UISettings />;
 
 export const Default = Template.bind({});
-

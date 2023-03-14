@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import '../../bootstrap.css'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import classNames from 'classnames'

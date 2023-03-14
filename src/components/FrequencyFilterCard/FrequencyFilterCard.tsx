@@ -153,6 +153,7 @@ type BandSelectionDropdownProps = {
   onFilterChange: any
   filterOn: boolean
 }
+
 const BandSelectionDropdown = (props: BandSelectionDropdownProps) => {
   //Get the corresponding freqUnit object based on the dropdown option selected
   const saveConvertedValue = (name: string) => {

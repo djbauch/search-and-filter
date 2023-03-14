@@ -21,7 +21,7 @@ const FalconCloseButton = ({ size, onClick, noOutline, variant, className, ...re
         'outline-none': noOutline
         // [className]: className
       })}
-      onClick={onClick && onClick}
+      onClick={onClick}
       {...rest}
     />
   )
