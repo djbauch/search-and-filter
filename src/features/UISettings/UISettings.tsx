@@ -32,17 +32,29 @@ const NavbarPositionControl = () => {
     dispatch(setNavbarPosition('horizontal'))
   }
   return (
-    <div key="inline-navbar-position" className="mb-3"
-      color="primary"
-      aria-label="Navbar Position"
-    >
-            <Form.Label>Navbar Position&nbsp;</Form.Label>
-      <ToggleButton onClick={handleVerticalButton} checked={navbarPosition==='vertical'} name="navbar" type="radio" value="vertical">Vertical</ToggleButton>
-      <ToggleButton onClick={handleHorizontalButton} checked={navbarPosition==='horizontal'} name="navbar" type="radio" value="horizontal">Horizontal</ToggleButton>
+    <div key="inline-navbar-position" className="mb-3" color="primary" aria-label="Navbar Position">
+      <Form.Label>Navbar Position&nbsp;</Form.Label>
+      <ToggleButton
+        onClick={handleVerticalButton}
+        checked={navbarPosition === 'vertical'}
+        name="navbar"
+        type="radio"
+        value="vertical"
+      >
+        Vertical
+      </ToggleButton>
+      <ToggleButton
+        onClick={handleHorizontalButton}
+        checked={navbarPosition === 'horizontal'}
+        name="navbar"
+        type="radio"
+        value="horizontal"
+      >
+        Horizontal
+      </ToggleButton>
     </div>
   )
 }
-
 
 export function UISettings() {
   const uiSettings = useAppSelector((state) => state.uiSettings)
@@ -77,20 +89,23 @@ export function UISettings() {
   }
   return (
     <Form>
-    <Form.Group style={{marginLeft: 8}}>
-      <Form.Switch size={12} checked={isFluid} onChange={handleFluidChanged} label="Fluid" />
-      <Form.Switch size={12} checked={isRTL} onChange={handleRTLChanged} label="RTL" />
-      <Form.Switch size={12} checked={isDark} onChange={handleDarkChanged} label="Dark" />
-      <Form.Switch
-        size={12} checked={isNavbarVerticalCollapsed} onChange={handleVerticalChanged}
-        label="Collapsed Vertical Navbar"
-      />
-      <Form.Switch
-        size={12} checked={showBurgerMenu} onChange={handleBurgerChanged}
-        label="Show Burgermenu"
-      />
-        <Form.Label htmlFor="currency-select" id="currency-select-label">Currency</Form.Label>
-        <Form.Select size="sm" style={{width: 220}}
+      <Form.Group style={{ marginLeft: 8 }}>
+        <Form.Switch size={12} checked={isFluid} onChange={handleFluidChanged} label="Fluid" />
+        <Form.Switch size={12} checked={isRTL} onChange={handleRTLChanged} label="RTL" />
+        <Form.Switch size={12} checked={isDark} onChange={handleDarkChanged} label="Dark" />
+        <Form.Switch
+          size={12}
+          checked={isNavbarVerticalCollapsed}
+          onChange={handleVerticalChanged}
+          label="Collapsed Vertical Navbar"
+        />
+        <Form.Switch size={12} checked={showBurgerMenu} onChange={handleBurgerChanged} label="Show Burgermenu" />
+        <Form.Label htmlFor="currency-select" id="currency-select-label">
+          Currency
+        </Form.Label>
+        <Form.Select
+          size="sm"
+          style={{ width: 220 }}
           id="currency-select"
           value={currency}
           onChange={handleCurrencyChanged}
@@ -103,11 +118,10 @@ export function UISettings() {
           <option value="₩">₩ won</option>
           <option value="¥">¥ yuan</option>
           <option value="¤">¤ generic</option>
-      </Form.Select>
+        </Form.Select>
 
-      <NavbarPositionControl />
-
-    </Form.Group>
+        <NavbarPositionControl />
+      </Form.Group>
     </Form>
   )
 }

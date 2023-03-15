@@ -11,20 +11,26 @@ interface CardCloseButtonProps {
   className?: string
 }
 
-const CardCloseButton: FC<CardCloseButtonProps> =
- ({size = 'small', onClick = ()=>{}, noOutline, className='button', ...rest}: CardCloseButtonProps) => (
-  <IconButton size={size}
-      className={classNames(className, {
-        [`btn-${size}`]: size,
-        'outline-none': noOutline || false,
-      })}
-      onClick={onClick}
-      aria-label="Close"
-      data-testid="CardCloseButton"
-      {...rest}
-    >
-      <CloseIcon/>
-    </IconButton>
+const CardCloseButton: FC<CardCloseButtonProps> = ({
+  size = 'small',
+  onClick = () => {},
+  noOutline,
+  className = 'button',
+  ...rest
+}: CardCloseButtonProps) => (
+  <IconButton
+    size={size}
+    className={classNames(className, {
+      [`btn-${size}`]: size,
+      'outline-none': noOutline || false
+    })}
+    onClick={onClick}
+    aria-label="Close"
+    data-testid="CardCloseButton"
+    {...rest}
+  >
+    <CloseIcon />
+  </IconButton>
 )
 
-export default CardCloseButton;
+export default CardCloseButton
