@@ -16,7 +16,7 @@ export const getFilterHeadersEnglish = () => {
     ['plat', 'Platform Types'],
     ['temp', 'Date Range'],
     ['freq', 'Frequency'],
-    ['func', 'Functional'],
+    ['func', 'Functional']
   ])
 }
 
@@ -34,28 +34,28 @@ export const getFrequencyUnits = (): Array<FrequencyUnits> => {
     {
       id: 'Hz',
       value: 1,
-      label: 'Hz',
+      label: 'Hz'
     },
     {
       id: 'kHz',
       value: 1e3,
-      label: 'kHz',
+      label: 'kHz'
     },
     {
       id: 'MHz',
       value: 1e6,
-      label: 'MHz',
+      label: 'MHz'
     },
     {
       id: 'GHz',
       value: 1e9,
-      label: 'GHz',
+      label: 'GHz'
     },
     {
       id: 'THz',
       value: 1e12,
-      label: 'THz',
-    },
+      label: 'THz'
+    }
   ]
 }
 
@@ -69,9 +69,9 @@ export const getBandsAvailable = (): Array<FrequencyBandCollection> => {
           id: 'User_Defined_Band',
           band: { low: 0, high: 0 },
           label: 'User Defined',
-          units: 'none',
-        },
-      ],
+          units: 'none'
+        }
+      ]
     },
     {
       id: 'IEEE',
@@ -81,77 +81,77 @@ export const getBandsAvailable = (): Array<FrequencyBandCollection> => {
           id: 'freqband1_IEEE',
           band: { low: 3000000, high: 30000000 },
           label: 'HF',
-          units: '3 MHz \u2014  30 MHz',
+          units: '3 MHz \u2014  30 MHz'
         },
         {
           id: 'freqband2_IEEE',
           band: { low: 30000000, high: 300000000 },
           label: 'VHF',
-          units: '30 MHz \u2014 300 MHz',
+          units: '30 MHz \u2014 300 MHz'
         },
         {
           id: 'freqband3_IEEE',
           band: { low: 300000000, high: 1000000000 },
           label: 'UHF',
-          units: '300 MHz \u2014 1 GHz',
+          units: '300 MHz \u2014 1 GHz'
         },
         {
           id: 'freqband4_IEEE',
           band: { low: 1000000000, high: 2000000000 },
           label: 'L',
-          units: '1 GHz \u2014 2 GHz',
+          units: '1 GHz \u2014 2 GHz'
         },
         {
           id: 'freqband5_IEEE',
           band: { low: 2000000000, high: 4000000000 },
           label: 'S',
-          units: '2 GHz \u2014 4 GHz',
+          units: '2 GHz \u2014 4 GHz'
         },
         {
           id: 'freqband6_IEEE',
           band: { low: 4000000000, high: 8000000000 },
           label: 'C',
-          units: '4 GHz \u2014 8 GHz',
+          units: '4 GHz \u2014 8 GHz'
         },
         {
           id: 'freqband7_IEEE',
           band: { low: 8000000000, high: 12400000000 },
           label: 'X',
-          units: '8 GHz \u2014 12.4 GHz',
+          units: '8 GHz \u2014 12.4 GHz'
         },
         {
           id: 'freqband8_IEEE',
           band: { low: 12400000000, high: 18000000000 },
           label: 'Ku',
-          units: '12.4 GHz \u2014 18 GHz',
+          units: '12.4 GHz \u2014 18 GHz'
         },
         {
           id: 'freqband9_IEEE',
           band: { low: 18000000000, high: 26500000000 },
           label: 'K',
-          units: ' 18 GHz \u2014 26.5 GHz',
+          units: ' 18 GHz \u2014 26.5 GHz'
         },
         {
           id: 'freqband10_IEEE',
           band: { low: 26500000000, high: 40000000000 },
-          label: 'Ka',
+          label: 'Ka'
         },
         {
           id: 'freqband11_IEEE',
           band: { low: 33000000000, high: 50000000000 },
-          label: 'Q',
+          label: 'Q'
         },
         {
           id: 'freqband12_IEEE',
           band: { low: 50000000000, high: 75000000000 },
-          label: 'V',
+          label: 'V'
         },
         {
           id: 'freqband13_IEEE',
           band: { low: 75000000000, high: 110000000000 },
-          label: 'W',
-        },
-      ],
+          label: 'W'
+        }
+      ]
     },
     {
       id: 'DOD',
@@ -160,69 +160,69 @@ export const getBandsAvailable = (): Array<FrequencyBandCollection> => {
         {
           id: 'freqband1_DoD',
           band: { low: 0, high: 250000000 },
-          label: 'A',
+          label: 'A'
         },
         {
           id: 'freqband2_DoD',
           band: { low: 250000000, high: 500000000 },
-          label: 'B',
+          label: 'B'
         },
         {
           id: 'freqband3_DoD',
           band: { low: 500000000, high: 1000000000 },
-          label: 'C',
+          label: 'C'
         },
         {
           id: 'freqband4_DoD',
           band: { low: 1000000000, high: 2000000000 },
-          label: 'D',
+          label: 'D'
         },
         {
           id: 'freqband5_DoD',
           band: { low: 2000000000, high: 3000000000 },
-          label: 'E',
+          label: 'E'
         },
         {
           id: 'freqband6_DoD',
           band: { low: 3000000000, high: 4000000000 },
-          label: 'F',
+          label: 'F'
         },
         {
           id: 'freqband7_DoD',
           band: { low: 4000000000, high: 6000000000 },
-          label: 'G',
+          label: 'G'
         },
         {
           id: 'freqband8_DoD',
           band: { low: 6000000000, high: 8000000000 },
-          label: 'H',
+          label: 'H'
         },
         {
           id: 'freqband9_DoD',
           band: { low: 8000000000, high: 10000000000 },
-          label: 'I',
+          label: 'I'
         },
         {
           id: 'freqband10_DoD',
           band: { low: 10000000000, high: 20000000000 },
-          label: 'J',
+          label: 'J'
         },
         {
           id: 'freqband11_DoD',
           band: { low: 20000000000, high: 40000000000 },
-          label: 'K',
+          label: 'K'
         },
         {
           id: 'freqband12_DoD',
           band: { low: 40000000000, high: 60000000000 },
-          label: 'L',
+          label: 'L'
         },
         {
           id: 'freqband13_DoD',
           band: { low: 60000000000, high: 100000000000 },
-          label: 'M',
-        },
-      ],
+          label: 'M'
+        }
+      ]
     },
     {
       id: 'ITU',
@@ -231,30 +231,30 @@ export const getBandsAvailable = (): Array<FrequencyBandCollection> => {
         {
           id: 'freqband1_ITU',
           band: { low: 3000000, high: 30000000 },
-          label: 'HF',
+          label: 'HF'
         },
         {
           id: 'freqband2_ITU',
           band: { low: 30000000, high: 300000000 },
-          label: 'VHF',
+          label: 'VHF'
         },
         {
           id: 'freqband3_ITU',
           band: { low: 300000000, high: 3000000000 },
-          label: 'UHF',
+          label: 'UHF'
         },
         {
           id: 'freqband4_ITU',
           band: { low: 3000000000, high: 30000000000 },
-          label: 'SHF',
+          label: 'SHF'
         },
         {
           id: 'freqband5_ITU',
           band: { low: 30000000000, high: 300000000000 },
-          label: 'EHF',
-        },
-      ],
-    },
+          label: 'EHF'
+        }
+      ]
+    }
   ]
 }
 
@@ -318,8 +318,9 @@ export const nodeConversion = (band: { low: number; high: number }) => {
 //CheckboxTree mandates that all elements must have a unique value, so use the id as the value, which is
 //guaranteed to be unique
 const getFreqBandFields = (units: string, showValues: boolean, activeFilter: any) => {
-  const matchingBand = activeFilter ? _.find(getBandsAvailable(), (element) => element.id === activeFilter.id)
-  : getBandsAvailable()[0]
+  const matchingBand = activeFilter
+    ? _.find(getBandsAvailable(), (element) => element.id === activeFilter.id)
+    : getBandsAvailable()[0]
   if (matchingBand) {
     const activeNodes = matchingBand.children
 
@@ -340,7 +341,7 @@ const getFreqBandFields = (units: string, showValues: boolean, activeFilter: any
         value: node.id,
         band: { low: node.band.low, high: node.band.high },
         label: showValues ? explanation : node.label,
-        className: 'freq-filter-node',
+        className: 'freq-filter-node'
       }
     })
   }
@@ -368,27 +369,27 @@ const getFunctionalOptsDummyData = (): FunctionalOpts => {
     {
       id: 'functional1',
       value: 'Coastal Defense Radar',
-      label: 'Coastal Defense Radar',
+      label: 'Coastal Defense Radar'
     },
     {
       id: 'functional2',
       value: 'Surface-to-Air Missile',
-      label: 'Surface-to-Air Missile',
+      label: 'Surface-to-Air Missile'
     },
     {
       id: 'functional3',
       value: 'Target Tracker',
-      label: 'Target Tracker',
+      label: 'Target Tracker'
     },
     {
       id: 'functional4',
       value: 'Navigation',
-      label: 'Navigation',
+      label: 'Navigation'
     },
     {
       id: 'functional5',
       value: 'Direction Finding',
-      label: 'Direction Finding',
-    },
+      label: 'Direction Finding'
+    }
   ]
 }

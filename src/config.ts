@@ -77,7 +77,9 @@ export const classifications = [
 ]
 
 export const getClsHeaderData = (key: string) => {
-  let headerData = _.find(classifications, (o) => {return o.key === key})
+  let headerData = _.find(classifications, (o) => {
+    return o.key === key
+  })
   return headerData
 }
 

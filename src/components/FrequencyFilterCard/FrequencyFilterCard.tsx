@@ -318,9 +318,7 @@ const PredefinedBands = (props: BandsProps) => {
     />
   )
 
-  const [freqStore, setFreqStore] = useState(
-    setInitFreqStore(retNodes('', true, props.freqState?.activeFilter))
-  )
+  const [freqStore, setFreqStore] = useState(setInitFreqStore(retNodes('', true, props.freqState?.activeFilter)))
   const onExpand = (expanded) => {
     props.onFilterChange({
       filterId: filterId,
@@ -404,32 +402,25 @@ type FrequencyFilterCardProps = {
 const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilterCardProps) => {
   const freqState = props.freqState
   //State
-  const [validUserFilter, setValidUserFilter] = useState(props.freqState.highFreq >= props.freqState.lowFreq)
-
-  const onDashboardChange = (e, cardName, isOnDashboard) => {
-    props.onDashboardChange(e, cardName, isOnDashboard)
-  }
+  const [validUserFilter, setValidUserFilter] = useState(freqState.highFreq >= freqState.lowFreq)
 
   let unitsDropdown = (
     <FreqDropdown
       id="units"
       value={props.freqState.units}
       onFilterChange={() => {}} //{props.onFilterChange}
-      filterOn={props.freqState.filterOn}
+      filterOn={freqState.filterOn}
     />
   )
 
   let bandsDropdown = (
     <BandSelectionDropdown
       id="bands"
-      value={props.freqState?.activeFilter.label}
+      value={freqState.activeFilter.label}
       onFilterChange={props.onFilterChange}
       filterOn={false} //{props.freqState.filterOn}
     />
   )
-
-
-
 
   const validRange = freqState.highFreq >= freqState.lowFreq
   const warningIcon = !validRange ? (
@@ -447,9 +438,7 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
       validRange,
       setValidUserFilter
     }
-  return activeFilter.id === 'User Defined'
-      ? UserSelectedBands(bandOptionArgs)
-      : PredefinedBands(bandOptionArgs)
+    return activeFilter.id === 'User Defined' ? UserSelectedBands(bandOptionArgs) : PredefinedBands(bandOptionArgs)
   }
 
   const handleFilterSwitch = (filterOn) => {
