@@ -1,6 +1,6 @@
 import localforage from 'localforage'
 import { matchSorter } from 'match-sorter'
-import sortBy from 'sort-by'
+import _ from 'lodash'
 
 export async function getContacts(query) {
   await fakeNetwork(`getContacts:${query}`)
@@ -9,7 +9,7 @@ export async function getContacts(query) {
   if (query) {
     contacts = matchSorter(contacts, query, { keys: ['first', 'last'] })
   }
-  return contacts.sort(sortBy('last', 'createdAt'))
+  return _.sortBy(contacts, ['last', 'createdAt'])
 }
 
 export async function createContact() {
