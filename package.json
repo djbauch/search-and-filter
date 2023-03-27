@@ -132,7 +132,7 @@
     "prettier": "^2.8.3",
     "prop-types": "^15.8.1",
     "storybook-addon-apollo-client": "^4.0.13",
-    "webpack": "^5.75.0"
+    "webpack": "^5.76.3"
   },
   "packageManager": "yarn@3.3.1"
 }
