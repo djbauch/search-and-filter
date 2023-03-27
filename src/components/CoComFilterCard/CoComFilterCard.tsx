@@ -22,10 +22,11 @@ const CoComFilterCard: FC<CoComFilterCardProps> = () => {
     console.log(`Checked ${JSON.stringify(checked)}`)
     dispatch(setChecked(checked))
   }
-  const expandChanged = (expanded, targetNode) => {
-    console.log('Expanded')
-    dispatch(setExpanded(targetNode))
+  const expandChanged = (expanded) => {
+    console.log(`Expanded ${JSON.stringify(expanded)}`)
+    dispatch(setExpanded(expanded))
   }
+
   return (
     <Card data-testid="CoComFilterCard">
       <CheckboxTree

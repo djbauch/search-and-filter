@@ -29,7 +29,7 @@ export const combatantCommandsSlice = createSlice({
     },
     setExpanded: (state, action: PayloadAction<string[]>) => {
       console.log('setExpanded')
-      state.expanded.push(action.payload as any)
+      state.expanded = action.payload
     }
   },
 })
