@@ -8,12 +8,14 @@ interface CombatantCommandState {
   value: CombatantCommand[]
   checked: string[]
   expanded: string[]
+  enabled: boolean
 }
 
 const initialState: CombatantCommandState = {
   value:getCombatantCommands(),
   checked: ['AFRICOM'],
-  expanded: ['CYBERCOM']
+  expanded: ['CYBERCOM'],
+  enabled: false
 }
 
 export const combatantCommandsSlice = createSlice({
@@ -24,16 +26,17 @@ export const combatantCommandsSlice = createSlice({
       state.value = [action.payload, ...state.value]
     },
     setChecked: (state, action: PayloadAction<string[]>) => {
-      console.log(`setChecked ${JSON.stringify(action.payload)}`)
       state.checked = action.payload
     },
     setExpanded: (state, action: PayloadAction<string[]>) => {
-      console.log('setExpanded')
       state.expanded = action.payload
+    },
+    setEnabled: (state, action: PayloadAction<boolean>) => {
+      state.enabled = action.payload
     }
   },
 })
 
-export const { addCC, setChecked, setExpanded } = combatantCommandsSlice.actions
+export const { addCC, setChecked, setExpanded, setEnabled } = combatantCommandsSlice.actions
 export const selectCombatantCommands = (state: RootState) => state.combatantCommands.value
 export default combatantCommandsSlice.reducer

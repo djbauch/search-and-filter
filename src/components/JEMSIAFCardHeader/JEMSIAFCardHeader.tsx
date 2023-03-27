@@ -8,11 +8,12 @@ import { ToastContainer } from 'react-toastify'
 
 interface JEMSIAFCardHeaderProps {
   title?: string
+  enabled?: boolean
   onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
 
-const JEMSIAFCardHeader: FC<JEMSIAFCardHeaderProps> = ({ title, onChange }: JEMSIAFCardHeaderProps) => {
-  const [isFilterActive, setFilterActive] = React.useState(true)
+const JEMSIAFCardHeader: FC<JEMSIAFCardHeaderProps> = ({ title, enabled, onChange }: JEMSIAFCardHeaderProps) => {
+  const isFilterActive = enabled || false
   title = title || 'Untitled Card'
   return (
     <CardHeader data-testid="JEMSIAFCardHeader">
@@ -22,7 +23,6 @@ const JEMSIAFCardHeader: FC<JEMSIAFCardHeaderProps> = ({ title, onChange }: JEMS
         <Switch
           checked={isFilterActive}
           onChange={(event) => {
-            setFilterActive(event.target.checked)
             onChange && onChange(event)
           }}
           color="primary"

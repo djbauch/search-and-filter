@@ -9,7 +9,7 @@ import JEMSIAFCardHeader from '../JEMSIAFCardHeader/JEMSIAFCardHeader'
 import CardDropdown from '../CardDropdown/CardDropdown'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import styles from './CoComFilterCard.module.css'
-import { setChecked, setExpanded } from '../../features/combatantCommands/combatantCommandsSlice'
+import { setChecked, setExpanded, setEnabled } from '../../features/combatantCommands/combatantCommandsSlice'
 export type CoComFilterCardProps = {}
 
 const CoComFilterCard: FC<CoComFilterCardProps> = () => {
@@ -18,17 +18,23 @@ const CoComFilterCard: FC<CoComFilterCardProps> = () => {
   const value = ccs.value
   const checked = ccs.checked
   const expanded = ccs.expanded
-  const checkChanged = (checked) => {
+  const enabled = ccs.enabled
+  const checkChanged = (checked: string[]) => {
     console.log(`Checked ${JSON.stringify(checked)}`)
     dispatch(setChecked(checked))
   }
-  const expandChanged = (expanded) => {
+  const expandChanged = (expanded: string[]) => {
     console.log(`Expanded ${JSON.stringify(expanded)}`)
     dispatch(setExpanded(expanded))
   }
-
+  const filterToggled = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(`Filter toggled ${event.target.checked}`)
+    dispatch(setEnabled(event.target.checked))
+  }
   return (
-    <Card data-testid="CoComFilterCard">
+    <Card border="primary" data-testid="CoComFilterCard">
+      <JEMSIAFCardHeader title="COCOMs" enabled={enabled} onChange={filterToggled}/>
+      <Card.Body>
       <CheckboxTree
         nodes={value}
         checked={checked}
@@ -51,6 +57,7 @@ const CoComFilterCard: FC<CoComFilterCardProps> = () => {
           leaf: <FontAwesomeIcon className="rct-icon rct-icon-leaf-close" icon="file" />
         }}
       />
+      </Card.Body>
     </Card>
   )
 }
