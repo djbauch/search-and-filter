@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store'
 import { CombatantCommand } from '../../typings/sharedTypes'
+import { getCombatantCommands } from './CombatantCommandsData'
 
 interface CombatantCommandState {
-  value: any[]
+  value: CombatantCommand[]
 }
 
 const initialState: CombatantCommandState = {
-  value: [],
+  value:getCombatantCommands()
 }
 
 export const combatantCommandsSlice = createSlice({

@@ -1,6 +1,4 @@
-import { toast } from 'react-toastify'
 import type { CombatantCommand, Plan } from '../../typings/sharedTypes'
-
 
  const sampleCombatantCommands = (): CombatantCommand[] => {
   return [
@@ -795,7 +793,7 @@ export const sampleTranscomPlans = (): Plan => {
 }
 const _isRealServer = false
 
-const getCombatantCommands = () => {
+export const getCombatantCommands = () => {
   let data: CombatantCommand[] = []
   if (_isRealServer) {
     //data = ??
