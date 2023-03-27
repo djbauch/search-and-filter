@@ -3368,7 +3368,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.11.6, @popperjs/core@npm:^2.6.0, @popperjs/core@npm:^2.9.0, @popperjs/core@npm:~2.11.6":
+"@popperjs/core@npm:^2.11.6, @popperjs/core@npm:^2.11.7, @popperjs/core@npm:^2.6.0, @popperjs/core@npm:^2.9.0, @popperjs/core@npm:~2.11.6":
   version: 2.11.7
   resolution: "@popperjs/core@npm:2.11.7"
   checksum: 5b6553747899683452a1d28898c1b39173a4efd780e74360bfcda8eb42f1c5e819602769c81a10920fc68c881d07fb40429604517d499567eac079cfa6470f19
@@ -3533,7 +3533,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^1.9.1":
+"@reduxjs/toolkit@npm:^1.9.3":
   version: 1.9.3
   resolution: "@reduxjs/toolkit@npm:1.9.3"
   dependencies:
@@ -4191,7 +4191,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/api@npm:6.5.16":
+"@storybook/api@npm:6.5.16, @storybook/api@npm:^6.5.16":
   version: 6.5.16
   resolution: "@storybook/api@npm:6.5.16"
   dependencies:
@@ -4452,7 +4452,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/components@npm:6.5.16":
+"@storybook/components@npm:6.5.16, @storybook/components@npm:^6.5.16":
   version: 6.5.16
   resolution: "@storybook/components@npm:6.5.16"
   dependencies:
@@ -5158,7 +5158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/theming@npm:6.5.16":
+"@storybook/theming@npm:6.5.16, @storybook/theming@npm:^6.5.16":
   version: 6.5.16
   resolution: "@storybook/theming@npm:6.5.16"
   dependencies:
@@ -20276,7 +20276,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.2.0":
+"redux@npm:^4.2.0, redux@npm:^4.2.1":
   version: 4.2.1
   resolution: "redux@npm:4.2.1"
   dependencies:
@@ -21101,20 +21101,24 @@ __metadata:
     "@mdx-js/react": ^2.3.0
     "@mui/icons-material": ^5.11.0
     "@mui/material": ^5.11.5
-    "@reduxjs/toolkit": ^1.9.1
+    "@popperjs/core": ^2.11.7
+    "@reduxjs/toolkit": ^1.9.3
     "@storybook/addon-actions": ^6.5.16
     "@storybook/addon-docs": ^6.5.16
     "@storybook/addon-essentials": ^6.5.16
     "@storybook/addon-interactions": ^6.5.16
     "@storybook/addon-links": ^6.5.16
     "@storybook/addons": ^6.5.16
+    "@storybook/api": ^6.5.16
     "@storybook/builder-webpack5": ^6.5.16
+    "@storybook/components": ^6.5.16
     "@storybook/core-events": ^6.5.16
     "@storybook/manager-webpack5": ^6.5.16
     "@storybook/node-logger": ^6.5.16
     "@storybook/preset-create-react-app": ^4.1.2
     "@storybook/react": ^6.5.16
     "@storybook/testing-library": ^0.0.13
+    "@storybook/theming": ^6.5.16
     "@testing-library/dom": ^8.20.0
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^13.4.0
@@ -21162,12 +21166,14 @@ __metadata:
     react-scripts: 5.0.1
     react-toastify: ^9.1.1
     reactstrap: ^9.1.5
+    redux: ^4.2.1
     require-from-string: ^2.0.2
     storybook-addon-apollo-client: ^4.0.13
     trim: ^1.0.1
     typescript: ^4.9.4
     web-vitals: ^2.1.0
     webpack: ^5.76.3
+    webpack-sources: ^3.2.3
   languageName: unknown
   linkType: soft
 
