@@ -19,7 +19,7 @@ import {
   AvailableSubscription,
   Project
 } from '../typings/sharedTypes'
-import { Parser } from 'json2csv'
+import { Parser } from '@json2csv/plainjs'
 import flatten from 'flat'
 import { features } from 'process'
 
