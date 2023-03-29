@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styles from './FilterSummaryCard.module.css';
 import { Button, Row } from 'react-bootstrap'
-import 'react-widgets/styles.css'
+//import 'react-widgets/styles.css'
 // import {
 //   defineFreqState,
 //   defineCcState,

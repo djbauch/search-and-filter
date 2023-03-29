@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect } from 'react'
-import { Outlet, NavLink, useLoaderData, Form, redirect, useNavigation, useSubmit } from 'react-router-dom'
+import { Outlet, NavLink, useLoaderData, Form, redirect, useNavigation, useSubmit, Link } from 'react-router-dom'
 
 export async function action() {
 
@@ -69,15 +70,21 @@ const Root = () => {
                   </NavLink>
                 </li>
               ))}
+
             </ul>)
             : (
-              <p>
-                <i>No results</i>
-              </p>
+              <ul>
+                <li>(No results)</li>
+              <li><Link to={'uisettings'}>UI Settings</Link></li>
+              <li><Link to={'cocoms'}>Combatant Commands</Link></li>
+              <li><Link to={'doublecocoms/2'}>Double COCOMs</Link></li>
+              <li><Link to={'filtertabs'}>Tabs</Link></li>
+              </ul>
             )
           }
         </nav>
       </div>
+      <div id="detail"><Outlet /></div>
     </>
   )
 }

@@ -1,15 +1,15 @@
 import React, { Component, useEffect, useRef } from 'react'
-import CoComCard from '../CoComFilterCard/CoComFilterCard'
-import FrequencyCard  from '../FrequencyFilterCard/FrequencyFilterCard'
-import TemporalCard  from '../TemporalFilterCard/TemporalFilterCard'
-import FunctionalCard  from '../FunctionFilterCard/FunctionFilterCard'
+import CoComCard from '../../components/CoComFilterCard/CoComFilterCard'
+import FrequencyCard  from '../../components/FrequencyFilterCard/FrequencyFilterCard'
+import TemporalCard  from '../../components/TemporalFilterCard/TemporalFilterCard'
+import FunctionalCard  from '../../components/FunctionFilterCard/FunctionFilterCard'
 import {Tabs, Tab} from 'react-bootstrap'
 // If you update rc-tabs to a 12.x release instead of 11.x you'll need the following line
 //import TabPane from 'rc-tabs/es/TabPanelList/TabPane';
 import 'rc-tabs/assets/index.css'
-import OrganizationsCard from '../OrganizationFilterCard/OrganizationFilterCard'
-import PlatformCard from '../PlatformFilterCard/PlatformFilterCard'
-import SummaryCard from '../FilterSummaryCard/FilterSummaryCard'
+import OrganizationsCard from '../../components/OrganizationFilterCard/OrganizationFilterCard'
+import PlatformCard from '../../components/PlatformFilterCard/PlatformFilterCard'
+import SummaryCard from '../../components/FilterSummaryCard/FilterSummaryCard'
 import { Rnd } from 'react-rnd'
 import { BiFilterAlt } from 'react-icons/bi'
 import { CCStateType, FreqStateType, FuncStateType, TempStateType, TopoStateType } from '../../typings/sharedTypes'
@@ -346,7 +346,7 @@ const closeTab = () => {
             //activeKey="2" //Uncomment to keep filter set to frequencies
           >
             <Tab
-              title={getTabName('CCMD', vertical, ccState.ccmdFilterOn)}
+              title={getTabName('CCMD', vertical, ccState.enabled)}
               key="1"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4  pt-3"
             >
@@ -360,51 +360,55 @@ const closeTab = () => {
               />
             </Tab>
             <Tab
-              title={getTabName('Frequency', vertical, freqState.filterOn)}
+              title={'Frequency'/*getTabName('Frequency', vertical, freqState.filterOn)*/}
               key="2"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
             >
-              <FrequencyCard
+              <p>Frequency Card</p>
+              {/* <FrequencyCard
                 // onFilterChange={this.props.onFilterChange}
                 // onDashboardChange={this.props.onDashboardChange}
                 // freqState={this.props.freqState}
                 // closeTab={this.closeTab}
                 // isTab={true}
-              />
+              /> */}
             </Tab>
             <Tab
-              title={getTabName('Date Range', vertical, tempState.filterOn)}
+              title={'Date Range'/*getTabName('Date Range', vertical, tempState.filterOn)*/}
               key="3"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
             >
-              <TemporalCard
+              <p>Temporal Card</p>
+              {/* <TemporalCard
                 // getTimeZoneOptions={this.props.getTimeZoneOptions}
                 // onFilterChange={this.props.onFilterChange}
                 // tempState={this.props.tempState}
                 // onDashboardChange={this.props.onDashboardChange}
                 // closeTab={this.closeTab}
                 // isTab={true}
-              />
+              /> */}
             </Tab>
             <Tab
-              title={getTabName('Functional', vertical, funcState.filterOn)}
+              title={'Functional'/* getTabName('Functional', vertical, funcState.filterOn)*/}
               key="4"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
             >
-              <FunctionalCard
+              <p>Functional Card</p>
+              {/* <FunctionalCard
                 // onFilterChange={this.props.onFilterChange}
                 // onDashboardChange={this.props.onDashboardChange}
                 // funcState={this.props.funcState}
                 // closeTab={this.closeTab}
                 // asTab={true}
-              />
+              /> */}
             </Tab>
             <Tab
-              title={getTabName('Organizations', vertical, topoState.orgFilterOn)}
+              title={'Organizations'/*getTabName('Organizations', vertical, topoState.orgFilterOn)*/}
               key="5"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
             >
-              <OrganizationsCard
+              <p>Organizations Card</p>
+              {/* <OrganizationsCard
                 // onFilterChange={this.props.onFilterChange}
                 // onDashboardChange={this.props.onDashboardChange}
                 // topoState={this.props.topoState}
@@ -412,31 +416,33 @@ const closeTab = () => {
                 // ccState={this.props.ccState}
                 // closeTab={this.closeTab}
                 // isTab={true}
-              />
+              /> */}
             </Tab>
             <Tab
-              title={getTabName("Platform", vertical, topoState.platFilterOn)}
+              title={'Platform'/*getTabName("Platform", vertical, topoState.platFilterOn)*/}
               key="6"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
             >
-              <PlatformCard
+              <p>Platform Card</p>
+              {/* <PlatformCard
                 // onFilterChange={this.props.onFilterChange}
                 // onDashboardChange={this.props.onDashboardChange}
                 // topoState={this.props.topoState}
                 // ccState={this.props.ccState}
                 // closeTab={this.closeTab}
                 // isTab={true}
-              />
+              /> */}
             </Tab>
             <Tab title="Summary" eventKey="7" className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3">
-              <SummaryCard
+              <p>Summary Card</p>
+              {/* <SummaryCard
                 // onFilterChange={this.props.onFilterChange}
                 // closeTab={this.closeTab}
                 // asTab={true}
                 // getFilterArray={this.getFilterArray}
                 // filterModalState={this.props.filterModalState}
                 // setFilterModalState={this.setFilterModalState}
-              />
+              /> */}
             </Tab>
           </Tabs>
         </div>

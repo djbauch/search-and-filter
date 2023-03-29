@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store'
 import { CombatantCommand } from '../../typings/sharedTypes'

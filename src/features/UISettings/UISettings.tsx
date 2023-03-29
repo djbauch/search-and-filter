@@ -5,7 +5,7 @@ import '../../bootstrap.css'
 // Note: Because we're using webpack, which supports tree-shaking, we can safely use named imports
 // See: https://mui.com/material-ui/guides/minimizing-bundle-size/
 
-import { Form, ToggleButtonGroup, ToggleButton } from 'react-bootstrap'
+import { Form, ToggleButton } from 'react-bootstrap'
 
 import {
   setFluid,
@@ -56,7 +56,7 @@ const NavbarPositionControl = () => {
   )
 }
 
-export function UISettings() {
+export const UISettings = () =>{
   const uiSettings = useAppSelector((state) => state.uiSettings)
   const dispatch = useAppDispatch()
   const isFluid = uiSettings.isFluid
@@ -125,3 +125,4 @@ export function UISettings() {
     </Form>
   )
 }
+export default UISettings

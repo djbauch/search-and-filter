@@ -4,7 +4,7 @@ import { UncontrolledTooltip, Button, Card, Container, Col, Form, Label, Row, Ca
 import JEMSIAFCardHeader from '../JEMSIAFCardHeader/JEMSIAFCardHeader'
 import CardDropdown from '../CardDropdown/CardDropdown'
 import { getFunctionalOpts } from 'services/filter'
-import 'react-widgets/styles.css'
+//import 'react-widgets/styles.css'
 import { FuncItemType, FuncStateType } from 'typings/sharedTypes'
 
 import { MDBSwitch } from 'mdb-react-ui-kit'
