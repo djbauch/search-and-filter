@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store'
 
-interface FilterTabsState {
+interface FunctionFilterState {
   filterId: string
   activeKey: number
   x: number
@@ -14,7 +14,7 @@ interface FilterTabsState {
   bounds?: string
 }
 
-const initialState: FilterTabsState = {
+const initialState: FunctionFilterState = {
   filterId: '',
   activeKey: -2,
   x: 0,
@@ -24,8 +24,8 @@ const initialState: FilterTabsState = {
   vertical: true
 }
 
-export const filterTabsSlice = createSlice({
-  name: 'filterTabs',
+export const functionFilterSlice = createSlice({
+  name: 'functionFilters',
   initialState,
   reducers: {
     setFilterId: (state, action: PayloadAction<string>) => {
@@ -37,12 +37,12 @@ export const filterTabsSlice = createSlice({
     setX: (state, action: PayloadAction<number>) => {
       state.x = action.payload
     },
-    setFilterState: (state, action: PayloadAction<Partial<FilterTabsState>>) => {
+    setFilterState: (state, action: PayloadAction<Partial<FunctionFilterState>>) => {
       _.assign(state, action.payload)
     }
   }
 })
 
-export const { setFilterId, setActiveKey, setX, setFilterState } = filterTabsSlice.actions
-export const selectFilterTabs = (state: RootState) => state.filterTabs
-export default filterTabsSlice.reducer
+export const { setFilterId, setActiveKey, setX, setFilterState } = functionFilterSlice.actions
+export const selectFilterTabs = (state: RootState) => state.functionFilters
+export default functionFilterSlice.reducer

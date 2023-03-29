@@ -1,14 +1,14 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
-import store from './app/store'
-import './index.css'
+import store from 'app/store'
+import 'index.css'
 import App from './App'
-import reportWebVitals from './reportWebVitals'
+import reportWebVitals from 'reportWebVitals'
 import SearchRoot, {
   loader as rootLoader,
   action as rootAction,
-} from './routes/SearchRoot'
+} from 'routes/SearchRoot'
 import esriConfig from '@arcgis/core/config'
 
 // Routing is with react-router v6
