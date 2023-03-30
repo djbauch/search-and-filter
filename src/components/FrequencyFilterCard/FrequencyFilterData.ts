@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { FrequencyBandCollection, FrequencyUnits } from "../../typings/sharedTypes"
+import type { FrequencyBandCollection, FrequencyUnits } from "../../typings/sharedTypes"
 
 /*
 Returns an array of JSON objects in the following format:
