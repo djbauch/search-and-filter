@@ -1,14 +1,14 @@
 import React, { FC } from 'react';
 import styles from './FunctionFilterCard.module.css';
 import { UncontrolledTooltip, Button, Card, Container, Col, Form, Label, Row, CardBody } from 'reactstrap'
-import JEMSIAFCardHeader from '../JEMSIAFCardHeader/JEMSIAFCardHeader'
-import CardDropdown from '../CardDropdown/CardDropdown'
+import JEMSIAFCardHeader from '../../components/JEMSIAFCardHeader/JEMSIAFCardHeader'
+import CardDropdown from '../../components/CardDropdown/CardDropdown'
 import { getFunctionalOpts } from 'services/filter'
 //import 'react-widgets/styles.css'
 import { FuncItemType, FuncStateType } from 'typings/sharedTypes'
 
 import { MDBSwitch } from 'mdb-react-ui-kit'
-import FalconCloseButton from '../common/FalconCloseButton'
+import FalconCloseButton from '../../components/common/FalconCloseButton'
 
 export const filterId = 'func'
 export const funcEventAdd = 'funcEventAdd'

@@ -4,7 +4,7 @@ import counterReducer from '../features/counter/counterSlice'
 import combatantCommandReducer from '../features/combatantCommands/combatantCommandsSlice'
 import filterTabsReducer from '../containers/FilterTabs/FilterTabsSlice'
 import uiSettingsReducer from '../features/UISettings/uiSettingsSlice'
-import functionFilterReducer from '../components/FunctionFilterCard/functionFilterSlice'
+import functionFilterReducer from '../features/FunctionFilter/functionFilterSlice'
 //import chosenFeatureReducer from '../features/GlobeStores/chosenFeatureSlice'
 // Reference https://redux.js.org/tutorials/quick-start
 const store = configureStore({
