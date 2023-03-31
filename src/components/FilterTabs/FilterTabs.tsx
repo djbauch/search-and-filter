@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import CoComCard from '../CoComFilterCard/CoComFilterCard'
-import FrequencyCard  from '../FrequencyFilterCard/FrequencyFilterCard'
-import TemporalCard  from '../TemporalFilterCard/TemporalFilterCard'
-import FunctionalCard  from '../../features/FunctionFilter/FunctionFilterCard'
+import CoComCard from 'components/CoComFilterCard/CoComFilterCard'
+import FrequencyCard  from 'components/FrequencyFilter/FrequencyFilterCard'
+import TemporalCard  from 'components/TemporalFilter/TemporalFilterCard'
+import FunctionalCard  from 'features/FunctionFilter/FunctionFilterCard'
 import Tabs from 'rc-tabs'
 // If you update rc-tabs to a 12.x release instead of 11.x you'll need the following line
 import TabPane from 'rc-tabs/es/TabPanelList/TabPane';
 import 'rc-tabs/assets/index.css'
-import OrganizationsCard from '../OrganizationFilter/OrganizationFilterCard'
-import PlatformCard from '../PlatformFilterCard/PlatformFilterCard'
-import SummaryCard from '../SummaryCard/SummaryCard'
+import OrganizationsCard from 'components/OrganizationFilter/OrganizationFilterCard'
+import PlatformCard from 'components/PlatformFilter/PlatformFilterCard'
+import SummaryCard from 'components/FilterSummary/FilterSummaryCard'
 import { Rnd } from 'react-rnd'
 import { BiFilterAlt } from 'react-icons/bi'
 import { CCStateType, FreqStateType, FuncStateType, TempStateType, TopoStateType } from '../../typings/sharedTypes'
@@ -18,16 +18,10 @@ export const filterId = 'tabs'
 
 type FilterTabsProps = {
   filterState: any
-  getCombatantCommands: any
   onFilterChange: any
   onDashboardChange: any
-  ccState: CCStateType
-  freqState: FreqStateType
+  
   getTimeZoneOptions: any
-  tempState: TempStateType
-  funcState: FuncStateType
-  topoState: TopoStateType
-  getOrganizations: any
   getFilterArray: any
   filterModalState: any
   setFilterModalState: () => any
@@ -40,7 +34,6 @@ const FilterTabs = () => {
   //   super(props)
 
   //   this.filterState = props.filterState
-  //   this.getCombatantCommands = props.getCombatantCommands
   //   this.onFilterChange = props.onFilterChange
   //   this.onDashboardChange = props.onDashboardChange
 

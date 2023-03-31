@@ -7,6 +7,7 @@ import CheckboxTree from 'react-checkbox-tree'
 import 'react-checkbox-tree/lib/react-checkbox-tree.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquare, faCheckSquare, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { FaSquare, FaCheckSquare, FaChevronRight, FaChevronDown } from 'react-icons/fa'
 import { FreqFilterType, FreqStateType, FrequencyBand } from 'typings/sharedTypes'
 import { AiOutlineWarning } from 'react-icons/ai'
 import { MDBSwitch } from 'mdb-react-ui-kit'
@@ -375,11 +376,11 @@ const PredefinedBands = (props: BandsProps) => {
           optimisticToggle={false}
           disabled={!props.freqState.filterOn}
           icons={{
-            check: <FontAwesomeIcon className="rct-icon rct-icon-check" icon={faCheckSquare} />,
-            uncheck: <FontAwesomeIcon className="rct-icon rct-icon-uncheck" icon={faSquare} />,
-            halfCheck: <FontAwesomeIcon className="rct-icon rct-icon-half-check" icon={faCheckSquare} />,
-            expandClose: <FontAwesomeIcon icon={faChevronRight} className="rct-icon rct-icon-expand-close" />,
-            expandOpen: <FontAwesomeIcon icon={faChevronDown} className="rct-icon rct-icon-expand-open" />,
+            check: <FaCheckSquare/>,
+            uncheck: <FaSquare />,
+            halfCheck: <FaCheckSquare />,
+            expandClose: <FaChevronRight />,
+            expandOpen: <FaChevronDown />,
             parentOpen: null,
             parentClose: null,
             leaf: null

@@ -25,9 +25,6 @@ export const combatantCommandsSlice = createSlice({
   name: 'combatantCommands',
   initialState,
   reducers: {
-    addCC: (state, action: PayloadAction<CombatantCommand>) => {
-      state.value = [action.payload, ...state.value]
-    },
     setChecked: (state, action: PayloadAction<string[]>) => {
       state.checked = action.payload
     },
@@ -35,11 +32,11 @@ export const combatantCommandsSlice = createSlice({
       state.expanded = action.payload
     },
     setEnabled: (state, action: PayloadAction<boolean>) => {
-      state.enabled = action.payload
+      state.filterOn = action.payload
     }
   },
 })
 
-export const { addCC, setChecked, setExpanded, setEnabled } = combatantCommandsSlice.actions
+export const { setChecked, setExpanded, setEnabled } = combatantCommandsSlice.actions
 export const selectCombatantCommands = (state: RootState) => state.combatantCommands.value
 export default combatantCommandsSlice.reducer
