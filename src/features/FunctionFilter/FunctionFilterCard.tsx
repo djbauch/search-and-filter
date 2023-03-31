@@ -3,7 +3,7 @@ import styles from './FunctionFilterCard.module.css';
 import { UncontrolledTooltip, Button, Card, Container, Col, Form, Label, Row, CardBody } from 'reactstrap'
 import JEMSIAFCardHeader from '../../components/JEMSIAFCardHeader/JEMSIAFCardHeader'
 import CardDropdown from '../../components/CardDropdown/CardDropdown'
-import { getFunctionalOpts } from 'services/filter'
+import { getFunctionalOpts } from 'services/functionalOptions'
 //import 'react-widgets/styles.css'
 import { FuncItemType, FuncStateType } from 'typings/sharedTypes'
 

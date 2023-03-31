@@ -78,6 +78,7 @@ const Root = () => {
               <li><Link to={'uisettings'}>UI Settings</Link></li>
               <li><Link to={'cocoms'}>Combatant Commands</Link></li>
               <li><Link to={'doublecocoms/2'}>Double COCOMs</Link></li>
+              <li><Link to={'frequencies'}>Frequencies</Link></li>
               <li><Link to={'filtertabs'}>Tabs</Link></li>
               </ul>
             )

@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from 'app/store'
 import type { FrequencyBandCollection, FrequencyUnits } from 'typings/sharedTypes'
-import {  } from './FrequencyFilterData'
+import {getBandsAvailable  } from './FrequencyFilterData'
 
-interface CombatantCommandState {
-  value: CombatantCommand[]
+interface FrequencyFilterState {
+  value: FrequencyBandCollection[]
   checked: string[]
   expanded: string[]
   enabled: boolean
 }
 
-const initialState: CombatantCommandState = {
-  value:getCombatantCommands(),
+const initialState: FrequencyFilterState = {
+  value:getBandsAvailable(),
   checked: ['AFRICOM'],
   expanded: ['CYBERCOM'],
   enabled: false
@@ -21,9 +21,6 @@ export const combatantCommandsSlice = createSlice({
   name: 'combatantCommands',
   initialState,
   reducers: {
-    addCC: (state, action: PayloadAction<CombatantCommand>) => {
-      state.value = [action.payload, ...state.value]
-    },
     setChecked: (state, action: PayloadAction<string[]>) => {
       state.checked = action.payload
     },
@@ -36,6 +33,6 @@ export const combatantCommandsSlice = createSlice({
   },
 })
 
-export const { addCC, setChecked, setExpanded, setEnabled } = combatantCommandsSlice.actions
+export const { setChecked, setExpanded, setEnabled } = combatantCommandsSlice.actions
 export const selectCombatantCommands = (state: RootState) => state.combatantCommands.value
 export default combatantCommandsSlice.reducer
