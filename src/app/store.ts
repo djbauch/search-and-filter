@@ -5,6 +5,7 @@ import combatantCommandReducer from '../features/combatantCommands/combatantComm
 import filterTabsReducer from '../containers/FilterTabs/FilterTabsSlice'
 import uiSettingsReducer from '../features/UISettings/uiSettingsSlice'
 import functionFilterReducer from '../features/FunctionFilter/functionFilterSlice'
+import frequencyFilterReducer from 'components/FrequencyFilter/frequencyFilterSlice'
 //import chosenFeatureReducer from '../features/GlobeStores/chosenFeatureSlice'
 // Reference https://redux.js.org/tutorials/quick-start
 const store = configureStore({
@@ -14,6 +15,7 @@ const store = configureStore({
     combatantCommands: combatantCommandReducer,
     functionFilters: functionFilterReducer,
     uiSettings: uiSettingsReducer,
+    frequencyFilters: frequencyFilterReducer
 
     // chosenFeature: chosenFeatureReducer
   },

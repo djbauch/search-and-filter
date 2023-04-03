@@ -3,6 +3,9 @@ import CoComCard from '../../components/CoComFilterCard/CoComFilterCard'
 import FrequencyCard  from '../../components/FrequencyFilter/FrequencyFilterCard'
 import TemporalCard  from '../../components/TemporalFilter/TemporalFilterCard'
 import FunctionalCard  from '../../features/FunctionFilter/FunctionFilterCard'
+import OrganizationFilterCard from 'components/OrganizationFilter/OrganizationFilterCard'
+import FilterSummaryCard from 'components/FilterSummary/FilterSummaryCard'
+import PlatformFilterCard from 'components/PlatformFilter/PlatformFilterCard'
 import {Tabs, Tab} from 'react-bootstrap'
 // If you update rc-tabs to a 12.x release instead of 11.x you'll need the following line
 //import TabPane from 'rc-tabs/es/TabPanelList/TabPane';
@@ -12,23 +15,14 @@ import PlatformCard from '../../components/PlatformFilter/PlatformFilterCard'
 import SummaryCard from '../../components/FilterSummary/FilterSummaryCard'
 import { Rnd } from 'react-rnd'
 import { BiFilterAlt } from 'react-icons/bi'
-import { CCStateType, FreqStateType, FuncStateType, TempStateType, TopoStateType } from '../../typings/sharedTypes'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { setFilterId, setActiveKey, setX, setFilterState } from './FilterTabsSlice'
 export const filterId = 'tabs'
 
 type FilterTabsProps = {
   filterState: any
-  getCombatantCommands: any
   onFilterChange: any
   onDashboardChange: any
-  ccState: CCStateType
-  freqState: FreqStateType
-  getTimeZoneOptions: any
-  tempState: TempStateType
-  funcState: FuncStateType
-  topoState: TopoStateType
-  getOrganizations: any
   getFilterArray: any
   filterModalState: any
   setFilterModalState: () => any
@@ -61,25 +55,7 @@ const FilterTabs = () => {
     fTabsBg = document.getElementById('f-tabs-bg')
     fTabsParent = document.getElementById('f-tabs-parent')
   }, [])
-  // constructor(props: FilterTabsProps) {
-  //   super(props)
 
-  //   this.filterState = props.filterState
-  //   this.getCombatantCommands = props.getCombatantCommands
-  //   this.onFilterChange = props.onFilterChange
-  //   this.onDashboardChange = props.onDashboardChange
-
-
-  //   this.state = {
-  //     activeKey: this.filterState.activeKey,
-  //     x: this.filterState.x,
-  //     y: this.filterState.y,
-  //     width: this.filterState.width,
-  //     height: this.filterState.height,
-  //     vertical: this.filterState.vertical,
-  //     verticalOld: this.filterState.vertical,
-  //     bounds: 'window'
-  //   }
   //   this.threshold = 120
   //   this.filtertabsRef = React.createRef()
 
@@ -163,15 +139,6 @@ const closeTab = () => {
     dispatch(setFilterState({
       activeKey: -2
     }))
-    // this.onFilterChange({
-    //   filterId: filterId,
-    //   activeKey: -2,
-    //   x: this.state.x,
-    //   y: this.state.y,
-    //   width: this.state.width,
-    //   height: this.state.height,
-    //   vertical: this.state.vertical
-    // })
   }
 
   const onTabClick = (key) => {
@@ -184,20 +151,14 @@ const closeTab = () => {
     }
 
     // this.onFilterChange({
-    //   filterId: filterId,
     //   activeKey: this.state.activeKey === key ? -2 : key,
-    //   x: this.state.x,
-    //   y: this.state.y,
-    //   width: this.state.width,
-    //   height: this.state.height,
-    //   vertical: this.state.vertical
     // })
   }
 
   const onDrag = (e, d) => {
     fTabsParent.style.setProperty('pointer-events', 'none')
     document.body.onmousemove = (e) => {
-      var yFromBottom = window.innerHeight - e.clientY
+      const yFromBottom = window.innerHeight - e.clientY
 
       dispatch(setFilterState({
         vertical: yFromBottom > threshold,
@@ -239,59 +200,16 @@ const closeTab = () => {
       bounds: 'window'
     }))
 
-    // this.onFilterChange({
-    //   filterId: filterId,
-    //   activeKey: activeKey,
-    //   x: d.x,
-    //   y: d.y,
-    //   width: width,
-    //   height: height,
-    //   vertical: vertical
-    // })
-
     checkOutOfBounds()
 
     document.getElementById('f-tabs-parent')?.style.setProperty('pointer-events', 'auto')
     document.body.onmousemove = null
   }
 
-  const getTabName = (filterName, isVertical, isFilterOn) => {
-    switch (filterName) {
-      case 'CCMD':
-        isFilterOn = isFilterOn //&& this.props.ccState.treeChecked.length > 0;
-        break
-      case 'Frequency':
-        // not implemented
-        break
-      case 'Date Range':
-        // not implemented
-        break
-      case 'Functional':
-        // if (isFilterOn) {
-        //     let nonBlank = false;
-        //     for (var obj of this.props.funcState.functionalValues) {
-        //         if (obj.value !== "") {
-        //             nonBlank = true;
-        //             break;
-        //         }
-        //     }
-        //     isFilterOn = isFilterOn && nonBlank;
-        // }
-        isFilterOn = isFilterOn
-        break
-      case 'Organizations':
-        isFilterOn = isFilterOn //&& this.props.topoState.treeChecked.length > 0;
-        break
-      case 'Platform':
-        isFilterOn = isFilterOn //&& this.props.topoState.platChecked.length > 0;
-        break
-      default:
-        console.log('unknown filter')
-        break
-    }
+  const dockedStyle = {  left: 'calc(50% - 0.5rem)', bottom: 0 }
+  const verticalStyle = {  top: 'calc(50% - 0.5rem)', right: 0, transform: 'rotate(90deg)' }
+  const getTabName = (filterName: string, isVertical: boolean, isFilterOn) => {
 
-    let dockedStyle = {  left: 'calc(50% - 0.5rem)', bottom: 0 }
-    let verticalStyle = { top: 'calc(50% - 0.5rem)', right: 0, transform: 'rotate(90deg)' }
     return (
       <div>
         {filterName}
@@ -314,10 +232,6 @@ const closeTab = () => {
   const componentWillUnmount = () => {
     window.removeEventListener('resize', checkOOBListener)
   }
-
-  const dockedStyle = { position: 'absolute', left: 'calc(50% - 0.5rem)', bottom: 0 }
-  const verticalStyle = { position: 'absolute', top: 'calc(50% - 0.5rem)', right: 0, transform: 'rotate(90deg)' }
-
 
   return (
       <Rnd
@@ -364,7 +278,7 @@ const closeTab = () => {
               key="2"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
             >
-              <p>Frequency Card</p>
+              <FrequencyCard />
               {/* <FrequencyCard
                 // onFilterChange={this.props.onFilterChange}
                 // onDashboardChange={this.props.onDashboardChange}
@@ -378,7 +292,7 @@ const closeTab = () => {
               key="3"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
             >
-              <p>Temporal Card</p>
+              <TemporalCard />
               {/* <TemporalCard
                 // getTimeZoneOptions={this.props.getTimeZoneOptions}
                 // onFilterChange={this.props.onFilterChange}
@@ -393,7 +307,7 @@ const closeTab = () => {
               key="4"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
             >
-              <p>Functional Card</p>
+              <FunctionalCard />
               {/* <FunctionalCard
                 // onFilterChange={this.props.onFilterChange}
                 // onDashboardChange={this.props.onDashboardChange}
@@ -407,7 +321,7 @@ const closeTab = () => {
               key="5"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
             >
-              <p>Organizations Card</p>
+              <OrganizationFilterCard />
               {/* <OrganizationsCard
                 // onFilterChange={this.props.onFilterChange}
                 // onDashboardChange={this.props.onDashboardChange}
@@ -423,7 +337,7 @@ const closeTab = () => {
               key="6"
               className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
             >
-              <p>Platform Card</p>
+              <PlatformCard />
               {/* <PlatformCard
                 // onFilterChange={this.props.onFilterChange}
                 // onDashboardChange={this.props.onDashboardChange}
@@ -434,7 +348,7 @@ const closeTab = () => {
               /> */}
             </Tab>
             <Tab title="Summary" eventKey="7" className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3">
-              <p>Summary Card</p>
+              <FilterSummaryCard />
               {/* <SummaryCard
                 // onFilterChange={this.props.onFilterChange}
                 // closeTab={this.closeTab}

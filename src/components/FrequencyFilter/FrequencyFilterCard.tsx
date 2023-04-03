@@ -13,6 +13,8 @@ import { AiOutlineWarning } from 'react-icons/ai'
 import { MDBSwitch } from 'mdb-react-ui-kit'
 import CardCloseButton from 'components/CardCloseButton/CardCloseButton'
 import _ from 'lodash'
+import { useAppSelector, useAppDispatch } from 'app/hooks'
+import { setChecked, setExpanded, setEnabled, FrequencyFilterState, setFilterSwitch} from 'components/FrequencyFilter/frequencyFilterSlice'
 
 export const filterId = 'freq'
 export const freqEventLowChanged = 'freqEventLowChanged'
@@ -46,30 +48,31 @@ export type FreqTextProps = {
   label: string
   value: string
   eventType: string
-  onFilterChange: (e: FilterChangeEvent) => void
-  setValidUserFilter: any //function
-  freqState: FreqStateType
-  validRange: boolean
-  filterOn: boolean
+  // onFilterChange: (e: FilterChangeEvent) => void
+  // setValidUserFilter: any //function
+  // freqState: FreqStateType
+  // validRange: boolean
+  // filterOn: boolean
 }
 
 export const FreqText = (props: FreqTextProps) => {
+  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencyFilters)
   const onChange = (e: string) => {
     //if the value is in Hz, it should be an integer. Other units can be entered as decimals.
-    const newValue = () => (props.freqState.units === 'Hz' ? parseInt(e) : parseFloat(e))
+    const newValue = () => (freqState.units === 'Hz' ? parseInt(e) : parseFloat(e))
 
-    props.onFilterChange({
-      filterId: filterId,
-      eventType: props.eventType,
-      id: props.id,
-      value: newValue()
-    })
-    props.setValidUserFilter(props.validRange)
+    // props.onFilterChange({
+    //   filterId: filterId,
+    //   eventType: props.eventType,
+    //   id: props.id,
+    //   value: newValue()
+    // })
+    // props.setValidUserFilter(props.validRange)
   }
 
-  let altText = props.validRange ? props.name : 'High Frequency must be higher than low frequency'
+  let altText = freqState.validRange ? props.name : 'High Frequency must be higher than low frequency'
 
-  let classNames = props.validRange ? 'mx-3 frequency-text' : 'mx-3 red-border frequency-text'
+  let classNames = freqState.validRange ? 'mx-3 frequency-text' : 'mx-3 red-border frequency-text'
 
   const stepForUnits = () => {
     return props.freqState.units === 'Hz' ? '1' : 'any'
@@ -101,14 +104,13 @@ export const FreqText = (props: FreqTextProps) => {
 export type FreqDropdownPropsType = {
   id: string
   value: string
-  onFilterChange: (event: FilterChangeEvent) => void
-  filterOn: (e: { filterId: string; eventType: string; value: any }) => void
 }
 
 /*
 A dropdown box containing the various frequency units.
 */
 const FreqDropdown = (props: FreqDropdownPropsType) => {
+  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencyFilters)
   //Get the corresponding freqUnit object based on the dropdown option selected
   const saveConvertedValue = (name: string) => {
     const unit = _.find(freqUnits, (u) => u.label === name) || freqUnits[0]
@@ -135,8 +137,8 @@ const FreqDropdown = (props: FreqDropdownPropsType) => {
     <RBSForm.Select
       className="custom-select-sm enabled bands-dropdown mx-3 w-auto light"
       name="freq"
-      id={props.id}
-      disabled={!props.filterOn}
+      id={freqState.filterId}
+      disabled={!freqState.filterOn}
       onChange={(e) => saveConvertedValue(`${e.target.value}`)}
     >
       {options}
@@ -154,23 +156,24 @@ type BandSelectionDropdownProps = {
   filterOn: boolean
 }
 
-const BandSelectionDropdown = (props: BandSelectionDropdownProps) => {
+const BandSelectionDropdown = () => {
+  const freqState = useAppSelector((state) => state.frequencyFilters)
   //Get the corresponding freqUnit object based on the dropdown option selected
   const saveConvertedValue = (name: string) => {
     const band = _.find(bandsAvailable, (b) => b.label === name)
 
-    props.onFilterChange({
-      filterId: filterId,
-      eventType: freqBandSelectionChanged,
-      id: props.id,
-      value: band
-    })
+    // props.onFilterChange({
+    //   filterId: filterId,
+    //   eventType: freqBandSelectionChanged,
+    //   id: props.id,
+    //   value: freqState.band
+    // })
   }
 
   ////Convert value to the unit selected in the dropdown
 
   let options = bandsAvailable.map((band) => {
-    const isCurrentSelection = band.id === props.value
+    const isCurrentSelection = band.id === freqState.band.id
     return (
       <option key={band.id} selected={isCurrentSelection}>
         {band.label}
@@ -182,8 +185,8 @@ const BandSelectionDropdown = (props: BandSelectionDropdownProps) => {
     <RBSForm.Select
       className="custom-select-sm enabled bands-dropdown mx-3 w-auto light"
       name="freq"
-      id={props.id}
-      disabled={!props.filterOn}
+      id={freqState.filterId}
+      disabled={!freqState.filterOn}
       onChange={(e) => saveConvertedValue(`${e.target.value}`)}
     >
       {options}
@@ -256,14 +259,21 @@ export const retNodes = (units: string, showVals: boolean, activeFilter) => {
 type BandsProps = {
   label: string
   freqState?: FreqStateType
-  unitsDropdown: JSX.Element
   warningIcon: JSX.Element
   onFilterChange: (event: FilterChangeEvent) => void
   validRange: boolean
   setValidUserFilter: any
 }
 //Filter When "User Defined" is selected
-const UserSelectedBands = (props: BandsProps) => {
+const UserSelectedBands = () => {
+  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencyFilters)
+  let unitsDropdown = (
+    <FreqDropdown
+      id="units"
+      value={freqState.units}
+      //onFilterChange={() => {}} //{props.onFilterChange}
+    />
+  )
   return (
     <Form>
       <Row>
@@ -274,19 +284,15 @@ const UserSelectedBands = (props: BandsProps) => {
         <Label className="filter-label my-auto" for="units" sm={2}>
           Units:{' '}
         </Label>
-        <Col sm={10}>{props.unitsDropdown}</Col>
+        <Col sm={10}>{unitsDropdown}</Col>
       </Row>
       <FreqText
         name="freq"
         id="lowFreq"
         label="Low"
         eventType={freqEventLowChanged}
-        value={'' + props.freqState.lowFreq}
-        onFilterChange={props.onFilterChange}
-        setValidUserFilter={props.setValidUserFilter}
-        freqState={props.freqState}
-        validRange={props.validRange}
-        filterOn={false} //{props.freqState.filterOn}
+        value={'' + freqState.lowFreq}
+        //setValidUserFilter={.setValidUserFilter}
       />
 
       <FreqText
@@ -294,18 +300,15 @@ const UserSelectedBands = (props: BandsProps) => {
         id="highFreq"
         label="High"
         eventType={freqEventHighChanged}
-        value={'' + props.freqState.highFreq}
-        onFilterChange={props.onFilterChange}
-        setValidUserFilter={props.setValidUserFilter}
-        freqState={props.freqState}
-        validRange={props.validRange}
-        filterOn={false} //{props.freqState.filterOn}
+        value={'' + freqState.highFreq}
+
       />
     </Form>
   )
 }
 
-const PredefinedBands = (props: BandsProps) => {
+const PredefinedBands = () => {
+  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencyFilters)
   const [valuesVisible, setValuesVisible] = useState(true)
 
   const showValue = (
@@ -315,43 +318,43 @@ const PredefinedBands = (props: BandsProps) => {
       onChange={() => setValuesVisible(!valuesVisible)}
       checked={valuesVisible}
       className="ms-1 me-2 mb-2"
-      disabled={!props.freqState.filterOn}
+      disabled={!freqState.filterOn}
     />
   )
 
-  const [freqStore, setFreqStore] = useState(setInitFreqStore(retNodes('', true, props.freqState?.activeFilter)))
+  const [freqStore, setFreqStore] = useState(setInitFreqStore(retNodes('', true, freqState?.activeFilter)))
   const onExpand = (expanded) => {
-    props.onFilterChange({
-      filterId: filterId,
-      eventType: freqEventExpandChanged,
-      value: expanded
-    })
+    // props.onFilterChange({
+    //   filterId: filterId,
+    //   eventType: freqEventExpandChanged,
+    //   value: expanded
+    // })
   }
 
   const onCheck = (checked) => {
     let { newStore } = freqToggled(checked, freqStore)
     setFreqStore(newStore)
-    props.onFilterChange({
-      filterId: filterId,
-      eventType: freqEventCheckedChanged,
-      value: checked
-    })
+    // props.onFilterChange({
+    //   filterId: filterId,
+    //   eventType: freqEventCheckedChanged,
+    //   value: checked
+    // })
   }
 
   const clearPreDefined = () => {
     let { newStore } = freqCleared(freqStore)
     setFreqStore(newStore)
-    props.onFilterChange({
-      filterId: filterId,
-      eventType: freqEventChecksCleared,
-      value: []
-    })
+    // props.onFilterChange({
+    //   filterId: filterId,
+    //   eventType: freqEventChecksCleared,
+    //   value: []
+    // })
   }
 
   return (
     <Form>
       <Row>
-        <p className="filter-subtitle ms-3">{props.label}</p>
+        <p className="filter-subtitle ms-3">{label}</p>
       </Row>
       <Row>{showValue}</Row>
       <Row>
@@ -401,25 +404,18 @@ type FrequencyFilterCardProps = {
 }
 
 const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilterCardProps) => {
-  const freqState = props.freqState
+  const freqState = useAppSelector((state) => state.frequencyFilters)
+  const dispatch = useAppDispatch()
   //State
   const [validUserFilter, setValidUserFilter] = useState(freqState.highFreq >= freqState.lowFreq)
 
-  let unitsDropdown = (
-    <FreqDropdown
-      id="units"
-      value={props.freqState.units}
-      onFilterChange={() => {}} //{props.onFilterChange}
-      filterOn={freqState.filterOn}
-    />
-  )
 
   let bandsDropdown = (
     <BandSelectionDropdown
-      id="bands"
-      value={freqState.activeFilter.label}
-      onFilterChange={props.onFilterChange}
-      filterOn={false} //{props.freqState.filterOn}
+      // id="bands"
+      // value={freqState.activeFilter.label}
+      // onFilterChange={props.onFilterChange}
+      // filterOn={freqState.filterOn}
     />
   )
 
@@ -433,7 +429,6 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
     const bandOptionArgs = {
       label: activeFilter.label,
       freqState,
-      unitsDropdown,
       warningIcon,
       onFilterChange: onFC,
       validRange,
@@ -457,10 +452,10 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
       <MDBSwitch
         id="filterOnFreq"
         className="light"
-        checked={false} //{props.freqState.filterOn}
+        checked={freqState.filterOn}
         onChange={() => {
-          let enabled = !props.freqState.filterOn
-          handleFilterSwitch(enabled)
+          const enabled = !freqState.filterOn
+          dispatch(setFilterSwitch(enabled))
           props.onFilterChange({ filterId: filterId, eventType: freqEventFilterSwitch, value: enabled })
         }}
       />

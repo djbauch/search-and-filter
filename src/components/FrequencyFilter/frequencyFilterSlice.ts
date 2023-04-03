@@ -1,24 +1,38 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import _ from 'lodash'
 import type { RootState } from 'app/store'
-import type { FrequencyBandCollection, FrequencyUnits } from 'typings/sharedTypes'
-import {getBandsAvailable  } from './FrequencyFilterData'
+import type { FrequencyBand, FrequencyBandCollection, FrequencyUnits } from 'typings/sharedTypes'
+import { getBandsAvailable } from './FrequencyFilterData'
 
-interface FrequencyFilterState {
+const availableBands = getBandsAvailable()
+export interface FrequencyFilterState {
   value: FrequencyBandCollection[]
+  filterId: string
+  band: FrequencyBandCollection
+  highFreq: number
+  lowFreq: number
+  units: string
   checked: string[]
   expanded: string[]
-  enabled: boolean
+  filterOn: boolean
+  validRange: boolean
 }
 
 const initialState: FrequencyFilterState = {
-  value:getBandsAvailable(),
-  checked: ['AFRICOM'],
-  expanded: ['CYBERCOM'],
-  enabled: false
+  value: availableBands,
+  filterId: 'freq',
+  band: availableBands[0],
+  highFreq: 0,
+  lowFreq: 0,
+  units: 'Hz',
+  checked: [],
+  expanded: [],
+  filterOn: false,
+  validRange: false
 }
 
-export const combatantCommandsSlice = createSlice({
-  name: 'combatantCommands',
+export const frequencyFilterSlice = createSlice({
+  name: 'frequencyFilters',
   initialState,
   reducers: {
     setChecked: (state, action: PayloadAction<string[]>) => {
@@ -28,11 +42,20 @@ export const combatantCommandsSlice = createSlice({
       state.expanded = action.payload
     },
     setEnabled: (state, action: PayloadAction<boolean>) => {
-      state.enabled = action.payload
+      state.filterOn = action.payload
+    },
+    setFilterOn: (state, action: PayloadAction<boolean>) => {
+      state.filterOn = action.payload
+    },
+    setFilterSwitch: (state, action: PayloadAction<boolean>) => {
+      state.filterOn = action.payload
+    },
+    setFrequencyBand: (state, action: PayloadAction<string>) => {
+      state.band = _.find(availableBands, { label: action.payload })
     }
-  },
+  }
 })
 
-export const { setChecked, setExpanded, setEnabled } = combatantCommandsSlice.actions
-export const selectCombatantCommands = (state: RootState) => state.combatantCommands.value
-export default combatantCommandsSlice.reducer
+export const { setChecked, setExpanded, setEnabled, setFilterOn, setFilterSwitch, setFrequencyBand } = frequencyFilterSlice.actions
+export const selectFrequencyFilters = (state: RootState) => state.frequencyFilters
+export default frequencyFilterSlice.reducer

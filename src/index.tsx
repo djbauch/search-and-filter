@@ -43,6 +43,7 @@ import '@fontsource/roboto/700.css'
 import ErrorPage from 'ErrorPage'
 import UISettings from 'features/UISettings/UISettings'
 import { CoComFilterCard } from 'components'
+import FrequencyFilterCard  from 'components/FrequencyFilter/FrequencyFilterCard'
 import { DoubleCoComs, loader as repLoader } from 'components/CoComFilterCard/DoubleCoComs'
 import FilterTabs from 'containers/FilterTabs/FilterTabs'
 esriConfig.assetsPath = './assets'
@@ -55,6 +56,7 @@ const router = createBrowserRouter(
       <Route key="CoComFilterCard" path="cocoms" element={<CoComFilterCard />}/>
       <Route key="DoubleCoComs" path="doublecocoms/:reps" element={<DoubleCoComs />} loader={repLoader}/>
       <Route key="FilterTabs" path="filtertabs" element={<FilterTabs />} />
+      <Route key="FrequencyFilterCard" path="frequencies" element={<FrequencyFilterCard />} />
     </Route>
   ])
 )

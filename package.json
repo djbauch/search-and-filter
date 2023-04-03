@@ -134,7 +134,7 @@
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-jest-dom": "^4.0.3",
     "generate-react-cli": "^8.2.0",
-    "prettier": "^2.8.7",
+    "prettier": "2.8.4",
     "prop-types": "^15.8.1",
     "redux": "^4.2.1",
     "storybook-addon-apollo-client": "^4.1.4",
