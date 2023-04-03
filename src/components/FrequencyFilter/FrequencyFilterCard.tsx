@@ -14,7 +14,13 @@ import { MDBSwitch } from 'mdb-react-ui-kit'
 import CardCloseButton from 'components/CardCloseButton/CardCloseButton'
 import _ from 'lodash'
 import { useAppSelector, useAppDispatch } from 'app/hooks'
-import { setChecked, setExpanded, setEnabled, FrequencyFilterState, setFilterSwitch} from 'components/FrequencyFilter/frequencyFilterSlice'
+import {
+  setChecked,
+  setExpanded,
+  setEnabled,
+  FrequencyFilterState,
+  setFilterSwitch
+} from 'components/FrequencyFilter/frequencyFilterSlice'
 
 export const filterId = 'freq'
 export const freqEventLowChanged = 'freqEventLowChanged'
@@ -301,7 +307,6 @@ const UserSelectedBands = () => {
         label="High"
         eventType={freqEventHighChanged}
         value={'' + freqState.highFreq}
-
       />
     </Form>
   )
@@ -379,7 +384,7 @@ const PredefinedBands = () => {
           optimisticToggle={false}
           disabled={!props.freqState.filterOn}
           icons={{
-            check: <FaCheckSquare/>,
+            check: <FaCheckSquare />,
             uncheck: <FaSquare />,
             halfCheck: <FaCheckSquare />,
             expandClose: <FaChevronRight />,
@@ -409,13 +414,12 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
   //State
   const [validUserFilter, setValidUserFilter] = useState(freqState.highFreq >= freqState.lowFreq)
 
-
   let bandsDropdown = (
     <BandSelectionDropdown
-      // id="bands"
-      // value={freqState.activeFilter.label}
-      // onFilterChange={props.onFilterChange}
-      // filterOn={freqState.filterOn}
+    // id="bands"
+    // value={freqState.activeFilter.label}
+    // onFilterChange={props.onFilterChange}
+    // filterOn={freqState.filterOn}
     />
   )
 
