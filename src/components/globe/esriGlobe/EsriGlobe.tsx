@@ -54,7 +54,7 @@ type EsriGlobeProps = {
   altitude: number
 }
 const EsriGlobe = (props: EsriGlobeProps) => {
-  const uiDiv = useRef<HTMLDivElement>()
+  const uiDiv = useRef<HTMLDivElement>(null)
   useEffect(() => {
     initialize(uiDiv.current!)
   })

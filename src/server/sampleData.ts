@@ -1227,37 +1227,6 @@ export const sampleExportProjectDataTypes = (): ExportProjectDataTypes => {
 }
 
 /*
- * Dummy server call. This can be replaced with hook to the server sending actual format and equipment information and returning file or executable.
- */
-export const getDataFile = (format: string, data: string | any[]): Blob => {
-  console.log(format + ' is the data format you chose.')
-  let file = ''
-  if (format === '.json') {
-    return new Blob([JSON.stringify(data)], { type: 'application/json' })
-  } else if (format === '.csv') {
-    let rows = new Array()
-    for (const element of data) {
-      let cols = new Object()
-      let entries = Object.entries(element)
-      for (const element of entries) {
-        if (typeof element[1] === 'object') {
-          element[1] = flatten(element[1])
-          for (let k = 0; k < Object.entries(element[1]).length; k++) {
-            cols[Object.entries(element[1])[k][0]] = Object.entries(element[1])[k][1]
-          }
-        } else {
-          cols[element[0]] = element[1]
-        }
-      }
-      rows.push(cols)
-    }
-    const parser = new Parser(); //(Object.keys(rows))
-    const csv = parser.parse(rows)
-    return new Blob([csv], { type: 'application/csv' })
-  }
-}
-
-/*
  * Dummy server call.This can be replaced with hooks to the server sending format and current canvas and receiving image in return.
  */
 export const getImageFile = (format, _canvas) => {

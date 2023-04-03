@@ -3,13 +3,14 @@ import React from 'react'
 import JEMSIAFCardHeader from './JEMSIAFCardHeader'
 import {toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
   title: "Components/JEMSIAFCardHeader",
   component: JEMSIAFCardHeader
-}
+} as ComponentMeta<typeof JEMSIAFCardHeader>
 
-const Template = args => <JEMSIAFCardHeader {...args} />
+const Template: ComponentStory<typeof JEMSIAFCardHeader> = args => <JEMSIAFCardHeader {...args} />
 
 export const Default = Template.bind({})
 
