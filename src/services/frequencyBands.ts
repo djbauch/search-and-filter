@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { Node as CheckBoxNode} from 'react-checkbox-tree'
 import type { FrequencyBandCollection, FrequencyUnits } from 'typings/sharedTypes'
 /*
 Returns an array of JSON objects in the following format:
@@ -298,7 +299,7 @@ export const nodeConversion = (band: { low: number; high: number }) => {
 //CheckboxTree mandates that all elements must have a unique value, so use the id as the value, which is
 //guaranteed to be unique
 const getFreqBandFields = (units: string, showValues: boolean, activeFilter: any) => {
-  const matchingBand = activeFilter
+  let matchingBand = activeFilter
     ? _.find(getBandsAvailable(), (element) => element.id === activeFilter.id)
     : getBandsAvailable()[0]
   if (matchingBand) {
@@ -316,14 +317,16 @@ const getFreqBandFields = (units: string, showValues: boolean, activeFilter: any
         }
       }
 
-      let explanation = node.label + labelSpacer(node.label) + nodeConversion(node.band)
+      const explanation = node.label + labelSpacer(node.label) + nodeConversion(node.band)
       return {
         value: node.id,
         band: { low: node.band.low, high: node.band.high },
         label: showValues ? explanation : node.label,
         className: 'freq-filter-node'
-      }
+      } as CheckBoxNode
     })
+  } else {
+    return []
   }
 }
 

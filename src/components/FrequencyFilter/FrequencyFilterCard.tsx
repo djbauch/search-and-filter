@@ -81,7 +81,7 @@ export const FreqText = (props: FreqTextProps) => {
   let classNames = freqState.validRange ? 'mx-3 frequency-text' : 'mx-3 red-border frequency-text'
 
   const stepForUnits = () => {
-    return props.freqState.units === 'Hz' ? '1' : 'any'
+    return freqState.units === 'Hz' ? '1' : 'any'
   }
 
   return (
@@ -100,7 +100,7 @@ export const FreqText = (props: FreqTextProps) => {
           onChange={(e) => onChange(`${e.target.value}`)}
           value={props.value}
           alt={altText}
-          disabled={!props.filterOn}
+          disabled={!freqState.filterOn}
         />
       </Col>
     </Row>
@@ -142,6 +142,7 @@ const FreqDropdown = (props: FreqDropdownPropsType) => {
   return (
     <RBSForm.Select
       className="custom-select-sm enabled bands-dropdown mx-3 w-auto light"
+      title="Freq"
       name="freq"
       id={freqState.filterId}
       disabled={!freqState.filterOn}
@@ -190,6 +191,7 @@ const BandSelectionDropdown = () => {
   return (
     <RBSForm.Select
       className="custom-select-sm enabled bands-dropdown mx-3 w-auto light"
+      title="Freq"
       name="freq"
       id={freqState.filterId}
       disabled={!freqState.filterOn}
@@ -264,14 +266,11 @@ export const retNodes = (units: string, showVals: boolean, activeFilter) => {
 }
 type BandsProps = {
   label: string
-  freqState?: FreqStateType
-  warningIcon: JSX.Element
-  onFilterChange: (event: FilterChangeEvent) => void
+  warningIcon: JSX.Element | null
   validRange: boolean
-  setValidUserFilter: any
 }
 //Filter When "User Defined" is selected
-const UserSelectedBands = () => {
+const UserSelectedBands = (props: BandsProps) => {
   const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencyFilters)
   let unitsDropdown = (
     <FreqDropdown
@@ -312,7 +311,7 @@ const UserSelectedBands = () => {
   )
 }
 
-const PredefinedBands = () => {
+const PredefinedBands = (props: BandsProps) => {
   const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencyFilters)
   const [valuesVisible, setValuesVisible] = useState(true)
 
@@ -359,7 +358,7 @@ const PredefinedBands = () => {
   return (
     <Form>
       <Row>
-        <p className="filter-subtitle ms-3">{label}</p>
+        <p className="filter-subtitle ms-3">{props.label}</p>
       </Row>
       <Row>{showValue}</Row>
       <Row>
@@ -367,22 +366,22 @@ const PredefinedBands = () => {
           type="button"
           className="btn btn-sm btn-secondary filter-clear-button font-weight-light mt-0 ms-3 w-auto"
           onClick={() => clearPreDefined()}
-          disabled={!props.freqState.filterOn}
+          disabled={!freqState.filterOn}
         >
           Clear
         </button>
       </Row>
       <Row className="">
         <CheckboxTree
-          nodes={retNodes(freqUnits[freqArrVal].label, valuesVisible, props.freqState?.activeFilter)}
-          checked={props.freqState.checked}
-          expanded={props.freqState.expanded}
+          nodes={retNodes(freqUnits[freqArrVal].label, valuesVisible, freqState?.activeFilter)}
+          checked={freqState.checked}
+          expanded={freqState.expanded}
           onCheck={(checked) => onCheck(checked)}
           onExpand={(expanded) => onExpand(expanded)}
           checkModel="all"
           iconsClass="fa5"
           optimisticToggle={false}
-          disabled={!props.freqState.filterOn}
+          disabled={!freqState.filterOn}
           icons={{
             check: <FaCheckSquare />,
             uncheck: <FaSquare />,
@@ -430,23 +429,20 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
 
   const onFC = props.onFilterChange
   const bandOptionReducer = (activeFilter: FreqFilterType) => {
-    const bandOptionArgs = {
+    const bandOptionArgs: BandsProps = {
       label: activeFilter.label,
-      freqState,
       warningIcon,
-      onFilterChange: onFC,
       validRange,
-      setValidUserFilter
     }
     return activeFilter.id === 'User Defined' ? UserSelectedBands(bandOptionArgs) : PredefinedBands(bandOptionArgs)
   }
 
   const handleFilterSwitch = (filterOn) => {
-    props.onFilterChange({
-      filterId: filterId,
-      eventType: freqEventFilterSwitch,
-      value: filterOn
-    })
+    // props.onFilterChange({
+    //   filterId: filterId,
+    //   eventType: freqEventFilterSwitch,
+    //   value: filterOn
+    // })
   }
   const switchOnOff = (
     <Container>
@@ -460,7 +456,6 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
         onChange={() => {
           const enabled = !freqState.filterOn
           dispatch(setFilterSwitch(enabled))
-          props.onFilterChange({ filterId: filterId, eventType: freqEventFilterSwitch, value: enabled })
         }}
       />
     </Container>

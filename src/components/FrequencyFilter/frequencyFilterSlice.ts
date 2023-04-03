@@ -8,7 +8,7 @@ const availableBands = getBandsAvailable()
 export interface FrequencyFilterState {
   value: FrequencyBandCollection[]
   filterId: string
-  band: FrequencyBandCollection
+  band: string
   highFreq: number
   lowFreq: number
   units: string
@@ -16,19 +16,21 @@ export interface FrequencyFilterState {
   expanded: string[]
   filterOn: boolean
   validRange: boolean
+  activeFilter: string
 }
 
 const initialState: FrequencyFilterState = {
   value: availableBands,
   filterId: 'freq',
-  band: availableBands[0],
+  band: availableBands[0].label,
   highFreq: 0,
   lowFreq: 0,
   units: 'Hz',
   checked: [],
   expanded: [],
   filterOn: false,
-  validRange: false
+  validRange: false,
+  activeFilter: 'freq'
 }
 
 export const frequencyFilterSlice = createSlice({
@@ -51,7 +53,7 @@ export const frequencyFilterSlice = createSlice({
       state.filterOn = action.payload
     },
     setFrequencyBand: (state, action: PayloadAction<string>) => {
-      state.band = _.find(availableBands, { label: action.payload })
+      state.band = action.payload //_.find(availableBands, { label: action.payload }).label || ''
     }
   }
 })

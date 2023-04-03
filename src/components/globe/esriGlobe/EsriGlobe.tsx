@@ -5,6 +5,10 @@ import Camera from '@arcgis/core/Camera'
 import Sketch from '@arcgis/core/widgets/Sketch'
 import Expand from '@arcgis/core/widgets/Expand'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import GraphicsLayerView from '@arcgis/core/views/layers/GraphicsLayerView'
+import Graphic from '@arcgis/core/Graphic'
+import Layer from '@arcgis/core/layers/Layer'
+import Point from '@arcgis/core/geometry/Point'
 import esriConfig from '@arcgis/core/config'
 import LayerList from '@arcgis/core/widgets/LayerList'
 import BasemapLayerList from '@arcgis/core/widgets/BasemapLayerList'
@@ -14,6 +18,13 @@ import Color from '@arcgis/core/Color'
 import PropTypes from 'prop-types'
 import './EsriGlobe.css'
 
+// ArcGIS doesn't make the GraphicHit interface easy to get to so:
+interface GraphicHit {
+  type: 'graphic'
+  graphic: Graphic
+  layer: Layer
+  mapPoint: Point
+}
 // Required: Set this property to insure assets resolve correctly.
 esriConfig.assetsPath = '/assets'
 
@@ -43,9 +54,9 @@ type EsriGlobeProps = {
   altitude: number
 }
 const EsriGlobe = (props: EsriGlobeProps) => {
-  const uiDiv = useRef()
+  const uiDiv = useRef<HTMLDivElement>()
   useEffect(() => {
-    initialize(uiDiv.current)
+    initialize(uiDiv.current!)
   })
   const [tooltipsEnabled] = useState(true) // useTooltipsEnabledState from LocalStorageKeys
   const [tooltipBehavior] = useState('view-mouseover') //useTooltipBehaviorState ""
@@ -53,7 +64,7 @@ const EsriGlobe = (props: EsriGlobeProps) => {
   const mapDiv = useRef(null)
 
   const addMeasurementTool = (sceneView: SceneView) => {
-    let activeWidget = null
+    let activeWidget: DirectLineMeasurement3D | AreaMeasurement3D | null = null
 
     const distanceId = 'esri-distance-button'
     const areaId = 'esri-area-button'
@@ -138,11 +149,7 @@ const EsriGlobe = (props: EsriGlobeProps) => {
 
       if (activeWidget) {
         sceneView.ui.add(activeWidget, 'bottom-right')
-        activeWidget.viewModel.start().catch(function (error) {
-          if (error.name !== 'AbortError') {
-            console.error(error)
-          }
-        })
+        activeWidget.viewModel.start()
       }
     }
 
@@ -309,21 +316,24 @@ const EsriGlobe = (props: EsriGlobeProps) => {
   }
 
   useEffect(() => {
-    const addHighlighting = (sceneView) => {
-      let highlightHandle = null
+    const addHighlighting = (sceneView: SceneView) => {
+      let highlightHandle: IHandle
       sceneView.on('pointer-move', function (event) {
         //hitTest checks for elements that are on the surface of the globe like points or equipment.
         sceneView.hitTest(event).then(function (response) {
           console.log(response)
-          if (response.results.length > 0) {
-            let graphic = response.results[0].graphic
+          const graphicHits = response.results?.filter(
+            (hitResult) => hitResult.type === 'graphic'
+          )
+          if (graphicHits?.length > 0) {
+            let graphic: Graphic = (graphicHits[0] as GraphicHit).graphic
             sceneView.whenLayerView(graphic.layer).then(function (layerView) {
               if (!highlightHandle) {
-                highlightHandle = layerView.highlight(graphic)
+                highlightHandle = (layerView as GraphicsLayerView).highlight(graphic)
                 if (tooltipsEnabled && tooltipBehavior === 'view-mouseover') {
                   sceneView.popup.open({
                     features: [graphic], // array of graphics with popupTemplate set and geometries
-                    location: graphic.geometry.centroid // updates the location of popup based on
+                    location: graphic.geometry.extent.center // updates the location of popup based on
                     // selected feature's geometry
                   })
                 }
@@ -332,7 +342,6 @@ const EsriGlobe = (props: EsriGlobeProps) => {
           } else {
             if (highlightHandle) {
               highlightHandle.remove()
-              highlightHandle = null
               if (tooltipsEnabled && tooltipBehavior === 'view-mouseover') sceneView.popup.close()
             }
           }
@@ -341,7 +350,7 @@ const EsriGlobe = (props: EsriGlobeProps) => {
     }
 
     // Only initialize view once.
-    viewRef.ui.container = uiDiv.current
+    viewRef.ui.container = uiDiv.current!
 
     addMeasurementTool(viewRef)
     addSketchTool(mapRef, viewRef)
