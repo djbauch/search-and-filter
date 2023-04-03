@@ -16,7 +16,7 @@ export interface FrequencyFilterState {
   expanded: string[]
   filterOn: boolean
   validRange: boolean
-  activeFilter: string
+  activeFilter: {id: string, value: string}
 }
 
 const initialState: FrequencyFilterState = {
@@ -30,7 +30,7 @@ const initialState: FrequencyFilterState = {
   expanded: [],
   filterOn: false,
   validRange: false,
-  activeFilter: 'freq'
+  activeFilter: {id: 'freq', value: 'User Defined'}
 }
 
 export const frequencyFilterSlice = createSlice({
