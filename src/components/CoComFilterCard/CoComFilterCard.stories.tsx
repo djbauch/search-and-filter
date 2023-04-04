@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 import CoComFilterCard from './CoComFilterCard';
-import store from '../../app/store'
-import { Provider } from 'react-redux'
 
 export default {
   title: "Components/CoComFilterCard",

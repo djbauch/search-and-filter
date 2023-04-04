@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import CoComCard from '../../components/CoComFilterCard/CoComFilterCard'
 import FrequencyCard from '../../components/FrequencyFilter/FrequencyFilterCard'
 import TemporalCard from '../../components/TemporalFilter/TemporalFilterCard'
@@ -10,14 +10,13 @@ import { Tabs, Tab } from 'react-bootstrap'
 //import TabPane from 'rc-tabs/es/TabPanelList/TabPane';
 import 'rc-tabs/assets/index.css'
 import PlatformCard from '../../components/PlatformFilter/PlatformFilterCard'
-import { Rnd } from 'react-rnd'
+import { DraggableData, Rnd, RndDragEvent } from 'react-rnd'
 import { BiFilterAlt } from 'react-icons/bi'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
-import { setFilterId, setActiveKey, setX, setFilterState } from './FilterTabsSlice'
+import { setFilterId, setActiveKey, setX, setFilterState, FilterTabsState } from './FilterTabsSlice'
 export const filterId = 'tabs'
 
 type FilterTabsProps = {
-  filterState: any
   onFilterChange: any
   onDashboardChange: any
   getFilterArray: any
@@ -25,8 +24,8 @@ type FilterTabsProps = {
   setFilterModalState: () => any
 }
 
-const FilterTabs = () => {
-  const ftabs = useAppSelector((state) => state.filterTabs)
+const FilterTabs: FC<{}> = () => {
+  const ftabs: FilterTabsState = useAppSelector((state) => state.filterTabs)
   const dispatch = useAppDispatch()
   const x = ftabs.x
   const y = ftabs.y
@@ -48,6 +47,7 @@ const FilterTabs = () => {
   let fTabsParent: HTMLElement
   // useEffect with empty dependency array to replace componentDidMount
   useEffect(() => {
+    console.log("Mounted tabs")
     filtertabs = document.getElementById('filtertabs')!
     fTabsBg = document.getElementById('f-tabs-bg')!
     fTabsParent = document.getElementById('f-tabs-parent')!
@@ -55,8 +55,10 @@ const FilterTabs = () => {
     checkOutOfBounds()
     changeWritingMode()
     window.addEventListener('resize', checkOOBListener)
-  }, [])
-
+    return () => {
+      window.removeEventListener('resize', checkOOBListener)
+    }
+   }, [])
   //   this.threshold = 120
   //   this.filtertabsRef = React.createRef()
 
@@ -165,7 +167,7 @@ const FilterTabs = () => {
     // })
   }
 
-  const onDrag = (e, d) => {
+  const onDrag = (e: RndDragEvent, d: DraggableData) => {
     fTabsParent.style.setProperty('pointer-events', 'none')
     document.body.onmousemove = (e) => {
       const yFromBottom = window.innerHeight - e.clientY
@@ -208,7 +210,7 @@ const FilterTabs = () => {
     }
   }
 
-  const onDragStop = (e, d) => {
+  const onDragStop = (_e: RndDragEvent, d: DraggableData) => {
     dispatch(
       setFilterState({
         x: d.x,
@@ -235,18 +237,7 @@ const FilterTabs = () => {
     )
   }
 
-  const componentDidMount = () => {
-    filtertabs = document.getElementById('filtertabs')!
-    fTabsBg = document.getElementById('f-tabs-bg')!
-    fTabsParent = document.getElementById('f-tabs-parent')!
-    ro.observe(filtertabs)
-    checkOutOfBounds()
-    changeWritingMode()
-    window.addEventListener('resize', checkOOBListener)
-    return () => {
-      window.removeEventListener('resize', checkOOBListener)
-    }
-  }
+
 
   return (
     <Rnd

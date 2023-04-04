@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import CardCloseButton from './CardCloseButton'
 

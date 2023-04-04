@@ -1,4 +1,4 @@
-/* eslint-disable */
+import * as React from 'react'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import CardDropdown from './CardDropdown';
 
@@ -9,7 +9,7 @@ export default {
 
 const Template: ComponentStory<typeof CardDropdown> = (args) => <CardDropdown {...args} />
 
-export const Default = () => <CardDropdown />
+export const Default = Template.bind({})
 
 Default.story = {
   name: 'default',

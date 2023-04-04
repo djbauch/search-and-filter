@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store'
 
-interface FilterTabsState {
+export interface FilterTabsState {
   filterId: string
   activeKey: number
   x: number
