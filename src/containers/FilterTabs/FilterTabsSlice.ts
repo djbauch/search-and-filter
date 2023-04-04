@@ -4,7 +4,7 @@ import type { RootState } from '../../app/store'
 
 export interface FilterTabsState {
   filterId: string
-  activeKey: number
+  activeKey: string
   x: number
   y: number
   width: number
@@ -16,12 +16,12 @@ export interface FilterTabsState {
 
 const initialState: FilterTabsState = {
   filterId: '',
-  activeKey: -2,
+  activeKey: "-2",
   x: 0,
   y: 0,
   width: 0,
   height: 0,
-  vertical: true
+  vertical: false
 }
 
 export const filterTabsSlice = createSlice({
@@ -31,7 +31,7 @@ export const filterTabsSlice = createSlice({
     setFilterId: (state, action: PayloadAction<string>) => {
       state.filterId = action.payload
     },
-    setActiveKey: (state, action: PayloadAction<number>) => {
+    setActiveKey: (state, action: PayloadAction<string>) => {
       state.activeKey = action.payload
     },
     setX: (state, action: PayloadAction<number>) => {

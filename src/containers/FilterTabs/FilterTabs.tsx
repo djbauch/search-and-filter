@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import CoComCard from '../../components/CoComFilterCard/CoComFilterCard'
 import FrequencyCard from '../../components/FrequencyFilter/FrequencyFilterCard'
 import TemporalCard from '../../components/TemporalFilter/TemporalFilterCard'
@@ -15,6 +15,10 @@ import { BiFilterAlt } from 'react-icons/bi'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { setFilterId, setActiveKey, setX, setFilterState, FilterTabsState } from './FilterTabsSlice'
 export const filterId = 'tabs'
+
+export const ItemTypes = {
+  TABS: 'tabs',
+}
 
 type FilterTabsProps = {
   onFilterChange: any
@@ -42,53 +46,59 @@ const FilterTabs: FC<{}> = () => {
   const funcState = useAppSelector((state) => state.functionFilters)
   const threshold = 120
   let filtertabsRef = useRef<Rnd>(null)
-  let filtertabs: HTMLElement
-  let fTabsBg: HTMLElement
-  let fTabsParent: HTMLElement
+  const [filterTabs, setFilterTabs] = useState<HTMLElement>()
+  const [fTabsBg, setfTabsBg] = useState<HTMLElement>()
+  const [fTabsParent, setfTabsParent] = useState<HTMLElement>()
   // useEffect with empty dependency array to replace componentDidMount
   useEffect(() => {
     console.log("Mounted tabs")
-    filtertabs = document.getElementById('filtertabs')!
-    fTabsBg = document.getElementById('f-tabs-bg')!
-    fTabsParent = document.getElementById('f-tabs-parent')!
-    ro.observe(filtertabs)
+    const tabsContainer = document.getElementById('filtertabs')
+    tabsContainer && setFilterTabs(tabsContainer)
+    const bgContainer = document.getElementById('f-tabs-bg')
+    bgContainer && setfTabsBg(bgContainer)
+    setfTabsParent(document.getElementById('f-tabs-parent')!)
+    const ro = new ResizeObserver((entries) => {
+      // Get these from the slice then update the slice
+      for (let entry of entries) {
+        const cr = entry.contentRect
+        dispatch(
+          setFilterState({
+            x: x - cr.width + width,
+            y: vertical ? y : y - cr.height + height,
+            width: cr.width,
+            height: cr.height
+          })
+        )
+        checkOutOfBounds()
+      }
+    })
+    tabsContainer && ro.observe(tabsContainer)
     checkOutOfBounds()
     changeWritingMode()
     window.addEventListener('resize', checkOOBListener)
     return () => {
+      console.log("Unmounted tabs")
+      ro.disconnect()
       window.removeEventListener('resize', checkOOBListener)
     }
    }, [])
   //   this.threshold = 120
   //   this.filtertabsRef = React.createRef()
 
-  const ro = new ResizeObserver((entries) => {
-    // Get these from the slice then update the slice
-    for (let entry of entries) {
-      const cr = entry.contentRect
-      dispatch(
-        setFilterState({
-          x: x - cr.width + width,
-          y: vertical ? y : y - cr.height + height,
-          width: cr.width,
-          height: cr.height
-        })
-      )
-      checkOutOfBounds()
-    }
-  })
-
   const checkOOBListener = () => checkOutOfBounds()
 
   const changeWritingMode = () => {
+    if (!filterTabs) {
+      return
+    }
     // TODO refactor; switches tabs from writing-mode: vertical-rl to writing-mode: lr
-    for (let i = 1; i <= filtertabs.getElementsByClassName('rc-tabs-tab-btn').length; i++) {
+    for (let i = 1; i <= filterTabs.getElementsByClassName('rc-tabs-tab-btn').length; i++) {
       document.getElementById('f-tabs-parent-tab-' + i)!.style.writingMode = vertical ? 'vertical-rl' : 'lr'
     }
   }
 
   const checkOutOfBounds = () => {
-    if (filtertabsRef.current != null) {
+    if (filtertabsRef.current != null && filterTabs) {
       const boundsX = Math.min(document.documentElement.clientWidth || 0, window.innerWidth || 0)
       const boundsY = Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0)
 
@@ -104,14 +114,14 @@ const FilterTabs: FC<{}> = () => {
           })
         )
       }
-      if (x + filtertabs.offsetWidth >= boundsX) {
+      if (x + filterTabs.offsetWidth >= boundsX) {
         filtertabsRef.current.updatePosition({
-          x: boundsX - filtertabs.offsetWidth,
+          x: boundsX - filterTabs.offsetWidth,
           y: y
         })
         dispatch(
           setFilterState({
-            x: boundsX - filtertabs.offsetWidth,
+            x: boundsX - filterTabs.offsetWidth,
             y: y
           })
         )
@@ -128,15 +138,15 @@ const FilterTabs: FC<{}> = () => {
           })
         )
       }
-      if (y + filtertabs.offsetHeight >= boundsY) {
+      if (y + filterTabs.offsetHeight >= boundsY) {
         filtertabsRef.current.updatePosition({
           x: x,
-          y: boundsY - filtertabs.offsetHeight
+          y: boundsY - filterTabs.offsetHeight
         })
         dispatch(
           setFilterState({
             x: x,
-            y: boundsY - filtertabs.offsetHeight
+            y: boundsY - filterTabs.offsetHeight
           })
         )
       }
@@ -145,20 +155,16 @@ const FilterTabs: FC<{}> = () => {
 
   const closeTab = () => {
     dispatch(
-      setFilterState({
-        activeKey: -2
-      })
+      setActiveKey("-2")
     )
   }
 
-  const onTabClick = (key) => {
+  const onTabClick = (key: string) => {
     if (key === activeKey) {
       closeTab()
     } else {
       dispatch(
-        setFilterState({
-          activeKey: key
-        })
+        setActiveKey(key)
       )
     }
 
@@ -168,6 +174,9 @@ const FilterTabs: FC<{}> = () => {
   }
 
   const onDrag = (e: RndDragEvent, d: DraggableData) => {
+    if (!fTabsParent) {
+      return
+    }
     fTabsParent.style.setProperty('pointer-events', 'none')
     document.body.onmousemove = (e) => {
       const yFromBottom = window.innerHeight - e.clientY
@@ -184,8 +193,8 @@ const FilterTabs: FC<{}> = () => {
 
       if (!vertical && filtertabsRef.current !== null) {
         filtertabsRef.current.updatePosition({
-          x: window.innerWidth / 2 - filtertabs.offsetWidth / 2,
-          y: window.innerHeight - filtertabs.offsetHeight - 0.08 * window.innerHeight
+          x: window.innerWidth / 2 - filterTabs!.offsetWidth / 2,
+          y: window.innerHeight - filterTabs!.offsetHeight - 0.08 * window.innerHeight
         })
         dispatch(
           setFilterState({
@@ -196,8 +205,8 @@ const FilterTabs: FC<{}> = () => {
 
       if (vertical && !verticalOld && filtertabsRef.current) {
         filtertabsRef.current.updatePosition({
-          x: e.clientX - filtertabs.offsetWidth / 2,
-          y: e.clientY - (filtertabs.offsetHeight * 4) / 5
+          x: e.clientX - filterTabs!.offsetWidth / 2,
+          y: e.clientY - (filterTabs!.offsetHeight * 4) / 5
         })
         dispatch(
           setFilterState({
@@ -237,8 +246,6 @@ const FilterTabs: FC<{}> = () => {
     )
   }
 
-
-
   return (
     <Rnd
       ref={filtertabsRef}
@@ -247,25 +254,28 @@ const FilterTabs: FC<{}> = () => {
         x: x,
         y: y,
         width: 'auto',
-        height: 'auto'
+        height: 'auto',
       }}
+      minWidth={400}
+      minHeight={100}
       position={{ x: x, y: y }}
       onDrag={onDrag}
       onDragStop={onDragStop}
       enableResizing={false}
       bounds={bounds}
     >
+
       <div id="f-tabs-bg" className={vertical ? 'f-tabs-bg-vertical' : 'f-tabs-bg-docked'}>
         <Tabs
           id="f-tabs-parent"
           //tabPosition={vertical ? 'right' : 'bottom'}
-          onChange={onTabClick}
+          onSelect={(k) => onTabClick(k || "none")}
           activeKey={activeKey}
-          //activeKey="2" //Uncomment to keep filter set to frequencies
+          //activeKey={"freq"} //Uncomment to keep filter set to frequencies
         >
           <Tab
             title={getTabName('CCMD', vertical, ccState.enabled)}
-            key="1"
+            eventKey="ccmd"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4  pt-3"
           >
             <CoComCard
@@ -279,7 +289,7 @@ const FilterTabs: FC<{}> = () => {
           </Tab>
           <Tab
             title={'Frequency' /*getTabName('Frequency', vertical, freqState.filterOn)*/}
-            key="2"
+            eventKey="freq"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
             <FrequencyCard />
@@ -293,7 +303,7 @@ const FilterTabs: FC<{}> = () => {
           </Tab>
           <Tab
             title={'Date Range' /*getTabName('Date Range', vertical, tempState.filterOn)*/}
-            key="3"
+            eventKey="date"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
             <TemporalCard />
@@ -308,7 +318,7 @@ const FilterTabs: FC<{}> = () => {
           </Tab>
           <Tab
             title={'Functional' /* getTabName('Functional', vertical, funcState.filterOn)*/}
-            key="4"
+            eventKey="function"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
             <FunctionalCard />
@@ -322,7 +332,7 @@ const FilterTabs: FC<{}> = () => {
           </Tab>
           <Tab
             title={'Organizations' /*getTabName('Organizations', vertical, topoState.orgFilterOn)*/}
-            key="5"
+            eventKey="orgs"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
             <OrganizationFilterCard />
@@ -338,7 +348,7 @@ const FilterTabs: FC<{}> = () => {
           </Tab>
           <Tab
             title={'Platform' /*getTabName("Platform", vertical, topoState.platFilterOn)*/}
-            key="6"
+            eventKey="platform"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
             <PlatformCard />
@@ -351,7 +361,7 @@ const FilterTabs: FC<{}> = () => {
                 // isTab={true}
               /> */}
           </Tab>
-          <Tab title="Summary" eventKey="7" className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3">
+          <Tab title="Summary" eventKey="summary" className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3">
             <FilterSummaryCard />
             {/* <SummaryCard
                 // onFilterChange={this.props.onFilterChange}
