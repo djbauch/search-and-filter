@@ -31,7 +31,8 @@ import {
   ActionFunction
 } from 'react-router-dom'
 
-import './bootstrap.css'
+import 'bootstrap.css'
+import 'assets/scss/theme-dark.scss'
 
 // Roboto font installed in the project for Material UI
 // Material UI's default typography only uses the 300,400,500, and 700 font weights

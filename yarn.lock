@@ -3540,6 +3540,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-leaflet/core@npm:^1.0.2, @react-leaflet/core@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@react-leaflet/core@npm:1.1.1"
+  peerDependencies:
+    leaflet: ^1.7.1
+    react: ^17.0.1
+    react-dom: ^17.0.1
+  checksum: 2fc4a80e5524f9437ac6cef0f95e63388f2df6ecc5107fef85fd097eb2455436e796d41a4c43cdcbb983a4132403646823ba1dc0d953e866eb80808cbfaf0232
+  languageName: node
+  linkType: hard
+
 "@react-stately/toggle@npm:^3.1.0, @react-stately/toggle@npm:^3.5.0":
   version: 3.5.0
   resolution: "@react-stately/toggle@npm:3.5.0"
@@ -5870,6 +5881,15 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: e009a2bfb50e90ca9b7c6e8f648f8464067271fd99116f881073fa6fa76dc8d0133181dd65e6614d5fb1220d671d67b0124aef7d97dc02d7e342ab143a47779d
+  languageName: node
+  linkType: hard
+
+"@types/lodash-es@npm:^4.17.6":
+  version: 4.17.7
+  resolution: "@types/lodash-es@npm:4.17.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 4b1f39fd1d921311c37a846c0e0df9d1fa23e27448a6ad1efd7574e703abd2b2fa5e8f3b5037146000f167ba231d0d01e52747d902654151b4ceeff9f2a9b380
   languageName: node
   linkType: hard
 
@@ -8800,6 +8820,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"can-use-dom@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "can-use-dom@npm:0.1.0"
+  checksum: 488fc94c40f2fcce46ebd41abf17ef0449acf0d6b145116036cd592a8e977e5729918d4b3b7c642ce7b1f5b83d330ade39a172cf6b6ef91093785991a868b308
+  languageName: node
+  linkType: hard
+
 "caniuse-api@npm:^3.0.0":
   version: 3.0.0
   resolution: "caniuse-api@npm:3.0.0"
@@ -8943,6 +8970,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.3":
+  version: 3.5.3
+  resolution: "chokidar@npm:3.5.3"
+  dependencies:
+    anymatch: ~3.1.2
+    braces: ~3.0.2
+    fsevents: ~2.3.2
+    glob-parent: ~5.1.2
+    is-binary-path: ~2.1.0
+    is-glob: ~4.0.1
+    normalize-path: ~3.0.0
+    readdirp: ~3.6.0
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  checksum: b49fcde40176ba007ff361b198a2d35df60d9bb2a5aab228279eb810feae9294a6b4649ab15981304447afe1e6ffbf4788ad5db77235dc770ab777c6e771980c
+  languageName: node
+  linkType: hard
+
 "chokidar@npm:^2.1.8":
   version: 2.1.8
   resolution: "chokidar@npm:2.1.8"
@@ -8963,25 +9009,6 @@ __metadata:
     fsevents:
       optional: true
   checksum: 0c43e89cbf0268ef1e1f41ce8ec5233c7ba022c6f3282c2ef6530e351d42396d389a1148c5a040f291cf1f4083a4c6b2f51dad3f31c726442ea9a337de316bcf
-  languageName: node
-  linkType: hard
-
-"chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.3":
-  version: 3.5.3
-  resolution: "chokidar@npm:3.5.3"
-  dependencies:
-    anymatch: ~3.1.2
-    braces: ~3.0.2
-    fsevents: ~2.3.2
-    glob-parent: ~5.1.2
-    is-binary-path: ~2.1.0
-    is-glob: ~4.0.1
-    normalize-path: ~3.0.0
-    readdirp: ~3.6.0
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  checksum: b49fcde40176ba007ff361b198a2d35df60d9bb2a5aab228279eb810feae9294a6b4649ab15981304447afe1e6ffbf4788ad5db77235dc770ab777c6e771980c
   languageName: node
   linkType: hard
 
@@ -13691,6 +13718,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"immutable@npm:^4.0.0":
+  version: 4.3.0
+  resolution: "immutable@npm:4.3.0"
+  checksum: bbd7ea99e2752e053323543d6ff1cc71a4b4614fa6121f321ca766db2bd2092f3f1e0a90784c5431350b7344a4f792fa002eac227062d59b9377b6c09063b58b
+  languageName: node
+  linkType: hard
+
 "import-fresh@npm:^3.0.0, import-fresh@npm:^3.1.0, import-fresh@npm:^3.2.1":
   version: 3.3.0
   resolution: "import-fresh@npm:3.3.0"
@@ -15713,6 +15747,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"leaflet.markercluster@npm:^1.4.1":
+  version: 1.5.3
+  resolution: "leaflet.markercluster@npm:1.5.3"
+  peerDependencies:
+    leaflet: ^1.3.1
+  checksum: abf0d0befbc78b7f178a330791554f0e4fd7170dbe2e6d59f387b627d914f4633b0541a9028fe5d11cf842c09c8dbb56ae6bd9d1d08c5ce35e32541c8f1eacd1
+  languageName: node
+  linkType: hard
+
+"leaflet@npm:^1.6.0, leaflet@npm:^1.9.3":
+  version: 1.9.3
+  resolution: "leaflet@npm:1.9.3"
+  checksum: f8bc33215e6aed8488cb3d32511b943ff093c1747bcda8a39116e24fe714e12525f1a6843b6a79940ece4cf8d2a86e2cb1d7b80fc550344b3182659b19231a04
+  languageName: node
+  linkType: hard
+
 "leven@npm:^3.1.0":
   version: 3.1.0
   resolution: "leven@npm:3.1.0"
@@ -15863,7 +15913,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash-es@npm:4.17.21":
+"lodash-es@npm:4.17.21, lodash-es@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash-es@npm:4.17.21"
   checksum: 05cbffad6e2adbb331a4e16fbd826e7faee403a1a04873b82b42c0f22090f280839f85b95393f487c1303c8a3d2a010048bf06151a6cbe03eee4d388fb0a12d2
@@ -20170,6 +20220,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-leaflet-markercluster@npm:^3.0.0-rc1":
+  version: 3.0.0-rc1
+  resolution: "react-leaflet-markercluster@npm:3.0.0-rc1"
+  dependencies:
+    "@react-leaflet/core": ^1.0.2
+    leaflet: ^1.6.0
+    leaflet.markercluster: ^1.4.1
+    react-leaflet: ^3.0.0
+  peerDependencies:
+    leaflet: ^1.6.0
+    leaflet.markercluster: ^1.4.1
+    react-leaflet: ^3.0.0
+  checksum: 9eb0a9259efdcbe03fcdbd9e0db330c1e6c2901d58f2f75be73a795bfa9fd211fd5dc1e88b81cb9fe778db3d9e160ba9f93297f93e0182205847a00e71c3cbaf
+  languageName: node
+  linkType: hard
+
+"react-leaflet@npm:^3.0.0":
+  version: 3.2.5
+  resolution: "react-leaflet@npm:3.2.5"
+  dependencies:
+    "@react-leaflet/core": ^1.1.1
+  peerDependencies:
+    leaflet: ^1.7.1
+    react: ^17.0.1
+    react-dom: ^17.0.1
+  checksum: 503b7cee8acc12e0e2c5e7675432e7ef5742463e3e5420282ce60a9efd306430caefae3cb282c976e3df7665f19aef5b49cdce44a034979b4ea3ee968c2621d2
+  languageName: node
+  linkType: hard
+
 "react-lifecycles-compat@npm:^3.0.4":
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
@@ -21339,6 +21418,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sass@npm:^1.60.0":
+  version: 1.60.0
+  resolution: "sass@npm:1.60.0"
+  dependencies:
+    chokidar: ">=3.0.0 <4.0.0"
+    immutable: ^4.0.0
+    source-map-js: ">=0.6.2 <2.0.0"
+  bin:
+    sass: sass.js
+  checksum: 06e163c37af466ec194cf2ed8dab616372afeb19322d356947d48ea664fc38398ae77c4d91bea9cb0ace954ce289d5518d0f8555ecc49f6bf2539a8ef52fc580
+  languageName: node
+  linkType: hard
+
 "sax@npm:~1.2.4":
   version: 1.2.4
   resolution: "sax@npm:1.2.4"
@@ -21491,6 +21583,7 @@ __metadata:
     generate-react-cli: ^8.2.0
     graphql: ^16.6.0
     jquery: ^3.6.4
+    leaflet: ^1.9.3
     localforage: ^1.10.0
     lodash: ^4.17.21
     match-sorter: ^6.3.1
@@ -21506,6 +21599,7 @@ __metadata:
     react-dom: ^18.2.0
     react-icons: ^4.8.0
     react-jsx: ^1.0.0
+    react-leaflet-markercluster: ^3.0.0-rc1
     react-markdown: ^8.0.6
     react-player: ^2.12.0
     react-redux: ^8.0.5
@@ -21516,6 +21610,8 @@ __metadata:
     reactstrap: ^9.1.5
     redux: ^4.2.1
     require-from-string: ^2.0.2
+    sass: ^1.60.0
+    simplebar-react: ^3.2.3
     storybook-addon-apollo-client: ^4.1.4
     trim: ^1.0.1
     typescript: ^4.9.4
@@ -21785,6 +21881,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"simplebar-core@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "simplebar-core@npm:1.2.3"
+  dependencies:
+    "@types/lodash-es": ^4.17.6
+    can-use-dom: ^0.1.0
+    lodash: ^4.17.21
+    lodash-es: ^4.17.21
+  checksum: 920a8084f4b6fdad2c9a52a212af26d186ea20479116604052d8f21a1341ef524cfbb8f7b02dceeba347d4eac9dfa5afc6f7ce2208d5f48419254c705e3d165a
+  languageName: node
+  linkType: hard
+
+"simplebar-react@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "simplebar-react@npm:3.2.3"
+  dependencies:
+    simplebar-core: ^1.2.3
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 0d5ebc9ad7fcae4154e35ed3e3bfe3c30cec4802d45dcac0ef9e6e5d95cb7cad3f04e945126c12949d33643186f411ce3738c82ad9913e09c584062eef2ffa2f
+  languageName: node
+  linkType: hard
+
 "sisteransi@npm:^1.0.5":
   version: 1.0.5
   resolution: "sisteransi@npm:1.0.5"
@@ -21939,7 +22058,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.0.1, source-map-js@npm:^1.0.2":
+"source-map-js@npm:>=0.6.2 <2.0.0, source-map-js@npm:^1.0.1, source-map-js@npm:^1.0.2":
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
   checksum: c049a7fc4deb9a7e9b481ae3d424cc793cb4845daa690bc5a05d428bf41bf231ced49b4cf0c9e77f9d42fdb3d20d6187619fc586605f5eabe995a316da8d377c

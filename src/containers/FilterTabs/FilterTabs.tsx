@@ -63,8 +63,8 @@ const FilterTabs: FC<{}> = () => {
         const cr = entry.contentRect
         dispatch(
           setFilterState({
-            x: x - cr.width + width,
-            y: vertical ? y : y - cr.height + height,
+            x: Math.max(x - cr.width + width, 0),
+            y: Math.max(vertical ? y : y - cr.height + height, 0),
             width: cr.width,
             height: cr.height
           })
@@ -191,10 +191,10 @@ const FilterTabs: FC<{}> = () => {
 
       changeWritingMode()
 
-      if (!vertical && filtertabsRef.current !== null) {
+      if (!vertical && filtertabsRef.current !== null && filterTabs) {
         filtertabsRef.current.updatePosition({
-          x: window.innerWidth / 2 - filterTabs!.offsetWidth / 2,
-          y: window.innerHeight - filterTabs!.offsetHeight - 0.08 * window.innerHeight
+          x: window.innerWidth / 2 - filterTabs.offsetWidth / 2,
+          y: window.innerHeight - filterTabs.offsetHeight - 0.08 * window.innerHeight
         })
         dispatch(
           setFilterState({
@@ -203,10 +203,10 @@ const FilterTabs: FC<{}> = () => {
         )
       }
 
-      if (vertical && !verticalOld && filtertabsRef.current) {
+      if (vertical && !verticalOld && filtertabsRef.current && filterTabs) {
         filtertabsRef.current.updatePosition({
-          x: e.clientX - filterTabs!.offsetWidth / 2,
-          y: e.clientY - (filterTabs!.offsetHeight * 4) / 5
+          x: e.clientX - filterTabs.offsetWidth / 2,
+          y: e.clientY - (filterTabs.offsetHeight * 4) / 5
         })
         dispatch(
           setFilterState({
