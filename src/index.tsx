@@ -47,6 +47,9 @@ import { CoComFilterCard } from 'components'
 import FrequencyFilterCard  from 'components/FrequencyFilter/FrequencyFilterCard'
 import { DoubleCoComs, loader as repLoader } from 'components/CoComFilterCard/DoubleCoComs'
 import FilterTabs from 'containers/FilterTabs/FilterTabs'
+import OrganizationFilterCard from 'components/OrganizationFilter/OrganizationFilterCard'
+import PlatformFilterCard from 'components/PlatformFilter/PlatformFilterCard'
+import TemporalFilterCard from 'components/TemporalFilter/TemporalFilterCard'
 esriConfig.assetsPath = './assets'
 library.add( faCheckSquare, faSquare, faChevronRight, faPlusSquare, faChevronDown, faMinusSquare, faFolder, faFolderOpen, faFile)
 
@@ -58,6 +61,9 @@ const router = createBrowserRouter(
       <Route key="DoubleCoComs" path="doublecocoms/:reps" element={<DoubleCoComs />} loader={repLoader}/>
       <Route key="FilterTabs" path="filtertabs" element={<FilterTabs />} />
       <Route key="FrequencyFilterCard" path="frequencies" element={<FrequencyFilterCard />} />
+      <Route key="OrganizationCard" path="organizations" element={<OrganizationFilterCard/>} />
+      <Route key="PlatformCard" path="platforms" element={<PlatformFilterCard />} />
+      <Route key="DateRangeCard" path="dates" element={<TemporalFilterCard />} />
     </Route>
   ])
 )

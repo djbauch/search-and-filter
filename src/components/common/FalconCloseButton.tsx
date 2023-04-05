@@ -1,7 +1,7 @@
 import React from 'react'
 import { CloseButton } from 'react-bootstrap'
 import classNames from 'classnames'
-import { useAppSelector } from '../../app/hooks'
+import { useAppSelector } from 'app/hooks'
 
 type Props = {
   size?: 'sm' | 'lg'

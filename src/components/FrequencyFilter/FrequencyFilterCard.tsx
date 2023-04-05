@@ -63,7 +63,7 @@ export type FreqTextProps = {
 }
 
 export const FreqText = (props: FreqTextProps) => {
-  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencyFilters)
+  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencies)
   const onChange = (e: string) => {
     //if the value is in Hz, it should be an integer. Other units can be entered as decimals.
     const newValue = () => (freqState.units === 'Hz' ? parseInt(e) : parseFloat(e))
@@ -117,7 +117,7 @@ export type FreqDropdownPropsType = {
 A dropdown box containing the various frequency units.
 */
 const FreqDropdown = (props: FreqDropdownPropsType) => {
-  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencyFilters)
+  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencies)
   //Get the corresponding freqUnit object based on the dropdown option selected
   const saveConvertedValue = (name: string) => {
     const unit = _.find(freqUnits, (u) => u.label === name) || freqUnits[0]
@@ -165,7 +165,7 @@ type BandSelectionDropdownProps = {
 }
 
 const BandSelectionDropdown = () => {
-  const freqState = useAppSelector((state) => state.frequencyFilters)
+  const freqState = useAppSelector((state) => state.frequencies)
   //Get the corresponding freqUnit object based on the dropdown option selected
   const saveConvertedValue = (name: string) => {
     const band = _.find(bandsAvailable, (b) => b.label === name)
@@ -272,7 +272,7 @@ type BandsProps = {
 }
 //Filter When "User Defined" is selected
 const UserSelectedBands = (props: BandsProps) => {
-  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencyFilters)
+  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencies)
   let unitsDropdown = (
     <FreqDropdown
       id="units"
@@ -313,7 +313,7 @@ const UserSelectedBands = (props: BandsProps) => {
 }
 
 const PredefinedBands = (props: BandsProps) => {
-  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencyFilters)
+  const freqState = useAppSelector<FrequencyFilterState>((state) => state.frequencies)
   const [valuesVisible, setValuesVisible] = useState(true)
 
   const showValue = (
@@ -409,7 +409,7 @@ type FrequencyFilterCardProps = {
 }
 
 const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilterCardProps) => {
-  const freqState = useAppSelector((state) => state.frequencyFilters)
+  const freqState = useAppSelector((state) => state.frequencies)
   const enabled = freqState.filterOn
   const dispatch = useAppDispatch()
   //State

@@ -12,7 +12,7 @@ import 'rc-tabs/assets/index.css'
 import PlatformCard from '../../components/PlatformFilter/PlatformFilterCard'
 import { DraggableData, Rnd, RndDragEvent } from 'react-rnd'
 import { BiFilterAlt } from 'react-icons/bi'
-import { useAppSelector, useAppDispatch } from '../../app/hooks'
+import { useAppSelector, useAppDispatch } from 'app/hooks'
 import { setFilterId, setActiveKey, setX, setFilterState, FilterTabsState } from './FilterTabsSlice'
 export const filterId = 'tabs'
 
@@ -39,11 +39,12 @@ const FilterTabs: FC<{}> = () => {
   const activeKey = ftabs.activeKey
   const verticalOld = ftabs.verticalOld
   const bounds = ftabs.bounds
-  const topoState = useAppSelector((state) => state.topologyFilters)
+  const topoState = useAppSelector((state) => state.organizations)
   const ccState = useAppSelector((state) => state.combatantCommands)
-  const freqState = useAppSelector((state) => state.frequencyFilters)
+  const freqState = useAppSelector((state) => state.frequencies)
   const tempState = useAppSelector((state) => state.temporalFilters)
-  const funcState = useAppSelector((state) => state.functionFilters)
+  const funcState = useAppSelector((state) => state.functions)
+  const platformState = useAppSelector((state) => state.platforms)
   const threshold = 120
   let filtertabsRef = useRef<Rnd>(null)
   const [filterTabs, setFilterTabs] = useState<HTMLElement>()
@@ -271,7 +272,6 @@ const FilterTabs: FC<{}> = () => {
           //tabPosition={vertical ? 'right' : 'bottom'}
           onSelect={(k) => onTabClick(k || "none")}
           activeKey={activeKey}
-          //activeKey={"freq"} //Uncomment to keep filter set to frequencies
         >
           <Tab
             title={getTabName('CCMD', vertical, ccState.enabled)}
@@ -282,13 +282,12 @@ const FilterTabs: FC<{}> = () => {
             // getCombatantCommands={this.props.getCombatantCommands}
             // onFilterChange={this.props.onFilterChange}
             // onDashboardChange={this.props.onDashboardChange}
-            // ccState={this.props.ccState}
             // closeTab={this.closeTab}
             // isTab={true}
             />
           </Tab>
           <Tab
-            title={'Frequency' /*getTabName('Frequency', vertical, freqState.filterOn)*/}
+            title={getTabName('Frequency', vertical, freqState.filterOn)}
             eventKey="freq"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
@@ -302,7 +301,7 @@ const FilterTabs: FC<{}> = () => {
               /> */}
           </Tab>
           <Tab
-            title={'Date Range' /*getTabName('Date Range', vertical, tempState.filterOn)*/}
+            title={getTabName('Date Range', vertical, tempState.filterOn)}
             eventKey="date"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
@@ -317,7 +316,7 @@ const FilterTabs: FC<{}> = () => {
               /> */}
           </Tab>
           <Tab
-            title={'Functional' /* getTabName('Functional', vertical, funcState.filterOn)*/}
+            title={getTabName('Function', vertical, funcState.filterOn)}
             eventKey="function"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
@@ -331,7 +330,7 @@ const FilterTabs: FC<{}> = () => {
               /> */}
           </Tab>
           <Tab
-            title={'Organizations' /*getTabName('Organizations', vertical, topoState.orgFilterOn)*/}
+            title={getTabName('Organizations', vertical, topoState.orgFilterOn)}
             eventKey="orgs"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
@@ -339,15 +338,12 @@ const FilterTabs: FC<{}> = () => {
             {/* <OrganizationsCard
                 // onFilterChange={this.props.onFilterChange}
                 // onDashboardChange={this.props.onDashboardChange}
-                // topoState={this.props.topoState}
-                // getOrganizations={this.props.getOrganizations}
-                // ccState={this.props.ccState}
                 // closeTab={this.closeTab}
                 // isTab={true}
               /> */}
           </Tab>
           <Tab
-            title={'Platform' /*getTabName("Platform", vertical, topoState.platFilterOn)*/}
+            title={getTabName("Platform", vertical, platformState.platFilterOn)}
             eventKey="platform"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
@@ -355,8 +351,6 @@ const FilterTabs: FC<{}> = () => {
             {/* <PlatformCard
                 // onFilterChange={this.props.onFilterChange}
                 // onDashboardChange={this.props.onDashboardChange}
-                // topoState={this.props.topoState}
-                // ccState={this.props.ccState}
                 // closeTab={this.closeTab}
                 // isTab={true}
               /> */}

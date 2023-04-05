@@ -1,11 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { enhancer as storybookEnhancer } from '@dreamworld/addon-redux'
-import counterReducer from '../features/counter/counterSlice'
-import combatantCommandReducer from '../features/combatantCommands/combatantCommandsSlice'
-import filterTabsReducer from '../containers/FilterTabs/FilterTabsSlice'
-import uiSettingsReducer from '../features/UISettings/uiSettingsSlice'
-import functionFilterReducer from '../features/FunctionFilter/functionFilterSlice'
+import counterReducer from 'features/counter/counterSlice'
+import combatantCommandReducer from 'features/combatantCommands/combatantCommandsSlice'
+import filterTabsReducer from 'containers/FilterTabs/FilterTabsSlice'
+import uiSettingsReducer from 'features/UISettings/uiSettingsSlice'
+import functionFilterReducer from 'features/FunctionFilter/functionFilterSlice'
 import frequencyFilterReducer from 'components/FrequencyFilter/frequencyFilterSlice'
+import organizationFilterReducer from 'components/OrganizationFilter/organizationFilterSlice'
+import temporalFilterReducer from 'components/TemporalFilter/temporalFilterSlice'
+import platformFilterReducer from 'components/PlatformFilter/platformFilterSlice'
 //import chosenFeatureReducer from '../features/GlobeStores/chosenFeatureSlice'
 // Reference https://redux.js.org/tutorials/quick-start
 const store = configureStore({
@@ -13,10 +16,12 @@ const store = configureStore({
     counter: counterReducer,
     filterTabs: filterTabsReducer,
     combatantCommands: combatantCommandReducer,
-    functionFilters: functionFilterReducer,
+    functions: functionFilterReducer,
     uiSettings: uiSettingsReducer,
-    frequencyFilters: frequencyFilterReducer
-
+    frequencies: frequencyFilterReducer,
+    organizations: organizationFilterReducer,
+    temporalFilters: temporalFilterReducer,
+    platforms: platformFilterReducer
     // chosenFeature: chosenFeatureReducer
   },
   enhancers: [storybookEnhancer],

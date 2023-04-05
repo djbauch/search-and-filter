@@ -7,9 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquare, faCheckSquare, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import JEMSIAFCardHeader from '../JEMSIAFCardHeader/JEMSIAFCardHeader'
 import CardDropdown from '../CardDropdown/CardDropdown'
-import { useAppSelector, useAppDispatch } from '../../app/hooks'
+import { useAppSelector, useAppDispatch } from 'app/hooks'
 import styles from './CoComFilterCard.module.css'
-import { setChecked, setExpanded, setEnabled } from '../../features/combatantCommands/combatantCommandsSlice'
+import { setChecked, setExpanded, setEnabled } from 'features/combatantCommands/combatantCommandsSlice'
 export type CoComFilterCardProps = {}
 
 const CoComFilterCard: FC<CoComFilterCardProps> = () => {

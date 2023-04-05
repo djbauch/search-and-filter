@@ -3,10 +3,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store'
 
 interface FunctionFilterState {
-
+ filterOn: boolean
 }
 
 const initialState: FunctionFilterState = {
+  filterOn: false
 }
 
 export const functionFilterSlice = createSlice({
@@ -15,7 +16,10 @@ export const functionFilterSlice = createSlice({
   reducers: {
     setFilterState: (state, action: PayloadAction<Partial<FunctionFilterState>>) => {
       _.assign(state, action.payload)
-    }
+    },
+    setEnabled: (state, action: PayloadAction<boolean>) => {
+    state.filterOn = action.payload
+  }
   }
 })
 
