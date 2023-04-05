@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import styles from './FrequencyFilterCard.module.css'
 import { Container, UncontrolledTooltip, Col, Form, FormGroup, Label, Input, Row } from 'reactstrap'
-import { Form as RBSForm } from 'react-bootstrap'
+import { Card, Form as RBSForm, ToggleButton } from 'react-bootstrap'
 import { getFrequencyUnits, getBandsAvailable, FreqNodes } from 'services/frequencyBands'
 import CheckboxTree from 'react-checkbox-tree'
 import 'react-checkbox-tree/lib/react-checkbox-tree.css'
@@ -10,7 +10,7 @@ import { faSquare, faCheckSquare, faChevronRight, faChevronDown } from '@fortawe
 import { FaSquare, FaCheckSquare, FaChevronRight, FaChevronDown } from 'react-icons/fa'
 import { FreqFilterType, FreqStateType, FrequencyBand } from 'typings/sharedTypes'
 import { AiOutlineWarning } from 'react-icons/ai'
-import { MDBSwitch } from 'mdb-react-ui-kit'
+//import { MDBSwitch } from 'mdb-react-ui-kit'
 import CardCloseButton from 'components/CardCloseButton/CardCloseButton'
 import _ from 'lodash'
 import { useAppSelector, useAppDispatch } from 'app/hooks'
@@ -21,6 +21,7 @@ import {
   FrequencyFilterState,
   setFilterSwitch
 } from 'components/FrequencyFilter/frequencyFilterSlice'
+import JEMSIAFCardHeader from 'components/JEMSIAFCardHeader/JEMSIAFCardHeader'
 
 export const filterId = 'freq'
 export const freqEventLowChanged = 'freqEventLowChanged'
@@ -316,14 +317,14 @@ const PredefinedBands = (props: BandsProps) => {
   const [valuesVisible, setValuesVisible] = useState(true)
 
   const showValue = (
-    <MDBSwitch
+    <ToggleButton
       id="enableTooltips"
-      label={'Show Values'}
-      onChange={() => setValuesVisible(!valuesVisible)}
+      value="enableTooltips"
+      onClick={() => setValuesVisible(!valuesVisible)}
       checked={valuesVisible}
       className="ms-1 me-2 mb-2"
       disabled={!freqState.filterOn}
-    />
+    >Show Values</ToggleButton>
   )
 
   const [freqStore, setFreqStore] = useState(setInitFreqStore(retNodes('', true, freqState?.activeFilter)))
@@ -409,6 +410,7 @@ type FrequencyFilterCardProps = {
 
 const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilterCardProps) => {
   const freqState = useAppSelector((state) => state.frequencyFilters)
+  const enabled = freqState.filterOn
   const dispatch = useAppDispatch()
   //State
   const [validUserFilter, setValidUserFilter] = useState(freqState.highFreq >= freqState.lowFreq)
@@ -427,8 +429,7 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
     <AiOutlineWarning className="filter-alert px-0 w-auto" title="High frequency must meet or exceed low frequency" />
   ) : null
 
-  const onFC = props.onFilterChange
-  const bandOptionReducer = (activeFilter: FreqFilterType) => {
+   const bandOptionReducer = (activeFilter: FreqFilterType) => {
     const bandOptionArgs: BandsProps = {
       label: activeFilter.label,
       warningIcon,
@@ -444,36 +445,16 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
     //   value: filterOn
     // })
   }
-  const switchOnOff = (
-    <Container>
-      <UncontrolledTooltip placement="bottom" target="filterOnFreq">
-        Enable/Disable Filter
-      </UncontrolledTooltip>
-      <MDBSwitch
-        id="filterOnFreq"
-        className="light"
-        checked={freqState.filterOn}
-        onChange={() => {
-          const enabled = !freqState.filterOn
-          dispatch(setFilterSwitch(enabled))
-        }}
-      />
-    </Container>
-  )
+
+  const filterToggled = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setEnabled(event.target.checked))
+  }
 
   return (
-    <div className={styles.FrequencyFilterCard} data-testid="FrequencyFilterCard">
-      <table>
-        <tr>
-          <th>
-            <CardCloseButton size="small" onClick={props.closeTab} className={'m-2'} />
-          </th>
-          <th>
-            <h4 className="mb-0 f-tabs-title">Frequency</h4>
-          </th>
-          <th>{switchOnOff}</th>
-        </tr>
-      </table>
+    <Card border="primary" className={styles.FrequencyFilterCard} data-testid="FrequencyFilterCard">
+      <JEMSIAFCardHeader title="Frequency" enabled={enabled} onChange={filterToggled}/>
+      <Card.Body>
+
       <hr className="filter-title-underline" />
       <Form>
         <Row>
@@ -484,7 +465,8 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
         </Row>
       </Form>
       {bandOptionReducer(freqState.activeFilter)}
-    </div>
+      </Card.Body>
+    </Card>
   )
 }
 
