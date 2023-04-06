@@ -17,12 +17,14 @@ export const samplePlatformTypes = (): PlatformType[] => {
         value: 'Friendly',
         label: 'Friendly',
         fontColor: '#7ad2ec',
+        className: 'blue-force'
       },
       {
         id: 'platform2',
         value: 'Adversary',
         label: 'Adversary',
         fontColor: '#ff2d41',
+        className: 'red-force'
       },
       {
         id: 'platform3',

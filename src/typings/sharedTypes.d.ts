@@ -98,6 +98,7 @@ export type PlatformType = {
   value: string
   label: string
   fontColor?: string
+  className?: string
 }
 
 export type FreqFilterType = {
