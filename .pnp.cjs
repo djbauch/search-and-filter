@@ -76,6 +76,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/jest-dom", "npm:5.16.5"],\
             ["@testing-library/react", "virtual:12822d1089810f1364ee256f17210b7b22c8d70db7d8b4a0652f571d73ca644fa1b1b8cf78bfe85af8676582905848b61bd65b5422e3a30b8b10440ade5ba5ca#npm:14.0.0"],\
             ["@testing-library/user-event", "virtual:12822d1089810f1364ee256f17210b7b22c8d70db7d8b4a0652f571d73ca644fa1b1b8cf78bfe85af8676582905848b61bd65b5422e3a30b8b10440ade5ba5ca#npm:14.4.3"],\
+            ["@types/bootstrap", "npm:5.2.6"],\
             ["@types/flat", "npm:5.0.2"],\
             ["@types/jest", "npm:29.5.0"],\
             ["@types/lodash", "npm:4.14.192"],\
@@ -11830,6 +11831,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@types/bonjour", "npm:3.5.10"],\
             ["@types/node", "npm:18.14.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/bootstrap", [\
+        ["npm:5.2.6", {\
+          "packageLocation": "./.yarn/cache/@types-bootstrap-npm-5.2.6-2e04aa5d73-e8e161fcaa.zip/node_modules/@types/bootstrap/",\
+          "packageDependencies": [\
+            ["@types/bootstrap", "npm:5.2.6"],\
+            ["@popperjs/core", "npm:2.11.7"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -31823,6 +31834,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/jest-dom", "npm:5.16.5"],\
             ["@testing-library/react", "virtual:12822d1089810f1364ee256f17210b7b22c8d70db7d8b4a0652f571d73ca644fa1b1b8cf78bfe85af8676582905848b61bd65b5422e3a30b8b10440ade5ba5ca#npm:14.0.0"],\
             ["@testing-library/user-event", "virtual:12822d1089810f1364ee256f17210b7b22c8d70db7d8b4a0652f571d73ca644fa1b1b8cf78bfe85af8676582905848b61bd65b5422e3a30b8b10440ade5ba5ca#npm:14.4.3"],\
+            ["@types/bootstrap", "npm:5.2.6"],\
             ["@types/flat", "npm:5.0.2"],\
             ["@types/jest", "npm:29.5.0"],\
             ["@types/lodash", "npm:4.14.192"],\

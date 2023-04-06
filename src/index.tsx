@@ -31,8 +31,11 @@ import {
   ActionFunction
 } from 'react-router-dom'
 
-import 'bootstrap.css'
+import 'scss/styles.scss'
+import * as bootstrap from 'bootstrap'
+
 import 'assets/scss/theme-dark.scss'
+import ThemeProvider from 'react-bootstrap/ThemeProvider'
 
 // Roboto font installed in the project for Material UI
 // Material UI's default typography only uses the 300,400,500, and 700 font weights
@@ -50,6 +53,7 @@ import FilterTabs from 'containers/FilterTabs/FilterTabs'
 import OrganizationFilterCard from 'components/OrganizationFilter/OrganizationFilterCard'
 import PlatformFilterCard from 'components/PlatformFilter/PlatformFilterCard'
 import TemporalFilterCard from 'components/TemporalFilter/TemporalFilterCard'
+
 esriConfig.assetsPath = './assets'
 library.add( faCheckSquare, faSquare, faChevronRight, faPlusSquare, faChevronDown, faMinusSquare, faFolder, faFolderOpen, faFile)
 
@@ -72,7 +76,9 @@ const root = ReactDOM.createRoot(container!)
 root.render(
   <React.StrictMode>
     <Provider store={store}>
+      <ThemeProvider>
       <RouterProvider router={router} />
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 )

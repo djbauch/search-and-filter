@@ -12,7 +12,7 @@ import styles from './CoComFilterCard.module.css'
 import { setChecked, setExpanded, setEnabled } from 'features/combatantCommands/combatantCommandsSlice'
 export type CoComFilterCardProps = {}
 
-const CoComFilterCard: FC<CoComFilterCardProps> = () => {
+const CoComFilterCard: FC = () => {
   const ccs = useAppSelector((state) => state.combatantCommands)
   const dispatch = useAppDispatch()
   const value = ccs.value

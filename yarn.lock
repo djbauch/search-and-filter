@@ -3432,7 +3432,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.11.6, @popperjs/core@npm:^2.11.7, @popperjs/core@npm:^2.6.0, @popperjs/core@npm:^2.9.0, @popperjs/core@npm:~2.11.6":
+"@popperjs/core@npm:^2.11.6, @popperjs/core@npm:^2.11.7, @popperjs/core@npm:^2.6.0, @popperjs/core@npm:^2.9.0, @popperjs/core@npm:^2.9.2, @popperjs/core@npm:~2.11.6":
   version: 2.11.7
   resolution: "@popperjs/core@npm:2.11.7"
   checksum: 5b6553747899683452a1d28898c1b39173a4efd780e74360bfcda8eb42f1c5e819602769c81a10920fc68c881d07fb40429604517d499567eac079cfa6470f19
@@ -5566,6 +5566,15 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: bfcadb042a41b124c4e3de4925e3be6d35b78f93f27c4535d5ff86980dc0f8bc407ed99b9b54528952dc62834d5a779392f7a12c2947dd19330eb05a6bcae15a
+  languageName: node
+  linkType: hard
+
+"@types/bootstrap@npm:^5.2.6":
+  version: 5.2.6
+  resolution: "@types/bootstrap@npm:5.2.6"
+  dependencies:
+    "@popperjs/core": ^2.9.2
+  checksum: e8e161fcaa193bf0bfb70be37f887e7111ac0c3d562a52e0ebc9ed6dfefecfc7bfe662f69409ab22cbf15be9cedc9457a147916899a7d41eca093511da708216
   languageName: node
   linkType: hard
 
@@ -21564,6 +21573,7 @@ __metadata:
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.4.3
+    "@types/bootstrap": ^5.2.6
     "@types/flat": ^5.0.2
     "@types/jest": ^29.5.0
     "@types/lodash": ^4.14.192

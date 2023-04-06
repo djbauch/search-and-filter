@@ -336,14 +336,13 @@ const PredefinedBands = (props: BandsProps) => {
   )
 
   const checkChanged = (checked: string[]) => {
-    console.log(`Checked ${JSON.stringify(checked)}`)
     dispatch(setChecked(checked))
   }
   const expandChanged = (expanded: string[]) => {
-    console.log(`Expanded ${JSON.stringify(expanded)}`)
     dispatch(setExpanded(expanded))
   }
   const clearPreDefined = () => {
+    dispatch(setChecked([]))
    // let { newStore } = freqCleared(freqStore)
    // setFreqStore(newStore)
     // props.onFilterChange({
@@ -378,6 +377,7 @@ const PredefinedBands = (props: BandsProps) => {
           onExpand={expandChanged}
           checkModel="all"
           //iconsClass="fa5"
+          nativeCheckboxes={true}
           optimisticToggle={false}
           disabled={!freqState.filterOn}
           icons={{
