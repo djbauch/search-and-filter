@@ -298,9 +298,9 @@ export const nodeConversion = (band: { low: number; high: number }) => {
 //////////////////////////////////////////////
 //CheckboxTree mandates that all elements must have a unique value, so use the id as the value, which is
 //guaranteed to be unique
-const getFreqBandFields = (units: string, showValues: boolean, activeFilter: any) => {
+const getFreqBandFields = (units: string, showValues: boolean, activeFilter: string) => {
   let matchingBand = activeFilter
-    ? _.find(getBandsAvailable(), (element) => element.id === activeFilter.id)
+    ? _.find(getBandsAvailable(), (element) => element.id === activeFilter)
     : getBandsAvailable()[0]
   if (matchingBand) {
     const activeNodes = matchingBand.children
@@ -330,6 +330,6 @@ const getFreqBandFields = (units: string, showValues: boolean, activeFilter: any
   }
 }
 
-export const FreqNodes = (units: string, showValues: boolean, activeFilter: any) => {
+export const FreqNodes = (units: string, showValues: boolean, activeFilter: string) => {
   return getFreqBandFields(units, showValues, activeFilter)
 }

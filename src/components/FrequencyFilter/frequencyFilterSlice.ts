@@ -1,36 +1,41 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import _ from 'lodash'
 import type { RootState } from 'app/store'
-import type { FrequencyBand, FrequencyBandCollection, FrequencyUnits } from 'typings/sharedTypes'
-import { getBandsAvailable } from './FrequencyFilterData'
+import type { FreqFilterType, FrequencyBand, FrequencyBandCollection, FrequencyUnits } from 'typings/sharedTypes'
+import { getBandsAvailable, getFrequencyUnits } from './FrequencyFilterData'
 
 const availableBands = getBandsAvailable()
+const frequencyUnits = getFrequencyUnits()
 export interface FrequencyFilterState {
   value: FrequencyBandCollection[]
   filterId: string
+  bandCollection: string
   band: string
   highFreq: number
   lowFreq: number
-  units: string
+  units: FrequencyUnits
   checked: string[]
   expanded: string[]
   filterOn: boolean
   validRange: boolean
-  activeFilter: {id: string, value: string}
+  activeFilter: string //{id: string, value: string}
+  valuesVisible: boolean
 }
 
 const initialState: FrequencyFilterState = {
   value: availableBands,
   filterId: 'freq',
+  bandCollection: availableBands[0].id,
   band: availableBands[0].label,
   highFreq: 0,
   lowFreq: 0,
-  units: 'Hz',
+  units: frequencyUnits[0],
   checked: [],
   expanded: [],
   filterOn: false,
   validRange: false,
-  activeFilter: {id: 'freq', value: 'User Defined'}
+  activeFilter: availableBands[0].id,
+  valuesVisible: true
 }
 
 export const frequencyFilterSlice = createSlice({
@@ -52,12 +57,21 @@ export const frequencyFilterSlice = createSlice({
     setFilterSwitch: (state, action: PayloadAction<boolean>) => {
       state.filterOn = action.payload
     },
+    setBandCollection: (state, action: PayloadAction<string>) => {
+      state.bandCollection = action.payload
+    },
     setFrequencyBand: (state, action: PayloadAction<string>) => {
       state.band = action.payload //_.find(availableBands, { label: action.payload }).label || ''
+    },
+    setUnits: (state, action: PayloadAction<FrequencyUnits>) => {
+      state.units = action.payload
+    },
+    setValuesVisible: (state, action: PayloadAction<boolean>) => {
+      state.valuesVisible = action.payload
     }
   }
 })
 
-export const { setChecked, setExpanded, setEnabled, setFilterOn, setFilterSwitch, setFrequencyBand } = frequencyFilterSlice.actions
+export const { setBandCollection, setUnits, setChecked, setExpanded, setEnabled, setFilterOn, setFilterSwitch, setFrequencyBand, setValuesVisible } = frequencyFilterSlice.actions
 export const selectFrequencyFilters = (state: RootState) => state.frequencyFilters
 export default frequencyFilterSlice.reducer
