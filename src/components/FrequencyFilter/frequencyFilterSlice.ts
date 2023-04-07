@@ -68,10 +68,28 @@ export const frequencyFilterSlice = createSlice({
     },
     setValuesVisible: (state, action: PayloadAction<boolean>) => {
       state.valuesVisible = action.payload
+    },
+    setLowFreq: (state, action: PayloadAction<number>) => {
+      state.lowFreq = action.payload
+    },
+    setHighFreq: (state, action: PayloadAction<number>) => {
+      state.highFreq = action.payload
     }
   }
 })
 
-export const { setBandCollection, setUnits, setChecked, setExpanded, setEnabled, setFilterOn, setFilterSwitch, setFrequencyBand, setValuesVisible } = frequencyFilterSlice.actions
+export const {
+  setBandCollection,
+  setUnits,
+  setChecked,
+  setExpanded,
+  setEnabled,
+  setFilterOn,
+  setFilterSwitch,
+  setFrequencyBand,
+  setValuesVisible,
+  setLowFreq,
+  setHighFreq
+} = frequencyFilterSlice.actions
 export const selectFrequencyFilters = (state: RootState) => state.frequencyFilters
 export default frequencyFilterSlice.reducer
