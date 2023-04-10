@@ -315,7 +315,7 @@ const FilterTabs: FC<{}> = () => {
               /> */}
           </Tab>
           <Tab
-            title={'Functional' /* getTabName('Functional', vertical, funcState.filterOn)*/}
+            title={'Functions' /* getTabName('Functions', vertical, funcState.filterOn)*/}
             eventKey="function"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >

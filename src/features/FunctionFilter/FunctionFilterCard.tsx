@@ -1,14 +1,12 @@
-import React, { FC } from 'react';
-import styles from './FunctionFilterCard.module.css';
-import { UncontrolledTooltip, Button, Card, Container, Col, Form, Label, Row, CardBody } from 'reactstrap'
-import JEMSIAFCardHeader from '../../components/JEMSIAFCardHeader/JEMSIAFCardHeader'
-import CardDropdown from '../../components/CardDropdown/CardDropdown'
-import { getFunctionalOpts } from 'services/functionalOptions'
+import React, { FC } from 'react'
+import styles from './FunctionFilterCard.module.css'
+import {useAppSelector, useAppDispatch} from 'app/hooks'
+import { setChecked, setEnabled } from './functionFilterSlice'
+import { Button, Card, Container, Col, Form, Row } from 'react-bootstrap'
+import JEMSIAFCardHeader from 'components/JEMSIAFCardHeader/JEMSIAFCardHeader'
+import CheckboxTree from 'react-checkbox-tree'
 //import 'react-widgets/styles.css'
 import { FuncItemType, FuncStateType } from 'typings/sharedTypes'
-
-import { MDBSwitch } from 'mdb-react-ui-kit'
-import FalconCloseButton from '../../components/common/FalconCloseButton'
 
 export const filterId = 'func'
 export const funcEventAdd = 'funcEventAdd'
@@ -17,10 +15,24 @@ export const funcEventDropdown = 'funcEventDropdown'
 export const funcEventFilterSwitch = 'funcEventFilterSwitch'
 interface FunctionFilterCardProps {}
 
-const FunctionFilterCard: FC<FunctionFilterCardProps> = () => (
-  <div className={styles.FunctionFilterCard} data-testid="FunctionFilterCard">
-    FunctionFilterCard Component
-  </div>
-);
+const FunctionFilterCard: FC = () => {
+  const functions = useAppSelector((state) => state.functions)
+  const dispatch = useAppDispatch()
+  const checked = functions.checked
+  const expanded = functions.expanded
+  const enabled = functions.filterOn
+  const filterToggled = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(`Filter toggled ${event.target.checked}`)
+    dispatch(setEnabled(event.target.checked))
+  }
+  const checkChanged = (checked: string[]) => {
+    dispatch(setChecked(checked))
+  }
+  return (
+    <Card border="primary" className={styles.FunctionFilterCard} data-testid="FunctionFilterCard">
+      <JEMSIAFCardHeader title="Functions" enabled={enabled} onChange={filterToggled} />
+    </Card>
+  )
+}
 
-export default FunctionFilterCard;
+export default FunctionFilterCard
