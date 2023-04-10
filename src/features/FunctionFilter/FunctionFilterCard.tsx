@@ -1,20 +1,17 @@
 import React, { FC } from 'react'
 import styles from './FunctionFilterCard.module.css'
-import {useAppSelector, useAppDispatch} from 'app/hooks'
+import { useAppSelector, useAppDispatch } from 'app/hooks'
 import { setChecked, setEnabled } from './functionFilterSlice'
-import { Button, Card, Container, Col, Form, Row } from 'react-bootstrap'
+import { Card, Container, Col, Form, Row } from 'react-bootstrap'
 import JEMSIAFCardHeader from 'components/JEMSIAFCardHeader/JEMSIAFCardHeader'
 import CheckboxTree from 'react-checkbox-tree'
-//import 'react-widgets/styles.css'
-import { FuncItemType, FuncStateType } from 'typings/sharedTypes'
+import { toast } from 'react-toastify'
 
 export const filterId = 'func'
-export const funcEventAdd = 'funcEventAdd'
-export const funcEventRemove = 'funcEventRemove'
 export const funcEventDropdown = 'funcEventDropdown'
 export const funcEventFilterSwitch = 'funcEventFilterSwitch'
-interface FunctionFilterCardProps {}
 
+const funcToastId = 'func'
 const FunctionFilterCard: FC = () => {
   const functions = useAppSelector((state) => state.functions)
   const dispatch = useAppDispatch()
@@ -27,10 +24,29 @@ const FunctionFilterCard: FC = () => {
   }
   const checkChanged = (checked: string[]) => {
     dispatch(setChecked(checked))
+    if (!enabled) {
+      toast.warn('Enable filter to see the effect of changes', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        toastId: funcToastId
+      })
+    }
   }
   return (
     <Card border="primary" className={styles.FunctionFilterCard} data-testid="FunctionFilterCard">
       <JEMSIAFCardHeader title="Functions" enabled={enabled} onChange={filterToggled} />
+      <Card.Body>
+        <CheckboxTree
+          nodes={functions.value}
+          checked={checked}
+          expanded={expanded}
+          onCheck={checkChanged}
+          nativeCheckboxes={true}
+          showNodeIcon={false}
+        />
+      </Card.Body>
     </Card>
   )
 }

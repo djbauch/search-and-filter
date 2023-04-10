@@ -16,27 +16,27 @@ export const getFunctionalOpts = (): FunctionalOpts => {
 const getFunctionalOptsDummyData = (): FunctionalOpts => {
   return [
     {
-      id: 'functional1',
+      id: 'function1',
       value: 'Coastal Defense Radar',
       label: 'Coastal Defense Radar'
     },
     {
-      id: 'functional2',
+      id: 'function2',
       value: 'Surface-to-Air Missile',
       label: 'Surface-to-Air Missile'
     },
     {
-      id: 'functional3',
+      id: 'function3',
       value: 'Target Tracker',
       label: 'Target Tracker'
     },
     {
-      id: 'functional4',
+      id: 'function4',
       value: 'Navigation',
       label: 'Navigation'
     },
     {
-      id: 'functional5',
+      id: 'function5',
       value: 'Direction Finding',
       label: 'Direction Finding'
     }

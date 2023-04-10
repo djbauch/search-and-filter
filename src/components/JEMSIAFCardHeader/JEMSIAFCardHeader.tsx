@@ -4,7 +4,6 @@ import CardCloseButton from '../CardCloseButton/CardCloseButton'
 import Tooltip from '@mui/material/Tooltip'
 import Switch from '@mui/material/Switch'
 import { Form as RBSForm } from 'react-bootstrap'
-import { ToastContainer } from 'react-toastify'
 
 interface JEMSIAFCardHeaderProps {
   title?: string
@@ -19,17 +18,16 @@ const JEMSIAFCardHeader: FC<JEMSIAFCardHeaderProps> = ({ title, enabled, onChang
     <CardHeader data-testid="JEMSIAFCardHeader">
       <CardCloseButton />
       <span style={{ fontWeight: 'bold' }}> {title} </span>
+      {onChange? 
       <Tooltip title={isFilterActive ? 'Disable Filter' : 'Enable Filter'}>
         <Switch
           checked={isFilterActive}
-          onChange={(event) => {
-            onChange && onChange(event)
-          }}
+          onChange={(event) => onChange(event)}
           color="primary"
           aria-label="Enable/Disable Filter"
         />
-      </Tooltip>
-      <ToastContainer />
+      </Tooltip> :
+      <span/>}
     </CardHeader>
   )
 }

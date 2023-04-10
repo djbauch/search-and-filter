@@ -53,7 +53,9 @@ import FilterTabs from 'containers/FilterTabs/FilterTabs'
 import OrganizationFilterCard from 'components/OrganizationFilter/OrganizationFilterCard'
 import PlatformFilterCard from 'components/PlatformFilter/PlatformFilterCard'
 import TemporalFilterCard from 'components/TemporalFilter/TemporalFilterCard'
-
+import FunctionFilterCard from 'features/FunctionFilter/FunctionFilterCard'
+import { ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 esriConfig.assetsPath = './assets'
 library.add( faCheckSquare, faSquare, faChevronRight, faPlusSquare, faChevronDown, faMinusSquare, faFolder, faFolderOpen, faFile)
 
@@ -67,6 +69,7 @@ const router = createBrowserRouter(
       <Route key="FrequencyFilterCard" path="frequencies" element={<FrequencyFilterCard />} />
       <Route key="OrganizationCard" path="organizations" element={<OrganizationFilterCard/>} />
       <Route key="PlatformCard" path="platforms" element={<PlatformFilterCard />} />
+      <Route key="FunctionsCard" path="functions" element={<FunctionFilterCard />} />
       <Route key="DateRangeCard" path="dates" element={<TemporalFilterCard />} />
     </Route>
   ])
@@ -78,6 +81,7 @@ root.render(
     <Provider store={store}>
       <ThemeProvider>
       <RouterProvider router={router} />
+      <ToastContainer />
       </ThemeProvider>
     </Provider>
   </React.StrictMode>

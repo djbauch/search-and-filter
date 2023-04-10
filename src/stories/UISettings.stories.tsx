@@ -1,7 +1,7 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 
-import { UISettings } from '../features/UISettings/UISettings'
+import { UISettings } from 'features/UISettings/UISettings'
 
 export default {
   title: 'Example/UISettings',

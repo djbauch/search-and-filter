@@ -1,7 +1,7 @@
 // Use this as an exemplar of how to define Slice State and Action Types in TypeScript
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../../app/store'
+import type { RootState } from 'app/store'
 
 // Define a type for the slice state
 interface SettingsState {

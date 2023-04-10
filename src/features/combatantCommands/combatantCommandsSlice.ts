@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../../app/store'
-import { CombatantCommand } from '../../typings/sharedTypes'
+import type { RootState } from 'app/store'
+import { CombatantCommand } from 'typings/sharedTypes'
 import { getCombatantCommands } from './CombatantCommandsData'
 
 interface CombatantCommandState {

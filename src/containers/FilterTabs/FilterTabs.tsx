@@ -11,13 +11,14 @@ import { Tabs, Tab } from 'react-bootstrap'
 import 'rc-tabs/assets/index.css'
 import PlatformCard from '../../components/PlatformFilter/PlatformFilterCard'
 import { DraggableData, Rnd, RndDragEvent } from 'react-rnd'
-import { BiFilterAlt } from 'react-icons/bi'
+import { BiFilter, BiFilterAlt,  } from 'react-icons/bi'
+import { FaFilter } from 'react-icons/fa'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { setFilterId, setActiveKey, setX, setFilterState, FilterTabsState } from './FilterTabsSlice'
 export const filterId = 'tabs'
 
 export const ItemTypes = {
-  TABS: 'tabs',
+  TABS: 'tabs'
 }
 
 type FilterTabsProps = {
@@ -39,11 +40,12 @@ const FilterTabs: FC<{}> = () => {
   const activeKey = ftabs.activeKey
   const verticalOld = ftabs.verticalOld
   const bounds = ftabs.bounds
-  const topoState = useAppSelector((state) => state.topologyFilters)
+  const orgState = useAppSelector((state) => state.organizations)
+  const platState = useAppSelector((state) => state.platforms)
   const ccState = useAppSelector((state) => state.combatantCommands)
-  const freqState = useAppSelector((state) => state.frequencyFilters)
-  const tempState = useAppSelector((state) => state.temporalFilters)
-  const funcState = useAppSelector((state) => state.functionFilters)
+  const freqState = useAppSelector((state) => state.frequencies)
+  const tempState = useAppSelector((state) => state.dates)
+  const funcState = useAppSelector((state) => state.functions)
   const threshold = 120
   let filtertabsRef = useRef<Rnd>(null)
   const [filterTabs, setFilterTabs] = useState<HTMLElement>()
@@ -51,7 +53,7 @@ const FilterTabs: FC<{}> = () => {
   const [fTabsParent, setfTabsParent] = useState<HTMLElement>()
   // useEffect with empty dependency array to replace componentDidMount
   useEffect(() => {
-    console.log("Mounted tabs")
+    console.log('Mounted tabs')
     const tabsContainer = document.getElementById('filtertabs')
     tabsContainer && setFilterTabs(tabsContainer)
     const bgContainer = document.getElementById('f-tabs-bg')
@@ -77,11 +79,11 @@ const FilterTabs: FC<{}> = () => {
     changeWritingMode()
     window.addEventListener('resize', checkOOBListener)
     return () => {
-      console.log("Unmounted tabs")
+      console.log('Unmounted tabs')
       ro.disconnect()
       window.removeEventListener('resize', checkOOBListener)
     }
-   }, [])
+  }, [])
 
   const checkOOBListener = () => checkOutOfBounds()
 
@@ -152,18 +154,14 @@ const FilterTabs: FC<{}> = () => {
   }
 
   const closeTab = () => {
-    dispatch(
-      setActiveKey("-2")
-    )
+    dispatch(setActiveKey('-2'))
   }
 
   const onTabClick = (key: string) => {
     if (key === activeKey) {
       closeTab()
     } else {
-      dispatch(
-        setActiveKey(key)
-      )
+      dispatch(setActiveKey(key))
     }
 
     // this.onFilterChange({
@@ -233,13 +231,14 @@ const FilterTabs: FC<{}> = () => {
     document.body.onmousemove = null
   }
 
-  const dockedStyle = { left: 'calc(50% - 0.5rem)', bottom: 0 }
-  const verticalStyle = { top: 'calc(50% - 0.5rem)', right: 0, transform: 'rotate(90deg)' }
+  const dockedStyle = { left: 'calc(50% - 0.5rem)', bottom: 0, color: 'green' }
+  const invisibleStyle = { left: 'calc(50%  - 0.5rem', bottom: 0, color: 'transparent'}
+  const verticalStyle = { top: 'calc(50% - 0.5rem)', right: 0, transform: 'rotate(90deg)', color: 'green' }
   const getTabName = (filterName: string, isVertical: boolean, isFilterOn) => {
     return (
       <div>
         {filterName}
-        {isFilterOn ? <BiFilterAlt style={isVertical ? verticalStyle : dockedStyle} /> : ''}
+        {isFilterOn ? <FaFilter style={isVertical ? verticalStyle : dockedStyle} /> : <FaFilter style={invisibleStyle} />}
       </div>
     )
   }
@@ -252,7 +251,7 @@ const FilterTabs: FC<{}> = () => {
         x: x,
         y: y,
         width: 'auto',
-        height: 'auto',
+        height: 'auto'
       }}
       minWidth={400}
       minHeight={100}
@@ -262,12 +261,11 @@ const FilterTabs: FC<{}> = () => {
       enableResizing={false}
       bounds={bounds}
     >
-
       <div id="f-tabs-bg" className={vertical ? 'f-tabs-bg-vertical' : 'f-tabs-bg-docked'}>
         <Tabs
           id="f-tabs-parent"
           //tabPosition={vertical ? 'right' : 'bottom'}
-          onSelect={(k) => onTabClick(k || "none")}
+          onSelect={(k) => onTabClick(k || 'none')}
           activeKey={activeKey}
           //activeKey={"freq"} //Uncomment to keep filter set to frequencies
         >
@@ -286,7 +284,7 @@ const FilterTabs: FC<{}> = () => {
             />
           </Tab>
           <Tab
-            title={'Frequency' /*getTabName('Frequency', vertical, freqState.filterOn)*/}
+            title={getTabName('Frequency', vertical, freqState.filterOn)}
             eventKey="freq"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
@@ -300,7 +298,7 @@ const FilterTabs: FC<{}> = () => {
               /> */}
           </Tab>
           <Tab
-            title={'Date Range' /*getTabName('Date Range', vertical, tempState.filterOn)*/}
+            title={getTabName('Date Range', vertical, tempState.filterOn)}
             eventKey="date"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
@@ -315,7 +313,7 @@ const FilterTabs: FC<{}> = () => {
               /> */}
           </Tab>
           <Tab
-            title={'Functions' /* getTabName('Functions', vertical, funcState.filterOn)*/}
+            title={getTabName('Functions', vertical, funcState.filterOn)}
             eventKey="function"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
@@ -329,7 +327,7 @@ const FilterTabs: FC<{}> = () => {
               /> */}
           </Tab>
           <Tab
-            title={'Organizations' /*getTabName('Organizations', vertical, topoState.orgFilterOn)*/}
+            title={getTabName('Organizations', vertical, orgState.orgFilterOn)}
             eventKey="orgs"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
@@ -345,19 +343,11 @@ const FilterTabs: FC<{}> = () => {
               /> */}
           </Tab>
           <Tab
-            title={'Platform' /*getTabName("Platform", vertical, topoState.platFilterOn)*/}
+            title={getTabName('Platforms', vertical, platState.platFilterOn)}
             eventKey="platform"
             className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3"
           >
             <PlatformCard />
-            {/* <PlatformCard
-                // onFilterChange={this.props.onFilterChange}
-                // onDashboardChange={this.props.onDashboardChange}
-                // topoState={this.props.topoState}
-                // ccState={this.props.ccState}
-                // closeTab={this.closeTab}
-                // isTab={true}
-              /> */}
           </Tab>
           <Tab title="Summary" eventKey="summary" className="scroll-box__wrapper scroll-vert ps-6 pe-4 pt-3">
             <FilterSummaryCard />

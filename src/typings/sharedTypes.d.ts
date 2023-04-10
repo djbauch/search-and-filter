@@ -1,5 +1,5 @@
 import { FeatureCollection, GeoJSON } from 'geojson'
-import JGlobe from '../components/globe/JGlobe'
+import JGlobe from 'components/globe/JGlobe'
 import Map from '@arcgis/core/Map'
 import View from '@arcgis/core/views/View'
 import SceneView from '@arcgis/core/views/SceneView'

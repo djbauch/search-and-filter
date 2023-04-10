@@ -1,6 +1,6 @@
 import { TimezoneOption } from 'typings/sharedTypes'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../../app/store'
+import type { RootState } from 'app/store'
 /*
 Queries for the list of timezone options for the dateRange filter. Returns an
 array of JSON objects in the following format:
@@ -25,25 +25,37 @@ export const sampleTimeZones = (): TimezoneOption[] => {
     }
   ]
 }
+
 interface TemporalState {
-    value: TimezoneOption
+    timeZone: TimezoneOption
     filterOn: boolean
+    start: Date
+    end: Date
 }
 
 const initialState: TemporalState = {
-    value: sampleTimeZones[0],
-    filterOn: false
+    timeZone: sampleTimeZones[0],
+    filterOn: false,
+    start: new Date(),
+    end: new Date()
 }
+
 export const temporalSlice = createSlice({
-  name: 'times',
+  name: 'dates',
   initialState,
   reducers: {
     setEnabled: (state, action: PayloadAction<boolean>) => {
       state.filterOn = action.payload
+    },
+    setStart: (state, action: PayloadAction<Date>) => {
+        state.start = action.payload
+    },
+    setEnd: (state, action: PayloadAction<Date>) => {
+        state.end = action.payload
     }
   }
 })
 
-export const { setEnabled } = temporalSlice.actions
+export const { setEnabled, setStart, setEnd } = temporalSlice.actions
 export const selectTimes = (state: RootState) => state.times
 export default temporalSlice.reducer

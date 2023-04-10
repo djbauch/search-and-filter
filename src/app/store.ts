@@ -20,7 +20,7 @@ const store = configureStore({
     uiSettings: uiSettingsReducer,
     frequencies: frequencyFilterReducer,
     organizations: organizationFilterReducer,
-    temporalFilters: temporalFilterReducer,
+    dates: temporalFilterReducer,
     platforms: platformFilterReducer
     // chosenFeature: chosenFeatureReducer
   },

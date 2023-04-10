@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from './FilterSummaryCard.module.css';
-import { Button, Row } from 'react-bootstrap'
+import { Button, Card, Row } from 'react-bootstrap'
 //import 'react-widgets/styles.css'
 // import {
 //   defineFreqState,
@@ -10,6 +10,7 @@ import { Button, Row } from 'react-bootstrap'
 //   defineFuncState
 // } from '../../../data/LocalStorageKeys'
 import FalconCloseButton from '../common/FalconCloseButton'
+import JEMSIAFCardHeader from 'components/JEMSIAFCardHeader/JEMSIAFCardHeader';
 export const filterId = 'summ'
 
 export const sumEventClear = 'sumEventClear'
@@ -66,20 +67,8 @@ export const FilterSummaryCard = (props: SummaryCardProps) => {
   // />: null;
 
   return (
-    <div className="font-weight-bold" data-testid="FilterSummaryCard">
-    FilterSummaryCard Component
-      <table>
-        <tr>
-          <th>
-            {/* Removed onClick={props.closeTab}*/}
-            <FalconCloseButton size="sm" variant="white" className={'m-2'} />
-          </th>
-          <th>
-            <h4 className="mb-0 f-tabs-title">Summary</h4>
-          </th>
-        </tr>
-      </table>
-      <hr className="filter-title-underline" />
+    <Card border="primary" className="font-weight-bold" data-testid="FilterSummaryCard">
+    <JEMSIAFCardHeader title="Summary" />
       <Row>
         <Button className="mx-auto my-2 btn-sm w-auto" onClick={handleViewSummary}>
           View Active Filter Summary
@@ -95,7 +84,7 @@ export const FilterSummaryCard = (props: SummaryCardProps) => {
           Disable All Filters
         </Button>
       </Row>
-    </div>
+    </Card>
   )
 }
 

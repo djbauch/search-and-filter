@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Outlet, Link, useLoaderData } from 'react-router-dom'
-import { getContacts } from '../contacts'
+import { getContacts } from 'contacts'
 import styles from './SearchPage.module.css'
 
 export async function loader() {

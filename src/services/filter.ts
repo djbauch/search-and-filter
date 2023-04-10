@@ -14,6 +14,6 @@ export const getFilterHeadersEnglish = () => {
     ['plat', 'Platform Types'],
     ['temp', 'Date Range'],
     ['freq', 'Frequency'],
-    ['func', 'Functional']
+    ['func', 'Functions']
   ])
 }

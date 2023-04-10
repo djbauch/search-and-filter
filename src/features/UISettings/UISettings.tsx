@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { useAppSelector, useAppDispatch } from '../../app/hooks'
-import '../../bootstrap.css'
+import { useAppSelector, useAppDispatch } from 'app/hooks'
+import 'bootstrap.css'
 
 // Note: Because we're using webpack, which supports tree-shaking, we can safely use named imports
 // See: https://mui.com/material-ui/guides/minimizing-bundle-size/
