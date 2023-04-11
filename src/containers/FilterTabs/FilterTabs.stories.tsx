@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react'
 import FilterTabs from './FilterTabs'
 
 export default {
-  title: 'Components/CardDropdown',
+  title: 'Containers/FilterTabs',
   component: FilterTabs
 } as ComponentMeta<typeof FilterTabs>
 

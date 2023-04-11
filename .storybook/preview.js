@@ -14,6 +14,7 @@ import {
 import { MockedProvider } from '@apollo/client/testing'
 import { Provider } from 'react-redux'
 import store from '../src/app/store'
+import { ToastContainer} from 'react-toastify'
 
 library.add( faCheckSquare, faSquare, faChevronRight, faPlusSquare, faChevronDown, faMinusSquare, faFolder, faFolderOpen, faFile)
 export const parameters = {
@@ -63,6 +64,7 @@ export const decorators = [
   (Story) => {
     return (
       <Provider store={store}>
+        <ToastContainer />
         <Story />
       </Provider>
     )

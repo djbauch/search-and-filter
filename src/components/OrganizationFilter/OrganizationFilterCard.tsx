@@ -6,7 +6,9 @@ import { Card } from 'react-bootstrap'
 import JEMSIAFCardHeader from 'components/JEMSIAFCardHeader/JEMSIAFCardHeader'
 import CheckboxTree from 'react-checkbox-tree'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { toast } from 'react-toastify'
 
+const orgToastId = "org"
 const OrganizationFilterCard: FC = () => {
   const orgs = useAppSelector((state) => state.organizations)
   const dispatch = useAppDispatch()
@@ -16,6 +18,15 @@ const OrganizationFilterCard: FC = () => {
   const enabled = orgs.orgFilterOn
   const checkChanged = (checked: string[]) => {
     dispatch(setChecked(checked))
+    if (!enabled) {
+      toast.warn('Enable Organization filter to see the effect of changes', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        toastId: orgToastId
+      })
+    }
   }
   const expandChanged = (expanded: string[]) => {
     console.log(`Expanded ${JSON.stringify(expanded)}`)

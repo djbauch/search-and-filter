@@ -5,7 +5,9 @@ import {setChecked, setExpanded, setEnabled } from './platformFilterSlice'
 import { Card }  from 'react-bootstrap'
 import JEMSIAFCardHeader from 'components/JEMSIAFCardHeader/JEMSIAFCardHeader'
 import CheckboxTree from 'react-checkbox-tree'
+import { toast} from 'react-toastify'
 
+const platformToastId = 'platform'
 const PlatformFilterCard: FC = () => {
   const platforms = useAppSelector((state) => state.platforms)
   const dispatch = useAppDispatch()
@@ -19,12 +21,22 @@ const PlatformFilterCard: FC = () => {
   }
   const checkChanged = (checked: string[]) => {
     dispatch(setChecked(checked))
+    if (!enabled) {
+      toast.warn('Enable Platform filter to see the effect of changes', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        toastId: platformToastId
+      })
+    }
+
   }
   return (
 <Card border="primary" className="PlatformFilterCard" data-testid="PlatformFilterCard">
     <JEMSIAFCardHeader title="Platforms" enabled={enabled} onChange={filterToggled} />
     <Card.Body>
-      <CheckboxTree nodes={platforms.value} 
+      <CheckboxTree nodes={platforms.value}
       checked={checked}
       expanded={expanded}
       onCheck={checkChanged}

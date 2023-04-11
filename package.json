@@ -65,7 +65,8 @@
     "eject": "react-scripts eject",
     "copy-esri-assets": "ncp ./node_modules/@arcgis/core/assets ./public/assets",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "chromatic": "npx chromatic --project-token=7e69a0ffa707 --storybook-build-dir storybook-static --zip"
   },
   "eslintConfig": {
     "extends": [
@@ -146,5 +147,7 @@
     "webpack": "^5.76.3",
     "webpack-sources": "^3.2.3"
   },
-  "packageManager": "yarn@3.3.1"
+  "packageManager": "yarn@3.3.1",
+  "readme": "ERROR: No README data found!",
+  "_id": "search-and-filter@0.1.0"
 }
