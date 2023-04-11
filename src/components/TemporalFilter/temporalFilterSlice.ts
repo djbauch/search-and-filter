@@ -1,6 +1,7 @@
 import { TimezoneOption } from 'typings/sharedTypes'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from 'app/store'
+import _ from 'lodash'
 /*
 Queries for the list of timezone options for the dateRange filter. Returns an
 array of JSON objects in the following format:
@@ -27,17 +28,19 @@ export const sampleTimeZones = (): TimezoneOption[] => {
 }
 
 interface TemporalState {
-    timeZone: TimezoneOption
-    filterOn: boolean
-    start: Date
-    end: Date
+  timeZoneOptions: TimezoneOption[]
+  timeZone: TimezoneOption
+  filterOn: boolean
+  start: Date
+  end: Date
 }
 
 const initialState: TemporalState = {
-    timeZone: sampleTimeZones[0],
-    filterOn: false,
-    start: new Date(),
-    end: new Date()
+  timeZoneOptions: sampleTimeZones(),
+  timeZone: sampleTimeZones[0],
+  filterOn: false,
+  start: new Date(),
+  end: new Date()
 }
 
 export const temporalSlice = createSlice({
@@ -48,10 +51,13 @@ export const temporalSlice = createSlice({
       state.filterOn = action.payload
     },
     setStart: (state, action: PayloadAction<Date>) => {
-        state.start = action.payload
+      state.start = action.payload
     },
     setEnd: (state, action: PayloadAction<Date>) => {
-        state.end = action.payload
+      state.end = action.payload
+    },
+    setTimeZone: (state, action: PayloadAction<string>) => {
+      state.timeZone = _.find(state.timeZoneOptions, { value: action.payload }) || state.timeZone
     }
   }
 })
