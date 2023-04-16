@@ -26,7 +26,7 @@ interface GraphicHit {
   mapPoint: Point
 }
 // Required: Set this property to insure assets resolve correctly.
-esriConfig.assetsPath = '/assets'
+esriConfig.assetsPath = process.env.PUBLIC_URL + '/assets'
 
 const blackColor = new Color('black')
 const mapRef = new Map({})
@@ -47,17 +47,22 @@ const initialize = (container: HTMLDivElement) => {
 }
 
 type EsriGlobeProps = {
-  layersVisible: boolean
-  map: Map
-  latitude: number
-  longitude: number
-  altitude: number
+  layersVisible?: boolean
+  map?: Map
+  latitude?: number
+  longitude?: number
+  altitude?: number
 }
+
 const EsriGlobe = (props: EsriGlobeProps) => {
+  const layersVisible = props.layersVisible || true
+  const map = props.map || new Map({
+    basemap: 'gray-vector'
+  })
   const uiDiv = useRef<HTMLDivElement>(null)
   useEffect(() => {
     initialize(uiDiv.current!)
-  })
+  }, [])
   const [tooltipsEnabled] = useState(true) // useTooltipsEnabledState from LocalStorageKeys
   const [tooltipBehavior] = useState('view-mouseover') //useTooltipBehaviorState ""
 
