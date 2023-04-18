@@ -15,7 +15,21 @@ import { MockedProvider } from '@apollo/client/testing'
 import { Provider } from 'react-redux'
 import store from '../src/app/store'
 import { ToastContainer} from 'react-toastify'
+import esriConfig from '@arcgis/core/config'
 
+import * as bootstrap from 'bootstrap'
+import '../bootstrap/dist/css/bootstrap.min.css'
+import ThemeProvider from 'react-bootstrap/ThemeProvider'
+
+import '../src/scss/styles.scss'
+import '@fontsource/roboto'
+import '@fontsource/roboto/300.css'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
+import 'react-toastify/dist/ReactToastify.css'
+
+esriConfig.assetsPath = '../src/assets'
 library.add( faCheckSquare, faSquare, faChevronRight, faPlusSquare, faChevronDown, faMinusSquare, faFolder, faFolderOpen, faFile)
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -64,8 +78,10 @@ export const decorators = [
   (Story) => {
     return (
       <Provider store={store}>
+        <ThemeProvider>
         <ToastContainer />
         <Story />
+        </ThemeProvider>
       </Provider>
     )
   }

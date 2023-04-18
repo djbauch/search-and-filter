@@ -8,10 +8,10 @@ import FilterSummaryCard from 'components/FilterSummary/FilterSummaryCard'
 import { Tabs, Tab } from 'react-bootstrap'
 // If you update rc-tabs to a 12.x release instead of 11.x you'll need the following line
 //import TabPane from 'rc-tabs/es/TabPanelList/TabPane';
-import 'rc-tabs/assets/index.css'
+
 import PlatformCard from '../../components/PlatformFilter/PlatformFilterCard'
 import { DraggableData, Rnd, RndDragEvent } from 'react-rnd'
-import { BiFilter, BiFilterAlt,  } from 'react-icons/bi'
+import { BiFilter, BiFilterAlt } from 'react-icons/bi'
 import { FaFilter } from 'react-icons/fa'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { setFilterId, setActiveKey, setX, setFilterState, FilterTabsState } from './FilterTabsSlice'
@@ -29,7 +29,7 @@ type FilterTabsProps = {
   setFilterModalState: () => any
 }
 
-const FilterTabs: FC<{}> = () => {
+export const FilterTabs: FC<{}> = () => {
   const ftabs: FilterTabsState = useAppSelector((state) => state.filterTabs)
   const dispatch = useAppDispatch()
   const x = ftabs.x
@@ -232,13 +232,17 @@ const FilterTabs: FC<{}> = () => {
   }
 
   const dockedStyle = { left: 'calc(50% - 0.5rem)', bottom: 0, color: 'green' }
-  const invisibleStyle = { left: 'calc(50%  - 0.5rem', bottom: 0, color: 'transparent'}
+  const invisibleStyle = { left: 'calc(50%  - 0.5rem', bottom: 0, color: 'transparent' }
   const verticalStyle = { top: 'calc(50% - 0.5rem)', right: 0, transform: 'rotate(90deg)', color: 'green' }
   const getTabName = (filterName: string, isVertical: boolean, isFilterOn) => {
     return (
       <div>
         {filterName}
-        {isFilterOn ? <FaFilter style={isVertical ? verticalStyle : dockedStyle} /> : <FaFilter style={invisibleStyle} />}
+        {isFilterOn ? (
+          <FaFilter style={isVertical ? verticalStyle : dockedStyle} />
+        ) : (
+          <FaFilter style={invisibleStyle} />
+        )}
       </div>
     )
   }
@@ -260,13 +264,17 @@ const FilterTabs: FC<{}> = () => {
       onDragStop={onDragStop}
       enableResizing={false}
       bounds={bounds}
+      style={{backgroundColor: '#FFF'}}
     >
-      <div id="f-tabs-bg" className={vertical ? 'f-tabs-bg-vertical' : 'f-tabs-bg-docked'}>
+      <div id="f-tabs-bg" className={vertical ? 'f-tabs-bg-vertical light' : 'f-tabs-bg-docked light'}>
         <Tabs
+          className="nav nav-tabs"
           id="f-tabs-parent"
           //tabPosition={vertical ? 'right' : 'bottom'}
+          //onChange={(k) => onTabClick(k ||'none')}
           onSelect={(k) => onTabClick(k || 'none')}
           activeKey={activeKey}
+          defaultActiveKey={"ccmd"}
           //activeKey={"freq"} //Uncomment to keep filter set to frequencies
         >
           <Tab
