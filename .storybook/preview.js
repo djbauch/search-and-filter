@@ -17,11 +17,13 @@ import store from '../src/app/store'
 import { ToastContainer} from 'react-toastify'
 import esriConfig from '@arcgis/core/config'
 
+// Import custom CSS
+import '../src/scss/styles.scss'
+// Import all of Bootstrap's JS
 import * as bootstrap from 'bootstrap'
-import '../bootstrap/dist/css/bootstrap.min.css'
+
 import ThemeProvider from 'react-bootstrap/ThemeProvider'
 
-import '../src/scss/styles.scss'
 import '@fontsource/roboto'
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
@@ -40,34 +42,65 @@ export const parameters = {
     }
   },
   backgrounds: {
-    default: 'purple',
+    default: 'Plum',
     values: [
       {
-        name: 'white',
+        name: 'White',
         value: '#FFFFFF'
       },
-      // colors from Falcon dark theme
       {
-        name: 'indigo',
+        name: 'Honeydew',
+        value: '#F0FFF0'
+      },
+      {
+        name: 'AliceBlue',
+        value: '#F0F8FF'
+      },
+
+      {
+        name: 'Plum',
+        value: '#DDA0DD'
+      },
+
+      {
+        name: 'AntiqueWhite',
+        value: '#FAEBD7'
+      },
+      {
+        name: 'Aqua',
+        value: '#00FFFF'
+      },
+      {
+        name: 'LightGray',
+        value: '#D3D3D3'
+      },
+
+      {
+        name: 'Indigo',
         value: '#727cf5'
       },
       {
-        name: 'purple',
+        name: 'Purple',
         value: '#6b5eae'
       },
       {
-        name: 'orange',
+        name: 'Orange',
         value: '#fd7e14'
       },
       {
-        name: 'gray',
+        name: 'Gray',
         value: '#748194'
       },
       {
-        name: 'black',
+        name: 'Red',
+        value: '#FF0000'
+      },
+      {
+        name: 'Black',
         value: '#000000'
       }
     ]
+
   },
   apolloClient: {
     MockeProvider: MockedProvider

@@ -22,13 +22,15 @@ interface ButtonProps {
    * Optional click handler
    */
   onClick?: () => void
+  className?: string
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const Button = ({ primary = false, size = 'medium', backgroundColor, label, ...props }: ButtonProps) => {
-  const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary'
+export const Button = ({ primary = false, size = 'medium', backgroundColor, label, className, ...props }: ButtonProps) => {
+  let mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary'
+  mode = className ? className : mode
   return (
     <button
       type="button"

@@ -13,7 +13,7 @@
 }
 .storybook-button--secondary {
   color: #333;
-  background-color: transparent;
+  background-color: #b3b3b3; /* Fix this when Internet is back */
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
 }
 .storybook-button--small {

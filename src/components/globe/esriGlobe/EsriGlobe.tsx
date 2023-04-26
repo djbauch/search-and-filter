@@ -56,9 +56,11 @@ type EsriGlobeProps = {
 
 const EsriGlobe = (props: EsriGlobeProps) => {
   const layersVisible = props.layersVisible || true
-  const map = props.map || new Map({
-    basemap: 'gray-vector'
-  })
+  const map =
+    props.map ||
+    new Map({
+      basemap: 'gray-vector'
+    })
   const uiDiv = useRef<HTMLDivElement>(null)
   useEffect(() => {
     initialize(uiDiv.current!)
@@ -327,9 +329,7 @@ const EsriGlobe = (props: EsriGlobeProps) => {
         //hitTest checks for elements that are on the surface of the globe like points or equipment.
         sceneView.hitTest(event).then(function (response) {
           console.log(response)
-          const graphicHits = response.results?.filter(
-            (hitResult) => hitResult.type === 'graphic'
-          )
+          const graphicHits = response.results?.filter((hitResult) => hitResult.type === 'graphic')
           if (graphicHits?.length > 0) {
             let graphic: Graphic = (graphicHits[0] as GraphicHit).graphic
             sceneView.whenLayerView(graphic.layer).then(function (layerView) {
