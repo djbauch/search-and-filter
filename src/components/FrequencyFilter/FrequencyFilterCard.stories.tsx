@@ -1,16 +1,15 @@
 /* eslint-disable */
 import * as React from 'react'
 import FrequencyFilterCard from './FrequencyFilterCard';
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react'
 
-export default {
+const meta: Meta<typeof FrequencyFilterCard> = {
   title: "Components/FrequencyFilterCard",
   component: FrequencyFilterCard
-} as ComponentMeta<typeof FrequencyFilterCard>
+}
+export default meta
+type Story = StoryObj<typeof FrequencyFilterCard>
 
-const Template: ComponentStory<typeof FrequencyFilterCard> = args => <FrequencyFilterCard {...args}/>
-export const Default = Template.bind({})
+export const Default: Story = {
 
-Default.story = {
-  name: 'default',
-};
+}

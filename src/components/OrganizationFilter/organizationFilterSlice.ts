@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import _ from 'lodash'
 import type { RootState } from 'app/store'
-import type { Organization, OrganizationNode } from 'typings/sharedTypes'
+import type { Organization, OrganizationNode } from 'typings'
 import { Node as TreeNode } from 'react-checkbox-tree'
 import { sampleOrganizations } from './organizationFilterData'
 const organizationData = sampleOrganizations()

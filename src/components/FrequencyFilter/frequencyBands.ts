@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { Node as CheckBoxNode} from 'react-checkbox-tree'
-import type { FrequencyBandCollection, FrequencyUnits } from 'typings/sharedTypes'
+import type { FrequencyBandCollection, FrequencyUnits } from './index'
 /*
 Returns an array of JSON objects in the following format:
 
@@ -59,26 +59,26 @@ export const getBandsAvailable = (): Array<FrequencyBandCollection> => {
       label: 'IEEE',
       children: [
         {
-          id: 'freqband1_IEEE',
-          band: { low: 3000000, high: 30000000 },
+          id: 'IEEE_HF',
+          band: { low: 3E6, high: 3E7 },
           label: 'HF',
           units: '3 MHz \u2014  30 MHz'
         },
         {
-          id: 'freqband2_IEEE',
-          band: { low: 30000000, high: 300000000 },
+          id: 'IEEE_VHF',
+          band: { low: 3E7, high: 3E8 },
           label: 'VHF',
           units: '30 MHz \u2014 300 MHz'
         },
         {
-          id: 'freqband3_IEEE',
-          band: { low: 300000000, high: 1000000000 },
+          id: 'IEEE_UHF',
+          band: { low: 3E8, high: 1E9 },
           label: 'UHF',
           units: '300 MHz \u2014 1 GHz'
         },
         {
-          id: 'freqband4_IEEE',
-          band: { low: 1000000000, high: 2000000000 },
+          id: 'IEEE_L',
+          band: { low: 1E9, high: 2E9 },
           label: 'L',
           units: '1 GHz \u2014 2 GHz'
         },
@@ -272,13 +272,13 @@ const addSpace = (check: number) => {
 
 export const convertUnit = (value: number) => {
   let units = ''
-  if (value >= 1000000000000) {
+  if (value >= 1E12) {
     units = 'THz'
-  } else if (value >= 1000000000) {
+  } else if (value >= 1E9) {
     units = 'GHz'
-  } else if (value >= 1000000) {
+  } else if (value >= 1E6) {
     units = 'MHz'
-  } else if (value >= 1000) {
+  } else if (value >= 1E3) {
     units = 'kHz'
   } else {
     units = 'Hz\u00A0'

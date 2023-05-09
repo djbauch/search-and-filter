@@ -18,7 +18,7 @@ import {
   NewsBlurb,
   AvailableSubscription,
   Project
-} from 'typings/sharedTypes'
+} from 'typings'
 import { Parser } from '@json2csv/plainjs'
 import flatten from 'flat'
 import { features } from 'process'
@@ -475,7 +475,7 @@ export const sampleProjectList: Project[] = [
         lowFreq: 10,
         highFreq: 30,
         units: 'Hz',
-        checked: ['freqBand1_IEEE', 'freqBand2_IEEE', 'freqBand3_IEEE', 'freqBand4_IEEE'],
+        checked: ['IEEE_HF', 'IEEE_VHF', 'IEEE_UHF', 'IEEE_L'],
         expanded: [],
         filterOn: true,
       },

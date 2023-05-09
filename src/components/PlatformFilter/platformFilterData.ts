@@ -1,4 +1,4 @@
-import { PlatformType } from "typings/sharedTypes"
+import { PlatformType } from "typings"
 
 /*
 Queries for the list of platform types. Returns an
@@ -59,4 +59,3 @@ export const samplePlatformTypes = (): PlatformType[] => {
       },
     ]
   }
-  

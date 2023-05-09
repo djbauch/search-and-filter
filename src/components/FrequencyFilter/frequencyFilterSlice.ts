@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import _ from 'lodash'
 import type { RootState } from 'app/store'
-import type { FreqFilterType, FrequencyBand, FrequencyBandCollection, FrequencyUnits } from 'typings/sharedTypes'
+import type { FreqFilterType, FrequencyBand, FrequencyBandCollection, FrequencyUnits } from './index'
 import { getBandsAvailable, getFrequencyUnits } from './FrequencyFilterData'
 
 const availableBands = getBandsAvailable()

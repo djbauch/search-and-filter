@@ -1,4 +1,4 @@
-import type { CombatantCommand, Plan } from '../../typings/sharedTypes'
+import type { CombatantCommand, Plan } from '../../typings'
 
  const sampleCombatantCommands = (): CombatantCommand[] => {
   return [

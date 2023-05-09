@@ -1,4 +1,4 @@
-import { FunctionalOpts } from 'typings/sharedTypes'
+import { FunctionalOpts } from 'typings'
 /*
 Queries for the list of Functional Opts. Returns an
 array of JSON objects in the following format:

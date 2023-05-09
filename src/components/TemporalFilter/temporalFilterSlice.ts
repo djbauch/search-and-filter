@@ -1,4 +1,4 @@
-import { TimezoneOption } from 'typings/sharedTypes'
+import { TimezoneOption } from 'typings'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from 'app/store'
 import _ from 'lodash'

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from 'app/store'
 import { getFunctionalOpts } from 'services/functionalOptions'
-import { FunctionalOpts } from 'typings/sharedTypes'
+import { FunctionalOpts } from 'typings'
 
 interface FunctionFilterState {
   value: FunctionalOpts

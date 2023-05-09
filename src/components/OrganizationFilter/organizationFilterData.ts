@@ -1,4 +1,4 @@
-import { CCOrg, Organization } from "typings/sharedTypes"
+import { CCOrg, Organization } from "typings"
 
 export const sampleCoComOrgs = (): CCOrg[] => {
     return [
@@ -60,7 +60,7 @@ export const sampleCoComOrgs = (): CCOrg[] => {
       { ccmd: 'NORTHCOM', organizations: ['JFMONORTH', 'FMFLANT', 'AIRLANT'] },
     ]
   }
-  
+
   /*
   Queries for the list of organizations. Returns an
   array of JSON objects in the following format:
@@ -137,4 +137,3 @@ export const sampleCoComOrgs = (): CCOrg[] => {
       { id: 'DARPA', organization: 'Joint/Other', value: 'DARPA', label: 'DARPA' },
     ]
   }
-  

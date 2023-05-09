@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from 'app/store'
-import { PlatformType } from 'typings/sharedTypes'
+import { PlatformType } from 'typings'
 import { samplePlatformTypes } from './platformFilterData'
 
 interface PlatformState {

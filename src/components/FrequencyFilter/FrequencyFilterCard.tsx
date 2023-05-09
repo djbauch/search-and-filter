@@ -3,13 +3,13 @@ import styles from './FrequencyFilterCard.module.css'
 import { Container, Col, Form, FormGroup, Row } from 'react-bootstrap'
 //import { Label, Input } from 'react-bootstrap'
 import { Card, Form as RBSForm, ToggleButton } from 'react-bootstrap'
-import { getFrequencyUnits, getBandsAvailable, FreqNodes } from 'services/frequencyBands'
+import { getFrequencyUnits, getBandsAvailable, FreqNodes } from 'components/FrequencyFilter/frequencyBands'
 import CheckboxTree from 'react-checkbox-tree'
 import 'react-checkbox-tree/lib/react-checkbox-tree.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquare, faCheckSquare, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FaSquare, FaCheckSquare, FaChevronRight, FaChevronDown } from 'react-icons/fa'
-import { FreqFilterType, FreqStateType, FrequencyBand } from 'typings/sharedTypes'
+import { FreqFilterType, FreqStateType, FrequencyBand } from './index'
 import { AiOutlineWarning } from 'react-icons/ai'
 import CardCloseButton from 'components/CardCloseButton/CardCloseButton'
 import _ from 'lodash'
@@ -163,6 +163,7 @@ const FreqDropdown = (props: FreqDropdownPropsType) => {
       aria-label="Frequency Units"
       id={freqState.filterId}
       disabled={!freqState.filterOn}
+      value={props.value}
       onChange={(e) => saveConvertedValue(`${e.target.value}`)}
     >
       {options}
@@ -306,7 +307,7 @@ const UserSelectedBands = (props: BandsProps) => {
         {props.warningIcon}
       </Row>
       <Row>
-        <Form.Label className="filter-label my-auto" for="units" sm={2}>
+        <Form.Label className="filter-label my-auto" htmlFor="units" sm={2}>
           Units:{' '}
         </Form.Label>
         <Col sm={10}>{unitsDropdown}</Col>
@@ -469,7 +470,7 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
       <hr className="filter-title-underline" />
       <Form>
         <Row>
-          <Form.Label className="filter-label my-auto" for="bands" sm={2}>
+          <Form.Label className="filter-label my-auto" htmlFor="bands" sm={2}>
             Bands:{' '}
           </Form.Label>
           <Col sm={10}><BandSelectionDropdown/></Col>
