@@ -18,7 +18,7 @@ const JEMSIAFCardHeader: FC<JEMSIAFCardHeaderProps> = ({ title, enabled, onChang
     <CardHeader data-testid="JEMSIAFCardHeader">
       <CardCloseButton />
       <span style={{ fontWeight: 'bold' }}> {title} </span>
-      {onChange? 
+      {onChange?
       <Tooltip title={isFilterActive ? 'Disable Filter' : 'Enable Filter'}>
         <Switch
           checked={isFilterActive}

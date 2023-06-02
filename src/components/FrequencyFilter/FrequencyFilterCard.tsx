@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react'
 import styles from './FrequencyFilterCard.module.css'
-import { Container, Col, Form, FormGroup, Row } from 'react-bootstrap'
+import { Card, Container, Col, Form as RBSForm, FormGroup, Row, ToggleButton } from 'react-bootstrap'
 //import { Label, Input } from 'react-bootstrap'
-import { Card, Form as RBSForm, ToggleButton } from 'react-bootstrap'
 import { getFrequencyUnits, getBandsAvailable, FreqNodes } from 'components/FrequencyFilter/frequencyBands'
 import CheckboxTree from 'react-checkbox-tree'
 import 'react-checkbox-tree/lib/react-checkbox-tree.css'
@@ -11,7 +10,6 @@ import { faSquare, faCheckSquare, faChevronRight, faChevronDown } from '@fortawe
 import { FaSquare, FaCheckSquare, FaChevronRight, FaChevronDown } from 'react-icons/fa'
 import { FreqFilterType, FreqStateType, FrequencyBand } from './index'
 import { AiOutlineWarning } from 'react-icons/ai'
-import CardCloseButton from 'components/CardCloseButton/CardCloseButton'
 import _ from 'lodash'
 import { useAppSelector, useAppDispatch } from 'app/hooks'
 import {
@@ -54,18 +52,14 @@ export const initializeFreqStore = () => {}
 A text box that accepts a numerical value.
 */
 
-export type FreqTextProps = {
+type FreqTextProps = {
   name: string
   id: string
   label: string
   value: string
   eventType: string
-  // onFilterChange: (e: FilterChangeEvent) => void
-  // setValidUserFilter: any //function
-  // freqState: FreqStateType
-  // validRange: boolean
-  // filterOn: boolean
 }
+
 
 export const FreqText = (props: FreqTextProps) => {
   console.log(`ID: ${props.id} label: ${props.label} name: ${props.name}`)
@@ -81,13 +75,6 @@ export const FreqText = (props: FreqTextProps) => {
       console.log('Setting high')
       dispatch(setHighFreq(newValue))
     }
-    // props.onFilterChange({
-    //   filterId: filterId,
-    //   eventType: props.eventType,
-    //   id: props.id,
-    //   value: newValue()
-    // })
-    // props.setValidUserFilter(props.validRange)
   }
 
   let altText = freqState.validRange ? props.name : 'High Frequency must be higher than low frequency'
@@ -99,12 +86,14 @@ export const FreqText = (props: FreqTextProps) => {
   }
 
   return (
-    <Row>
-      <Form.Label className="filter-label my-auto" sm={2}>
+    <Row className={styles.formRow}>
+      <Col sm={1}>
+      <RBSForm.Label className="filter-label my-auto" sm={2}>
         {props.label}:{' '}
-      </Form.Label>
-      <Col sm={10}>
-        <Form.Control
+      </RBSForm.Label>
+      </Col>
+      <Col sm={2}>
+        <RBSForm.Control
           htmlSize={12}
           className={classNames}
           type="number"
@@ -122,7 +111,7 @@ export const FreqText = (props: FreqTextProps) => {
   )
 }
 
-export type FreqDropdownPropsType = {
+type FreqDropdownPropsType = {
   id: string
   value: string
 }
@@ -147,9 +136,9 @@ const FreqDropdown = (props: FreqDropdownPropsType) => {
 
   ////Convert value to the unit selected in the dropdown
   let options = freqUnits.map((fu) => {
-    const isCurrentSelection = fu.id === props.value
+    //const isCurrentSelection = fu.id === props.value
     return (
-      <option key={fu.id} selected={isCurrentSelection}>
+      <option key={fu.id}>
         {fu.label}
       </option>
     )
@@ -201,7 +190,7 @@ const BandSelectionDropdown = () => {
   let options = bandsAvailable.map((bandCollection) => {
     const isCurrentSelection = bandCollection.id === freqState.bandCollection
     return (
-      <option key={bandCollection.id} selected={isCurrentSelection}>
+      <option key={bandCollection.id}>
         {bandCollection.label}
       </option>
     )
@@ -215,6 +204,7 @@ const BandSelectionDropdown = () => {
       aria-label="Frequency Band Collection"
       id={freqState.filterId}
       disabled={!freqState.filterOn}
+      value={freqState.bandCollection}
       onChange={(e) => saveConvertedValue(`${e.target.value}`)}
     >
       {options}
@@ -297,20 +287,21 @@ const UserSelectedBands = (props: BandsProps) => {
     <FreqDropdown
       id="units"
       value={freqState.units.id}
-      //onFilterChange={() => {}} //{props.onFilterChange}
     />
   )
   return (
-    <RBSForm>
+    <>
       <Row>
         <p className="filter-subtitle ms-3 px-0 w-auto">{props.label}</p>
         {props.warningIcon}
       </Row>
-      <Row>
-        <Form.Label className="filter-label my-auto" htmlFor="units" sm={2}>
+      <Row className={styles.formRow}>
+        <Col sm={1}>
+        <RBSForm.Label className="filter-label my-auto" htmlFor="units" sm={2}>
           Units:{' '}
-        </Form.Label>
-        <Col sm={10}>{unitsDropdown}</Col>
+        </RBSForm.Label>
+        </Col>
+        <Col sm={2}>{unitsDropdown}</Col>
       </Row>
       <FreqText
         name="freq"
@@ -328,7 +319,7 @@ const UserSelectedBands = (props: BandsProps) => {
         eventType={freqEventHighChanged}
         value={'' + freqState.highFreq}
       />
-    </RBSForm>
+    </>
   )
 }
 
@@ -337,7 +328,7 @@ const PredefinedBands = (props: BandsProps) => {
   const dispatch = useAppDispatch()
   const valuesVisible = freqState.valuesVisible
   const showValue = (
-    <Form.Switch
+    <RBSForm.Switch
       id="showValues"
       value="showValues"
       onChange={() => dispatch(setValuesVisible(!valuesVisible))}
@@ -366,7 +357,7 @@ const PredefinedBands = (props: BandsProps) => {
   }
 
   return (
-    <Form>
+    <>
       <Row>
         <p className="filter-subtitle ms-3">{props.label}</p>
       </Row>
@@ -409,7 +400,7 @@ const PredefinedBands = (props: BandsProps) => {
         />
       </Row>
       <Row></Row>
-    </Form>
+    </>
   )
 }
 
@@ -468,16 +459,19 @@ const FrequencyFilterCard: FC<FrequencyFilterCardProps> = (props: FrequencyFilte
       <JEMSIAFCardHeader title="Frequency" enabled={enabled} onChange={filterToggled}/>
       <Card.Body>
       <hr className="filter-title-underline" />
-      <Form>
-        <Row>
-          <Form.Label className="filter-label my-auto" htmlFor="bands" sm={2}>
+      <RBSForm>
+
+        <Row className={styles.formRow}>
+        <Col sm={1}>
+          <RBSForm.Label className="filter-label my-auto" htmlFor="bands" sm={2}>
             Bands:{' '}
-          </Form.Label>
-          <Col sm={10}><BandSelectionDropdown/></Col>
+          </RBSForm.Label>
+          </Col>
+          <Col sm={2}><BandSelectionDropdown/></Col>
         </Row>
 
       {bandOptionReducer(freqState.bandCollection)}
-      </Form>
+      </RBSForm>
       </Card.Body>
     </Card>
   )

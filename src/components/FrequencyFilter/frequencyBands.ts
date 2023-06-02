@@ -83,53 +83,53 @@ export const getBandsAvailable = (): Array<FrequencyBandCollection> => {
           units: '1 GHz \u2014 2 GHz'
         },
         {
-          id: 'freqband5_IEEE',
-          band: { low: 2000000000, high: 4000000000 },
+          id: 'IEEE_S',
+          band: { low: 2E9, high: 4E9 },
           label: 'S',
           units: '2 GHz \u2014 4 GHz'
         },
         {
-          id: 'freqband6_IEEE',
-          band: { low: 4000000000, high: 8000000000 },
+          id: 'IEEE_C',
+          band: { low: 4E9, high: 8E9 },
           label: 'C',
           units: '4 GHz \u2014 8 GHz'
         },
         {
-          id: 'freqband7_IEEE',
-          band: { low: 8000000000, high: 12400000000 },
+          id: 'IEEE_X',
+          band: { low: 8E9, high: 124E8 },
           label: 'X',
           units: '8 GHz \u2014 12.4 GHz'
         },
         {
-          id: 'freqband8_IEEE',
-          band: { low: 12400000000, high: 18000000000 },
+          id: 'IEEE_Ku',
+          band: { low: 124E8, high: 18E9 },
           label: 'Ku',
           units: '12.4 GHz \u2014 18 GHz'
         },
         {
-          id: 'freqband9_IEEE',
-          band: { low: 18000000000, high: 26500000000 },
+          id: 'IEEE_K',
+          band: { low: 18E9, high: 265E8 },
           label: 'K',
           units: ' 18 GHz \u2014 26.5 GHz'
         },
         {
-          id: 'freqband10_IEEE',
-          band: { low: 26500000000, high: 40000000000 },
+          id: 'IEEE_Ka',
+          band: { low: 265E8, high: 4E10 },
           label: 'Ka'
         },
         {
-          id: 'freqband11_IEEE',
-          band: { low: 33000000000, high: 50000000000 },
+          id: 'IEEE_Q',
+          band: { low: 33E9, high: 5E10 },
           label: 'Q'
         },
         {
-          id: 'freqband12_IEEE',
-          band: { low: 50000000000, high: 75000000000 },
+          id: 'IEEE_V',
+          band: { low: 5E10, high: 75E9 },
           label: 'V'
         },
         {
-          id: 'freqband13_IEEE',
-          band: { low: 75000000000, high: 110000000000 },
+          id: 'IEEE_W',
+          band: { low: 75E9, high: 11E10 },
           label: 'W'
         }
       ]
@@ -139,68 +139,68 @@ export const getBandsAvailable = (): Array<FrequencyBandCollection> => {
       label: 'DOD',
       children: [
         {
-          id: 'freqband1_DoD',
-          band: { low: 0, high: 250000000 },
+          id: 'DoD_A',
+          band: { low: 0, high: 250E6 },
           label: 'A'
         },
         {
-          id: 'freqband2_DoD',
-          band: { low: 250000000, high: 500000000 },
+          id: 'DoD_B',
+          band: { low: 250E6, high: 500E6 },
           label: 'B'
         },
         {
-          id: 'freqband3_DoD',
-          band: { low: 500000000, high: 1000000000 },
+          id: 'DoD_C',
+          band: { low: 500E6, high: 1E9 },
           label: 'C'
         },
         {
-          id: 'freqband4_DoD',
-          band: { low: 1000000000, high: 2000000000 },
+          id: 'DoD_D',
+          band: { low: 1E9, high: 2E9 },
           label: 'D'
         },
         {
-          id: 'freqband5_DoD',
-          band: { low: 2000000000, high: 3000000000 },
+          id: 'DoD_E',
+          band: { low: 2E9, high: 3E9 },
           label: 'E'
         },
         {
-          id: 'freqband6_DoD',
-          band: { low: 3000000000, high: 4000000000 },
+          id: 'DoD_F',
+          band: { low: 3E9, high: 4E9 },
           label: 'F'
         },
         {
-          id: 'freqband7_DoD',
-          band: { low: 4000000000, high: 6000000000 },
+          id: 'DoD_G',
+          band: { low: 4E9, high: 6E9 },
           label: 'G'
         },
         {
-          id: 'freqband8_DoD',
-          band: { low: 6000000000, high: 8000000000 },
+          id: 'DoD_H',
+          band: { low: 6E9, high: 8E9 },
           label: 'H'
         },
         {
-          id: 'freqband9_DoD',
-          band: { low: 8000000000, high: 10000000000 },
+          id: 'DoD_I',
+          band: { low: 8E9, high: 10E9 },
           label: 'I'
         },
         {
-          id: 'freqband10_DoD',
-          band: { low: 10000000000, high: 20000000000 },
+          id: 'DoD_J',
+          band: { low: 10E9, high: 20E9 },
           label: 'J'
         },
         {
-          id: 'freqband11_DoD',
-          band: { low: 20000000000, high: 40000000000 },
+          id: 'DoD_K',
+          band: { low: 20E9, high: 40E9 },
           label: 'K'
         },
         {
-          id: 'freqband12_DoD',
-          band: { low: 40000000000, high: 60000000000 },
+          id: 'DoD_L',
+          band: { low: 40E9, high: 60E9 },
           label: 'L'
         },
         {
           id: 'freqband13_DoD',
-          band: { low: 60000000000, high: 100000000000 },
+          band: { low: 60E9, high: 100E9 },
           label: 'M'
         }
       ]
@@ -210,28 +210,28 @@ export const getBandsAvailable = (): Array<FrequencyBandCollection> => {
       label: 'ITU',
       children: [
         {
-          id: 'freqband1_ITU',
-          band: { low: 3000000, high: 30000000 },
+          id: 'ITU_HF',
+          band: { low: 3E6, high: 30E6 },
           label: 'HF'
         },
         {
-          id: 'freqband2_ITU',
-          band: { low: 30000000, high: 300000000 },
+          id: 'ITU_VHF',
+          band: { low: 30E6, high: 300E6 },
           label: 'VHF'
         },
         {
-          id: 'freqband3_ITU',
-          band: { low: 300000000, high: 3000000000 },
+          id: 'ITU_UHF',
+          band: { low: 300E6, high: 3E9 },
           label: 'UHF'
         },
         {
-          id: 'freqband4_ITU',
-          band: { low: 3000000000, high: 30000000000 },
+          id: 'ITU_SHF',
+          band: { low: 3E9, high: 30E9 },
           label: 'SHF'
         },
         {
-          id: 'freqband5_ITU',
-          band: { low: 30000000000, high: 300000000000 },
+          id: 'ITU_EHF',
+          band: { low: 30E9, high: 300E9 },
           label: 'EHF'
         }
       ]
